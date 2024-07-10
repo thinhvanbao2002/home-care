@@ -1,0 +1,26 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+.auth-model {
+    background-color: #fff;
+    max-width: 500px;
+    border-radius: 20px;
+    text-align: center;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.custom-input {
+    width: 400px;
+    height: 48px;
+    font-size: 16px;
+    margin-top: 30px;
+}
+.ant-form-item-explain-error {
+    text-align: left;
+}
+
