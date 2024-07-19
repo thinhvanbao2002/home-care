@@ -1,49 +1,113 @@
-import React from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button, Checkbox, Row, Col, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './login.css';
+import { login } from '~/services/user/auth-service';
+import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 
-const Login = () => {
-    const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+const UserLogin = () => {
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    // Xử lý login
+    const onFinish = async (values) => {
+        try {
+            setLoading(true);
+            const res = await login(email, password);
+            console.log(res);
+            openNotificationSuccess('Thành công', 'Đăng nhập thành công');
+            setLoading(false);
+        } catch (error) {
+            openNotificationError('Thất bại', error.message);
+        }
     };
 
     return (
-        <div className="login-container">
-            <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={onFinish}>
-                <h2 className="login-title">Đăng nhập</h2>
-                <Form.Item name="username" rules={[{ required: true, message: 'Please input your Username!' }]}>
-                    <Input
-                        className="form-login-input"
-                        prefix={<UserOutlined className="site-form-item-icon" />}
-                        placeholder="Username"
-                    />
-                </Form.Item>
-                <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
-                    <Input
-                        prefix={<LockOutlined className="site-form-item-icon" />}
-                        type="password"
-                        placeholder="Password"
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
-                    <a className="login-form-forgot" href="">
-                        Forgot password
-                    </a>
-                </Form.Item>
+        <>
+            <div className="login-user-container">
+                <Row className="style-row" justify="center" align="middle">
+                    <Col xs={0} sm={0} md={0} lg={6} xl={6} className="column1">
+                        <div className="logo-container">
+                            <img src="/logo-homecare.jpg" alt="" />
+                        </div>
+                        <div className="login-page-left-title">
+                            <h3>Một tài khoản cho mọi dịch vụ của HomeCare</h3>
+                        </div>
+                        <div className="login-page-left-desc">
+                            <p>Đăng nhập tài khoản ASUS và thực hiện mọi việc bạn cần từ một cổng dịch vụ duy nhất!</p>
+                        </div>
+                    </Col>
+                    <Col xs={20} sm={14} md={12} lg={8} xl={8} className="column2">
+                        <Spin spinning={loading} tip="Loading...">
+                            <Form
+                                className="login-form-customer"
+                                initialValues={{ remember: true }}
+                                onFinish={onFinish}
+                            >
+                                <div className="logo-container-right">
+                                    <img src="/logo-homecare.jpg" alt="" />
+                                </div>
+                                <h2 className="login-title-customer">Đăng nhập Tài khoản</h2>
+                                <Form.Item
+                                    label="Email"
+                                    name="enterEmai"
+                                    labelCol={{ span: 24 }}
+                                    rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
+                                >
+                                    <Input
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        className="form-login-input-customer"
+                                        prefix={<UserOutlined className="site-form-item-icon" />}
+                                        placeholder="Email"
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Mật khẩu"
+                                    name="password"
+                                    labelCol={{ span: 24 }}
+                                    rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+                                >
+                                    <Input
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="form-login-input-customer"
+                                        prefix={<LockOutlined className="site-form-item-icon" />}
+                                        type="password"
+                                        placeholder="Password"
+                                    />
+                                </Form.Item>
+                                <Form.Item>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                        }}
+                                    >
+                                        <Form.Item name="remember" valuePropName="checked" noStyle>
+                                            <Checkbox>Nhớ tôi</Checkbox>
+                                        </Form.Item>
+                                        <a className="login-form-forgot" href="">
+                                            Quên mật khẩu của bạn?
+                                        </a>
+                                    </div>
+                                </Form.Item>
 
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
-                        Log in
-                    </Button>
-                    Or <a href="">register now!</a>
-                </Form.Item>
-            </Form>
-        </div>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="submit" className="login-form-button-customer">
+                                        Đăng nhập
+                                    </Button>
+                                    <a href="">Đăng kí tài khoản!</a>
+                                </Form.Item>
+                            </Form>
+                        </Spin>
+                    </Col>
+                </Row>
+            </div>
+        </>
     );
 };
 
-export default Login;
+export default UserLogin;

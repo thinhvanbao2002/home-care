@@ -1,4 +1,4 @@
-import privateAdminAxios from './axios-admin-instant';
+import privateAdminAxios from '../instants/axios-admin-instant';
 // Product
 const fetchAllAdmin = (q, status, fromDate, toDate, page, take) => {
     return privateAdminAxios.get('/admin', {

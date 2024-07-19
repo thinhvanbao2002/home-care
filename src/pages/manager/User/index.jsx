@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, DatePicker, Input, Select, Row, Col, Tag, Form, Upload } from 'antd';
+import { Button, Table, DatePicker, Input, Select, Row, Col, Tag, Modal } from 'antd';
 import '../Admin/admin.css';
-import { EditOutlined, DeleteOutlined, FileExcelFilled, PlusOutlined } from '@ant-design/icons';
-import { fetchAllCustomer, getDetailCustomer } from '~/services/admin-customer-service';
-import { keyboard } from '@testing-library/user-event/dist/keyboard';
+import { EditOutlined, DeleteOutlined, FileExcelFilled } from '@ant-design/icons';
+import { deleteCustomer, fetchAllCustomer, getDetailCustomer } from '~/services/admin/admin-customer-service';
 import moment from 'moment';
-import { formatNumber } from '~/components/common/ultils';
-import UserDetailModal from '~/components/common/Modal';
-import ModalForm from '~/components/common/Modal';
+import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { FormUserDetail } from './components/FormUserDetail';
-
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 const { RangePicker } = DatePicker;
 
 function User() {
-    const [componentSize, setComponentSize] = useState();
     const [searchKeyword, setSearchKeyword] = useState('');
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
@@ -26,7 +22,8 @@ function User() {
     const [user, setDataUser] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [customerId, setCustomerId] = useState('');
     const [userDetail, setUserDetail] = useState([]);
     // Xử lý date
     const handleDateChange = (dates) => {
@@ -36,13 +33,6 @@ function User() {
             setFromDate(formattedDates[0]);
             setToDate(formattedDates[1]);
         }
-    };
-
-    const onFormLayoutChange = ({ size }) => {
-        setComponentSize(size);
-    };
-    const handleClick = (record) => {
-        console.log('Click', record);
     };
 
     // Fetch All user admin
@@ -82,7 +72,18 @@ function User() {
         }
     };
 
-    console.log(userDetail);
+    const handleDeleteCustomer = async () => {
+        try {
+            const res = await deleteCustomer(customerId);
+            if (res.code === 200) {
+                openNotificationSuccess('Thành công', 'Xóa người dùng thành công!');
+                setDeleteModalVisible(false);
+                await getCustomerAdmin();
+            }
+        } catch (error) {
+            openNotificationError('Thất bại', error.response.data.message);
+        }
+    };
 
     const columns = [
         {
@@ -107,7 +108,7 @@ function User() {
         { title: 'Số dư ví', dataIndex: 'wallet', key: '7', width: 200 },
         { title: 'Điểm tích lũy', dataIndex: 'cumulative_score', key: '8', width: 200 },
         { title: 'Ngày tạo', dataIndex: 'created_at', key: '9', width: 150 },
-        { title: 'id', dataIndex: 'id', key: '10', width: 100 },
+        { title: 'id', dataIndex: 'id', key: '10', width: 0 },
         {
             title: 'Thao tác',
             key: 'operation',
@@ -136,12 +137,15 @@ function User() {
                             backgroundColor: '#FF3333',
                         }}
                         size="large"
+                        onClick={() => {
+                            setDeleteModalVisible(true);
+                            setCustomerId(record?.id);
+                        }}
                     ></Button>
                 </span>
             ),
         },
     ];
-
     return (
         <>
             <Row gutter={16} align="middle" justify="space-between">
@@ -168,11 +172,6 @@ function User() {
                 </Col>
                 <Col>
                     <Row gutter={16}>
-                        {/* <Col>
-                            <Button type="primary" style={{ marginRight: 16 }} icon={<PlusOutlined />}>
-                                Thêm mới
-                            </Button>
-                        </Col> */}
                         <Col>
                             <Button
                                 type="button"
@@ -206,9 +205,6 @@ function User() {
                     };
                 })}
                 scroll={{ x: 1300 }}
-                onRow={(record) => ({
-                    onClick: () => handleClick(record),
-                })}
                 pagination={{
                     current: page,
                     pageSize: take,
@@ -217,11 +213,30 @@ function User() {
                     pageSizeOptions: ['10', '20', '50', '100'],
                 }}
             />
-            <ModalForm
-                visible={isModalVisible}
-                onClose={handleModalClose}
-                children={<FormUserDetail data={userDetail} />}
+            <FormUserDetail
+                isModalVisible={isModalVisible}
+                handleModalClose={handleModalClose}
+                data={userDetail}
+                getDataCustomers={getCustomerAdmin}
             />
+            <Modal
+                title={
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <ExclamationCircleOutlined
+                            style={{ color: '#FF3333', fontSize: '24px', marginRight: '10px' }}
+                        />
+                        <span style={{ fontSize: '20px' }}>Xác nhận xóa</span>
+                    </div>
+                }
+                visible={deleteModalVisible}
+                onOk={handleDeleteCustomer} // Define this function to handle delete action
+                onCancel={() => setDeleteModalVisible(false)}
+                okText="Xác nhận"
+                cancelText="Hủy bỏ"
+                centered // Center the modal vertically
+            >
+                <p style={{ fontSize: '18px', textAlign: 'center' }}>Bạn có chắc chắn muốn xóa?</p>
+            </Modal>
         </>
     );
 }

@@ -19,7 +19,9 @@ import Voucher from './pages/manager/Voucher';
 import Gift from './pages/manager/Gift';
 import New from './pages/manager/New';
 import Notification from './pages/manager/Notification';
-import Login from './pages/user/Login';
+import UserLogin from './pages/user/Login';
+import Login from '~/pages/manager/Auth';
+import Register from './pages/user/Register';
 function App() {
     // const count = useSelector((state) => state.counter.value);
     // const dispatch = useDispatch();
@@ -32,7 +34,8 @@ function App() {
                         <Route path="products" element={<Admin />} />
                     </Route>
                     <Route path="auth">
-                        <Route path="login" element={<Login />} />
+                        <Route path="login" element={<UserLogin />} />
+                        <Route path="a/login" element={<Login />} />
                         <Route path="products" element={<Admin />} />
                     </Route>
                     <Route path="admin" element={<ManagerLayout />}>
@@ -46,6 +49,9 @@ function App() {
                         <Route path="gift" element={<Gift />} />
                         <Route path="new" element={<New />} />
                         <Route path="notification" element={<Notification />} />
+                    </Route>
+                    <Route path="customer">
+                        <Route path="register" element={<Register />} />
                     </Route>
                 </Routes>
             </div>

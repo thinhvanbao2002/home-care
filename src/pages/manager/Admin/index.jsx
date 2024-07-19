@@ -16,10 +16,10 @@ import {
 } from 'antd';
 import './admin.css';
 import { EditOutlined, DeleteOutlined, FileExcelFilled, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { createAdmin, deleteAdmin, fetchAllAdmin, getDetailAdmin, updateAdmin } from '~/services/admin-service';
+import { createAdmin, deleteAdmin, fetchAllAdmin, getDetailAdmin, updateAdmin } from '~/services/admin/admin-service';
 import moment from 'moment';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { uploadFile } from '~/services/public-serbice';
+import { uploadFile } from '~/services/instants/public-serbice';
 
 const { RangePicker } = DatePicker;
 
