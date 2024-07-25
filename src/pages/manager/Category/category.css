@@ -1,0 +1,14 @@
+/* .ant-table-cell {
+    display: flex !important;
+    align-items: center !important; 
+    justify-content: space-between;
+} */
+.ant-space {
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-between;
+    width: 100%;
+}
+.ant-table-row-expand-icon {
+    /* margin-top: 8.5px !important; */
+}
