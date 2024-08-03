@@ -11,4 +11,16 @@ const uploadFile = (image) => {
         },
     });
 };
-export { uploadFile };
+
+// Upload file
+const uploadFiles = (image) => {
+    const formData = new FormData();
+    formData.append('image', image);
+
+    return publicInstance.post('/uploads/images', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
+export { uploadFile, uploadFiles };

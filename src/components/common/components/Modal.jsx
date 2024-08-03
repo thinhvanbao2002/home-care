@@ -3,8 +3,13 @@ import { Modal } from 'antd';
 function ModalForm({ visible, onClose, children, onSubmit, title, width, onReset }) {
     const handleOk = async () => {
         try {
-            await onSubmit(); // Gọi hàm onSubmit từ bên ngoài
-            onClose();
+            const isSubmitSuccessful = await onSubmit(); // Gọi hàm onSubmit từ bên ngoài
+
+            console.log('isSubmitSuccessful', isSubmitSuccessful);
+
+            if (isSubmitSuccessful) {
+                onClose(); // Chỉ đóng modal khi submit thành công
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -16,23 +21,22 @@ function ModalForm({ visible, onClose, children, onSubmit, title, width, onReset
             onReset(); // Reset form khi modal đóng
         }
     };
+
     return (
-        <>
-            <Modal
-                title={title}
-                centered
-                visible={visible}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                width={width}
-                className="custom-modal"
-                maskClosable={false}
-                okText="Xác nhận"
-                cancelText="Hủy bỏ"
-            >
-                {children}
-            </Modal>
-        </>
+        <Modal
+            title={title}
+            centered
+            visible={visible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            width={width}
+            className="custom-modal"
+            maskClosable={false}
+            okText="Xác nhận"
+            cancelText="Hủy bỏ"
+        >
+            {children}
+        </Modal>
     );
 }
 

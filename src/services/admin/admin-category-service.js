@@ -36,4 +36,21 @@ const deleteCategory = (categoryId) => {
     return privateAdminAxios.delete(`a/category/${categoryId}`);
 };
 
-export { fetchAllCategory, createParentCategory, deleteCategory, createChildCategory, updateCategory };
+const fetchAllChildCategory = (q, page, take) => {
+    return privateAdminAxios.get('a/category/child', {
+        params: {
+            q,
+            page: page,
+            take: take,
+        },
+    });
+};
+
+export {
+    fetchAllCategory,
+    createParentCategory,
+    deleteCategory,
+    createChildCategory,
+    updateCategory,
+    fetchAllChildCategory,
+};

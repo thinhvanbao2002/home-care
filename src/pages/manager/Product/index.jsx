@@ -7,9 +7,28 @@ import moment from 'moment';
 import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { deleteVoucher, fetchAllVoucher, getDetailVoucher } from '~/services/admin/admin-voucher-service';
+import { fetchAllProduct } from '~/services/admin/admin-product-service';
+import FormCreateProduct from './components/FormCreateProduct';
 const { RangePicker } = DatePicker;
 
 function Product() {
+    const [products, setProducts] = useState([]);
+    const [page, setPage] = useState(1);
+    const [take, setTake] = useState(10);
+    const [q, setQ] = useState('');
+    const [isModalCreateProductVisible, setIsModalCreateProductVisible] = useState(false);
+
+    useEffect(() => {
+        getAllProduct();
+    }, [q]);
+
+    const getAllProduct = async () => {
+        try {
+            const res = await fetchAllProduct(q);
+            setProducts(res.data);
+        } catch (error) {}
+    };
+
     // Xử lý date
     const handleDateChange = (dates) => {
         // setDateRange(dates);
@@ -20,13 +39,89 @@ function Product() {
         // }
     };
 
+    const handleModalClose = () => {
+        // setIsModalVisible(false);
+        setIsModalCreateProductVisible(false);
+    };
+
+    const columns = [
+        {
+            title: 'STT',
+            width: 80,
+            dataIndex: 'key',
+            key: '0',
+            fixed: 'left',
+        },
+
+        { title: 'Tên sản phẩm', dataIndex: 'name', key: '1', width: 200 },
+        { title: 'Danh mục sản phẩm', dataIndex: 'category', key: '2', width: 200 },
+        { title: 'Giá tiền', dataIndex: 'price', key: '3', width: 200 },
+        { title: 'Bảo hành', dataIndex: 'warranty_period', key: '4', width: 200 },
+        { title: 'Cân nặng', dataIndex: 'weight', key: '5', width: 200 },
+        { title: 'Loại hàng', dataIndex: 'product_type', key: '6', width: 200 },
+        { title: 'Tình trạng hàng', dataIndex: 'availability', key: '7', width: 150 },
+        { title: 'Số lượng còn', dataIndex: 'quantity', key: '8', width: 200 },
+        { title: 'Số lượng đã bán ', dataIndex: 'sold', key: '9', width: 200 },
+        { title: 'Số lượt đánh giá', dataIndex: 'number_of_review', key: '10', width: 150 },
+        { title: 'Số sao trung bình', dataIndex: 'rating_rate', key: '11', width: 200 },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'status',
+            key: '12',
+            width: 150,
+            render: (text) => <Tag color={text === 'Đang hoạt động' ? 'blue' : 'red'}>{text}</Tag>,
+        },
+        { title: 'ID', dataIndex: 'id', key: '13', width: 0 },
+        {
+            title: 'Thao tác',
+            key: 'operation',
+            fixed: 'right',
+            width: 150,
+            render: (text, record) => (
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Button
+                        type="button"
+                        icon={<EditOutlined style={{ color: '#fff' }} />}
+                        style={{
+                            padding: '8px 16px',
+                            fontSize: '16px',
+                            marginRight: 20,
+                            backgroundColor: '#FFCC33',
+                        }}
+                        size="large"
+                        //  onClick={() => handleOpenDetailCustomer(record?.id)}
+                    ></Button>
+                    <Button
+                        type="button"
+                        icon={<DeleteOutlined style={{ color: '#fff' }} />}
+                        style={{
+                            padding: '8px 16px',
+                            fontSize: '16px',
+                            backgroundColor: '#FF3333',
+                        }}
+                        size="large"
+                        //  onClick={() => {
+                        //      setDeleteModalVisible(true);
+                        //      setCustomerId(record?.id);
+                        //  }}
+                    ></Button>
+                </span>
+            ),
+        },
+    ];
+
     return (
         <>
             <Row gutter={16} align="middle" justify="space-between">
                 <Col>
                     <Row gutter={16}>
                         <Col>
-                            <Input placeholder="Nội dung tìn kiếm" style={{ width: '200px' }} allowClear />
+                            <Input
+                                placeholder="Nội dung tìn kiếm"
+                                style={{ width: '200px' }}
+                                onChange={(e) => setQ(e.target.value)}
+                                allowClear
+                            />
                         </Col>
                         <Col>
                             <Select placeholder="Trạng thái" style={{ width: '200px' }} allowClear>
@@ -71,7 +166,7 @@ function Product() {
                                 type="primary"
                                 style={{ marginRight: 16 }}
                                 icon={<PlusOutlined />}
-                                // onClick={() => setOpen(true)}
+                                onClick={() => setIsModalCreateProductVisible(true)}
                             >
                                 Thêm mới
                             </Button>
@@ -91,6 +186,53 @@ function Product() {
                     </Row>
                 </Col>
             </Row>
+            <Table
+                style={{ marginTop: 40 }}
+                columns={columns}
+                dataSource={products?.map((data, index) => {
+                    const realIndex = (page - 1) * take + index + 1;
+                    return {
+                        key: realIndex,
+                        name: data.name,
+                        category: data.category.name,
+                        price: formatNumber(data.price),
+                        warranty_period: `${data.warranty_period} tháng`,
+                        weight: data.weight,
+                        product_type: (() => {
+                            switch (data.product_type) {
+                                case 'new_product':
+                                    return 'Sản phẩm mới';
+                                case 'best_selling':
+                                    return 'Hàng bán chạy';
+                                case 'inventory':
+                                    return 'Tồn kho';
+                                default:
+                                    return 'Chưa xác định'; // Nếu có loại nào không được xác định
+                            }
+                        })(),
+                        availability: data.availability === true ? 'Còn hàng' : 'Hết hàng',
+                        quantity: data.quantity,
+                        sold: data.sold,
+                        number_of_review: data.number_of_review,
+                        rating_rate: data.rating_rate,
+                        status: data.status === true ? 'Đang hoạt động' : 'Ngừng hoạt động',
+                        id: data.id,
+                    };
+                })}
+                scroll={{ x: 1300 }}
+                pagination={{
+                    // current: page,
+                    // pageSize: take,
+                    // total: total,
+                    showSizeChanger: true,
+                    pageSizeOptions: ['10', '20', '50', '100'],
+                }}
+            />
+            <FormCreateProduct
+                isModalCreateProductVisible={isModalCreateProductVisible}
+                handleModalClose={handleModalClose}
+                getDataProduct={getAllProduct}
+            />
         </>
     );
 }

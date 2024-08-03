@@ -71,6 +71,8 @@ function Admin() {
 
     const handleImageUpload = useCallback(
         async (info) => {
+            console.log(info);
+
             const file = info.file.originFileObj;
             if (file) {
                 try {
