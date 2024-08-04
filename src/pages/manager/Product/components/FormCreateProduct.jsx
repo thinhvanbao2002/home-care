@@ -7,7 +7,7 @@ import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { uploadFile, uploadFiles } from '~/services/instants/public-serbice';
 import { fetchAllChildCategory } from '~/services/admin/admin-category-service';
 import { createProduct } from '~/services/admin/admin-product-service';
-import { openNotificationSuccess } from '~/components/common/ultils';
+import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 
 function FormCreateProduct({ isModalCreateProductVisible, handleModalClose, getDataProduct }) {
     const [form] = Form.useForm();
@@ -47,7 +47,7 @@ function FormCreateProduct({ isModalCreateProductVisible, handleModalClose, getD
             resetForm();
             return true;
         } catch (error) {
-            console.log(error);
+            openNotificationError('Thất bại', 'Thêm sản phẩm thất bại!');
             return false;
         }
     };
@@ -137,7 +137,13 @@ function FormCreateProduct({ isModalCreateProductVisible, handleModalClose, getD
                             value={warrantyPeriod}
                             onChange={(e) => setWarrantyPeriod(e.target.value)}
                             label="Thời gian bảo hành"
-                            rules={[{ required: true, message: 'Vui lòng nhập thời gian bảo hành!' }]}
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập thời gian bảo hành!' },
+                                {
+                                    pattern: /^[0-9]+(\.[0-9]+)?$/,
+                                    message: 'Vui lòng nhập số hợp lệ!',
+                                },
+                            ]}
                         >
                             <Input placeholder="Nhập thời gian bảo hành" />
                         </Form.Item>
@@ -146,7 +152,13 @@ function FormCreateProduct({ isModalCreateProductVisible, handleModalClose, getD
                             value={weight}
                             onChange={(e) => setWeigh(e.target.value)}
                             label="Trọng lượng"
-                            rules={[{ required: true, message: 'Vui lòng nhập trọng lượng sản phẩm!' }]}
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập trọng lượng sản phẩm!' },
+                                {
+                                    pattern: /^[0-9]+(\.[0-9]+)?$/,
+                                    message: 'Vui lòng nhập số hợp lệ!',
+                                },
+                            ]}
                         >
                             <Input placeholder="Nhập trọng lượng" />
                         </Form.Item>
@@ -170,6 +182,10 @@ function FormCreateProduct({ isModalCreateProductVisible, handleModalClose, getD
                                 {
                                     required: true,
                                     message: 'Vui lòng nhập giá tiền!',
+                                },
+                                {
+                                    pattern: /^[0-9]+(\.[0-9]+)?$/,
+                                    message: 'Vui lòng nhập số hợp lệ!',
                                 },
                             ]}
                         >
@@ -230,7 +246,11 @@ function FormCreateProduct({ isModalCreateProductVisible, handleModalClose, getD
                                 onChange={handleImageUpload}
                             >
                                 {imageUrl ? (
-                                    <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+                                    <img
+                                        src={imageUrl}
+                                        alt="avatar"
+                                        style={{ width: '100%', height: '100%', borderRadius: '7px' }}
+                                    />
                                 ) : (
                                     uploadButton
                                 )}
@@ -242,7 +262,7 @@ function FormCreateProduct({ isModalCreateProductVisible, handleModalClose, getD
                     <Col span={24}>
                         <Form.Item
                             name="images"
-                            label="Ảnh sản phẩm"
+                            label="Ảnh chi tiết sản phẩm"
                             valuePropName="fileList"
                             getValueFromEvent={(e) => e.fileList}
                         >

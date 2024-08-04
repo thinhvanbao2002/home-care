@@ -7,41 +7,91 @@ import moment from 'moment';
 import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { deleteVoucher, fetchAllVoucher, getDetailVoucher } from '~/services/admin/admin-voucher-service';
-import { fetchAllProduct } from '~/services/admin/admin-product-service';
+import { deleteProduct, fetchAllProduct, getDetailProduct } from '~/services/admin/admin-product-service';
 import FormCreateProduct from './components/FormCreateProduct';
+import { fetchAllChildCategory } from '~/services/admin/admin-category-service';
+import FormUpdateProduct from './components/FormUpdateProduct';
 const { RangePicker } = DatePicker;
 
 function Product() {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
-    const [take, setTake] = useState(10);
+    const [take, setTake] = useState(12);
+    const [total, setTotal] = useState(0);
+    const [status, setStatus] = useState(null);
     const [q, setQ] = useState('');
     const [isModalCreateProductVisible, setIsModalCreateProductVisible] = useState(false);
+    const [isModalUpdateProductVisible, setIsModalUpdateProductVisible] = useState(false);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [productId, setProductId] = useState(null);
+    const [productType, setProductType] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [categoryId, setCategoryId] = useState(null);
+    const [cateName, setcateName] = useState('');
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [fromDate, setFromDate] = useState(null);
+    const [toDate, setToDate] = useState(null);
+    const [productDetail, setProductDetail] = useState({});
 
     useEffect(() => {
         getAllProduct();
-    }, [q]);
+        getAllCategory();
+    }, [q, status, page, take, productType, categoryId, dateRange]);
 
     const getAllProduct = async () => {
         try {
-            const res = await fetchAllProduct(q);
+            const res = await fetchAllProduct({ q, status, page, take, productType, categoryId, fromDate, toDate });
             setProducts(res.data);
+            setTotal(res.meta.item_count);
+        } catch (error) {}
+    };
+    const getAllCategory = async () => {
+        try {
+            const res = await fetchAllChildCategory(cateName, 1, 1000);
+            setCategories(res.data);
         } catch (error) {}
     };
 
     // Xử lý date
     const handleDateChange = (dates) => {
-        // setDateRange(dates);
-        // if (dates) {
-        //     const formattedDates = dates.map((date) => (date ? date.format('DD-MM-YYYY') : null));
-        //     setFromDate(formattedDates[0]);
-        //     setToDate(formattedDates[1]);
-        // }
+        setDateRange(dates);
+        if (dates) {
+            const formattedDates = dates.map((date) => (date ? date.format('DD-MM-YYYY') : null));
+            setFromDate(formattedDates[0]);
+            setToDate(formattedDates[1]);
+        }
     };
 
     const handleModalClose = () => {
-        // setIsModalVisible(false);
         setIsModalCreateProductVisible(false);
+        setIsModalUpdateProductVisible(false);
+    };
+
+    const handleDeleteProduct = async () => {
+        try {
+            await deleteProduct(productId);
+            openNotificationSuccess('Thành công', 'Xóa sản phẩm thành công!');
+            setDeleteModalVisible(false);
+            await getAllProduct();
+        } catch (error) {
+            openNotificationSuccess('Thất bại', 'Xóa sản phẩm thất bại!');
+        }
+    };
+
+    const handleOpenFormUpdateProduct = async (productId) => {
+        try {
+            setIsModalUpdateProductVisible(!isModalUpdateProductVisible);
+            const res = await getDetailProduct(productId);
+            setProductDetail(res?.data);
+            // setSelectedUser(customerId);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleTableChange = (pagination) => {
+        setPage(pagination.current);
+        setTake(pagination.pageSize);
     };
 
     const columns = [
@@ -89,7 +139,7 @@ function Product() {
                             backgroundColor: '#FFCC33',
                         }}
                         size="large"
-                        //  onClick={() => handleOpenDetailCustomer(record?.id)}
+                        onClick={() => handleOpenFormUpdateProduct(record?.id)}
                     ></Button>
                     <Button
                         type="button"
@@ -100,10 +150,10 @@ function Product() {
                             backgroundColor: '#FF3333',
                         }}
                         size="large"
-                        //  onClick={() => {
-                        //      setDeleteModalVisible(true);
-                        //      setCustomerId(record?.id);
-                        //  }}
+                        onClick={() => {
+                            setDeleteModalVisible(true);
+                            setProductId(record?.id);
+                        }}
                     ></Button>
                 </span>
             ),
@@ -124,39 +174,66 @@ function Product() {
                             />
                         </Col>
                         <Col>
-                            <Select placeholder="Trạng thái" style={{ width: '200px' }} allowClear>
-                                <Select.Option value="Đang hạt động">Đang hạt động</Select.Option>
-                                <Select.Option value="Ngừng hoạt động">Ngừng hoạt động</Select.Option>
+                            <Select
+                                value={status}
+                                onChange={(value) => setStatus(value)}
+                                placeholder="Trạng thái"
+                                style={{ width: '200px' }}
+                                allowClear
+                            >
+                                <Select.Option value="true">Đang hạt động</Select.Option>
+                                <Select.Option value="false">Ngừng hoạt động</Select.Option>
                             </Select>
                         </Col>
                         <Col>
                             <RangePicker
                                 placeholder={['Từ ngày', 'Đến ngày']}
                                 onChange={handleDateChange}
-                                // value={dateRange}
+                                value={dateRange}
                                 format="DD-MM-YYYY"
                             />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginTop: '20px' }}>
                         <Col>
-                            <Select placeholder="Loại sản phẩm" style={{ width: '200px' }} allowClear>
-                                <Select.Option value="Đang hạt động">Đang hạt động</Select.Option>
-                                <Select.Option value="Ngừng hoạt động">Ngừng hoạt động</Select.Option>
+                            <Select
+                                placeholder="Chọn loại sản phẩm"
+                                style={{ width: '200px' }}
+                                allowClear
+                                onChange={(value) => setProductType(value)}
+                                value={productType} // Đảm bảo giá trị đã chọn được hiển thị
+                            >
+                                <Select.Option value="new_product">Hàng mới về</Select.Option>
+                                <Select.Option value="best_selling">Hàng bán chạy</Select.Option>
+                                <Select.Option value="inventory">Hàng tồn kho</Select.Option>
                             </Select>
                         </Col>
                         <Col>
-                            <Select placeholder="Thương hiệu" style={{ width: '200px' }} allowClear>
-                                <Select.Option value="samsung">Samsung</Select.Option>
-                                <Select.Option value="tosiba">Tosiba</Select.Option>
+                            <Select
+                                placeholder="Chọn danh mục sản phẩm"
+                                style={{ width: '200px' }}
+                                showSearch
+                                allowClear
+                                onChange={(value) => setCategoryId(value)}
+                                value={categoryId}
+                                filterOption={(input, option) => {
+                                    const children = String(option.children).toLowerCase();
+                                    return children.includes(input.toLowerCase());
+                                }}
+                            >
+                                {categories.map((category) => (
+                                    <Select.Option key={category.id} value={category.id}>
+                                        {category.name} - {category.parent.name}
+                                    </Select.Option>
+                                ))}
                             </Select>
                         </Col>
-                        <Col>
+                        {/* <Col>
                             <Select placeholder="Loại hàng" style={{ width: '300px' }} allowClear>
                                 <Select.Option value="samsung">Sản phẩm mới</Select.Option>
                                 <Select.Option value="tosiba">Sản phẩm bán chạy</Select.Option>
                             </Select>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Col>
                 <Col>
@@ -220,12 +297,13 @@ function Product() {
                     };
                 })}
                 scroll={{ x: 1300 }}
+                onChange={handleTableChange}
                 pagination={{
-                    // current: page,
-                    // pageSize: take,
-                    // total: total,
+                    current: page,
+                    pageSize: take,
+                    total: total,
                     showSizeChanger: true,
-                    pageSizeOptions: ['10', '20', '50', '100'],
+                    pageSizeOptions: ['12', '20', '50', '100'],
                 }}
             />
             <FormCreateProduct
@@ -233,6 +311,29 @@ function Product() {
                 handleModalClose={handleModalClose}
                 getDataProduct={getAllProduct}
             />
+            <FormUpdateProduct
+                isModalUpdateProductVisible={isModalUpdateProductVisible}
+                handleModalClose={handleModalClose}
+                getDetailProduct={productDetail}
+            />
+            <Modal
+                title={
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <ExclamationCircleOutlined
+                            style={{ color: '#FF3333', fontSize: '24px', marginRight: '10px' }}
+                        />
+                        <span style={{ fontSize: '20px' }}>Xác nhận xóa</span>
+                    </div>
+                }
+                visible={deleteModalVisible}
+                onOk={handleDeleteProduct} // Define this function to handle delete action
+                onCancel={() => setDeleteModalVisible(false)}
+                okText="Xác nhận"
+                cancelText="Hủy bỏ"
+                centered // Center the modal vertically
+            >
+                <p style={{ fontSize: '18px', textAlign: 'center' }}>Bạn có chắc chắn muốn xóa?</p>
+            </Modal>
         </>
     );
 }

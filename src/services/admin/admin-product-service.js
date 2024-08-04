@@ -1,14 +1,14 @@
 import privateAdminAxios from '../instants/axios-admin-instant';
 // Product
-const fetchAllProduct = (q, status, fromDate, toDate, page, take, brand, product_type) => {
+const fetchAllProduct = ({ q, status, fromDate, toDate, page, take, categoryId, productType }) => {
     return privateAdminAxios.get('a/product', {
         params: {
             q: q,
-            category_id: brand,
+            brand: categoryId,
             status: status,
             from_date: fromDate,
             to_date: toDate,
-            product_type: product_type,
+            product_type: productType,
             page: page,
             take: take,
         },
@@ -43,8 +43,8 @@ const createProduct = (
     });
 };
 
-const getDetailVoucher = (voucherId) => {
-    return privateAdminAxios.get(`a/voucher/${voucherId}`);
+const getDetailProduct = (productId) => {
+    return privateAdminAxios.get(`a/product/${productId}`);
 };
 
 const updateVoucher = (voucherId, name, enTime, discountPercent) => {
@@ -55,8 +55,8 @@ const updateVoucher = (voucherId, name, enTime, discountPercent) => {
     });
 };
 
-const deleteVoucher = (voucherId) => {
-    return privateAdminAxios.delete(`a/voucher/${voucherId}`);
+const deleteProduct = (productId) => {
+    return privateAdminAxios.delete(`a/product/${productId}`);
 };
 
-export { fetchAllProduct, createProduct, getDetailVoucher, updateVoucher, deleteVoucher };
+export { fetchAllProduct, createProduct, getDetailProduct, updateVoucher, deleteProduct };
