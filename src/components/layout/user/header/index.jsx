@@ -1,8 +1,44 @@
 import './header.css';
 import './header-responsive.css';
 import '../../../../assets/global-style/globalStyle.scss';
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { fetchAllCategory } from '~/services/user/category-service';
+import { fetchAllProduct } from '~/services/user/product-service';
 
 function Header() {
+    const [isHovered, setIsHovered] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [childCategoies, setChildCategories] = useState([]);
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        getAllCategory();
+        getAllProduct();
+    }, []);
+
+    const getAllCategory = async () => {
+        try {
+            const res = await fetchAllCategory();
+            setCategories(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getAllProduct = async () => {
+        try {
+            const res = await fetchAllProduct();
+            setProducts(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleMouseEnter = (item) => {
+        setChildCategories(item.children);
+    };
+
     return (
         <>
             <div className="wrapber">
@@ -11,42 +47,58 @@ function Header() {
                         <div className="logo">
                             <img src="/logo-homecare.jpg" alt="" className="logo-img" />
                         </div>
-                        <ul className="nav-list">
-                            <li className="nav-item">
-                                <a href="" className="nav-text">
-                                    Samsung
-                                </a>
+                        {categories &&
+                            categories.length > 0 &&
+                            categories.map((item) => (
+                                <ul className="nav-list">
+                                    <li className="nav-item">
+                                        <Link
+                                            onMouseEnter={() => handleMouseEnter(item)}
+                                            onMouseLeave={() => setIsHovered(false)}
+                                            href=""
+                                            className="nav-text"
+                                        >
+                                            {item.name}
+                                        </Link>
+                                        <div className="menu-container">
+                                            <div className="menu-container-left">
+                                                <ul className="menu-list">
+                                                    {childCategoies &&
+                                                        childCategoies &&
+                                                        childCategoies.map((child) => (
+                                                            <li className="menu-item">
+                                                                <a href="" className="menu-text">
+                                                                    {child.name}
+                                                                </a>
+                                                            </li>
+                                                        ))}
+                                                </ul>
+                                            </div>
 
-                                <div className="menu-container">
-                                    <div className="menu-container-left">
-                                        <ul className="menu-list">
-                                            <li className="menu-item">
-                                                <a href="" className="menu-text">
-                                                    Samsung
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div className="menu-container-right">
-                                        <h2>menu-container</h2>
-                                        <ul className="menu-list-1">
-                                            <li className="menu-item">
-                                                <a href="" className="menu-text">
-                                                    <img
-                                                        src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/07/hinh-dep-10.jpg"
-                                                        alt=""
-                                                        className="menu-img"
-                                                    />
-                                                    <span>Samsung/LG</span>
-                                                </a>
-                                                <span className="new">Mới</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                                            <div className="menu-container-right">
+                                                <h2>menu-container</h2>
+                                                <ul className="menu-list-1">
+                                                    {products &&
+                                                        products.length > 0 &&
+                                                        products.map((p) => (
+                                                            <li className="menu-item">
+                                                                <a href="" className="menu-text">
+                                                                    <img
+                                                                        src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/07/hinh-dep-10.jpg"
+                                                                        alt=""
+                                                                        className="menu-img"
+                                                                    />
+                                                                    <span>{products.name}</span>
+                                                                </a>
+                                                                <span className="new">Mới</span>
+                                                            </li>
+                                                        ))}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            ))}
                     </div>
                     <div className="nav-right">
                         <ul className="nav-list">

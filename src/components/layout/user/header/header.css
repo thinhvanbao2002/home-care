@@ -5,6 +5,7 @@
     height: 80px;
     margin: 0 40px;
     padding: 0 16px;
+    border-bottom: 2px solid #000;
 }
 
 /* nav-left */
@@ -58,6 +59,7 @@
 /* Menu container */
 
 .menu-container {
+    z-index: 1000;
     background: #fff;
     position: absolute;
     top: 53px;
@@ -71,6 +73,8 @@
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
+    height: 550px;
+    transition: 0.1s;
 }
 
 @keyframes menu_container {
@@ -99,7 +103,7 @@
     content: "";
     height: 40px;
     width: 30%;
-    top: -26px;
+    top: -40px;
 }
 
 

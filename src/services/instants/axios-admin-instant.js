@@ -1,10 +1,10 @@
 import axios from 'axios';
-import env from 'react-dotenv';
 
 const admin_instance = axios.create({
-    baseURL: 'http://localhost:3009/api/v1/',
+    baseURL: process.env.BASE_API_URL || 'http://localhost:3009/api/v1',
 });
 
+console.log('ENV:', process.env.BASE_API_URL);
 // Add a request interceptor
 admin_instance.interceptors.request.use(
     function (config) {

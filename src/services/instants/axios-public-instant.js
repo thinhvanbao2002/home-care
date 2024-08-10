@@ -1,9 +1,10 @@
 import axios from 'axios';
-import env from 'react-dotenv';
 
 const publicInstance = axios.create({
-    baseURL: 'http://localhost:3009/api/v1/',
+    baseURL: process.env.BASE_API_URL || 'http://localhost:3009/api/v1',
 });
+
+console.log('ENV:', process.env.BASE_API_URL);
 
 // Add a response interceptor
 publicInstance.interceptors.response.use(

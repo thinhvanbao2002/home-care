@@ -13,6 +13,7 @@ import Auth from '~/pages/manager/Auth';
 import Overview from '~/pages/manager/Overview';
 import User from './pages/manager/User';
 import Product from './pages/manager/Product';
+import UserProduct from './pages/user/Product';
 import Category from './pages/manager/Category';
 import Inventory from './pages/manager/Inventory';
 import Voucher from './pages/manager/Voucher';
@@ -30,8 +31,8 @@ function App() {
             <div>
                 <Routes>
                     <Route path="" element={<DefaultLayoutUser />}>
-                        <Route path="home" element={<Home />} />
-                        <Route path="products" element={<Admin />} />
+                        <Route path="" element={<Home />} />
+                        <Route path="products" element={<UserProduct />} />
                     </Route>
                     <Route path="auth">
                         <Route path="login" element={<UserLogin />} />
