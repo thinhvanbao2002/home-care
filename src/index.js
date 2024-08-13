@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faMinus, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import ReactDOM from 'react-dom/client';
 import App from '~/App';
 import reportWebVitals from './reportWebVitals';
@@ -8,6 +9,7 @@ import { store } from './redux/store/store';
 import GlobalStyles from './assets/global-style';
 import { BrowserRouter } from 'react-router-dom';
 
+library.add(faMinus, faPlus, faXmark);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <GlobalStyles>

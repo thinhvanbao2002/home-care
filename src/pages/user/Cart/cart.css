@@ -1,0 +1,403 @@
+:root {
+    --primary-color: #000;
+    --white-color: #fff;
+    --text-color: #333;
+    --border-color: #dbdbdb;
+    --header-height: 120px;
+}
+
+
+
+.app {
+    overflow: hidden;
+}
+
+.grid__row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.header {
+    height: var(--header-height);
+    background-color: var(--white-color);
+}
+
+.logo-cart {
+    display: flex;
+    align-items: center;
+    padding-top: 30px;
+}
+
+.logo-cart img {
+    width: 200px;
+}
+
+.logo-cart h1 {
+    color: black;
+    position: relative;
+    margin-left: 30px;
+}
+
+.logo-cart h1::before {
+    content: "";
+    position: absolute;
+    height: 40px;
+    width: 1px;
+    background-color: var(--primary-color);
+    left: -16px;
+    top: -12px;
+}
+
+.app__container {
+    background-color: #f5f5f5;
+    padding-top: 10px;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.app__content {
+    padding-top: 34px;
+}
+
+.cart {
+    width: 1200px;
+    margin: 20px auto;
+}
+
+.cart__header,
+.cart__items {
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .05);
+    padding: 10px;
+}
+
+.cart__header {
+    display: grid;
+    grid-template-columns: 4fr 5fr;
+    align-items: center;
+    color: #888;
+    font-size: 14px;
+}
+
+.cart__header-left,
+.cart__header-right {
+    display: flex;
+    align-items: center;
+}
+
+.cart__header-left {
+    padding-left: 10px;
+}
+
+.cart__header-right {
+    padding-right: 10px;
+    justify-content: space-between;
+}
+
+.cart__header-left .checkbox {
+    margin-right: 20px;
+}
+
+.cart__header-right {
+    justify-content: space-between;
+}
+
+.header-title {
+    margin-left: 20px;
+}
+
+.cart__items {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.cart__item {
+    display: grid;
+    grid-template-columns: 4fr 5fr;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart__item-left,
+.cart__item-right {
+    display: flex;
+    align-items: center;
+}
+
+.cart__item-left {
+    padding-left: 10px;
+}
+
+.cart__item-right {
+    padding-right: 30px;
+    justify-content: space-between;
+}
+
+.item-details {
+    display: flex;
+    align-items: center;
+}
+
+.item-details img {
+    border-radius: 5px;
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+}
+
+.item-details p {
+    margin: 0 20px 0 10px;
+    color: #000;
+}
+
+.classified p {
+    margin: 0;
+}
+
+/* Căn chỉnh các phần tử trong giỏ hàng như trước */
+
+.classified {
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+    top: 100%;
+    left: 0;
+    width: 200px;
+}
+
+.dropdown-item {
+    margin-bottom: 10px;
+}
+
+.dropdown-item p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.dropdown-item select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.unit-price {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+.unit-price-old {
+    text-decoration: line-through;
+}
+
+.unit-price-new {
+    color: var(--primary-color);
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    background: var(--white-color);
+    border: 1px solid var(--border-color);
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.quantity input {
+    width: 50px;
+    height: 30px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    margin: 0 5px;
+}
+
+.total-price {
+    color: red;
+    margin-right: 40px;
+}
+
+.delete-btn {
+    color: red;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+
+.card__buy {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 -2px 10px 0px rgba(110, 110, 110, 0.1);
+    font-size: 14px;
+    bottom: 0;
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+
+.card__buy-left,
+.card__buy-right,
+.checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox input {
+    margin-right: 10px;
+    width: 16px;
+    height: 16px;
+}
+
+.actions button {
+    border: none;
+    background-color: #fff;
+    padding: 8px 16px;
+    color: red;
+}
+
+.buy-button,
+.voucher-button {
+    border-radius: 10px;
+    margin-right: 10px;
+    padding: 8px 16px;
+    background-color: #000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.total-summary {
+    display: flex;
+    align-items: center;
+}
+
+.total-amount span,
+.savings span {
+    font-weight: bold;
+    color: red;
+}
+
+.total-amount,
+.savings {
+    margin-right: 20px;
+}
+
+.card__buy-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Modal Background */
+.voucher-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Content */
+.voucher-modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px 20px 40px 20px;
+    border-radius: 3px;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+    font-size: 14px;
+}
+
+/* Close Button */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.voucher-input,
+.voucher-search {
+    display: flex;
+    align-items: center;
+    margin: 4px 0 10px;
+}
+
+.voucher-input input,
+.voucher-search input {
+    width: 360px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-right: 20px;
+}
+
+.voucher-input button,
+.voucher-search button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+    width: 100px;
+}
+
+.voucher-input button:hover,
+.voucher-search button:hover,
+.buy-button:hover,
+.voucher-button:hover {
+    background-color: #333;
+}

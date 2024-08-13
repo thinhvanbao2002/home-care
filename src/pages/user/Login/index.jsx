@@ -4,6 +4,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './login.css';
 import { login } from '~/services/user/auth-service';
 import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
+import { store } from '~/redux/store/store';
+import { setAuth } from '~/redux/slide/authSlide';
 
 const UserLogin = () => {
     const [loading, setLoading] = useState(false);
@@ -15,8 +17,8 @@ const UserLogin = () => {
         try {
             setLoading(true);
             const res = await login(email, password);
-            console.log(res);
             openNotificationSuccess('Thành công', 'Đăng nhập thành công');
+            store.dispatch(setAuth(res.data));
             setLoading(false);
         } catch (error) {
             openNotificationError('Thất bại', error.message);

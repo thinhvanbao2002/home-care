@@ -4,11 +4,14 @@ import './styles/responsive.css';
 import { useEffect, useState } from 'react';
 import { fetchAllProduct } from '~/services/user/product-service';
 import { formatNumber } from '~/components/common/ultils';
+import { fetchAllChildCategory } from '~/services/user/category-service';
 function Home() {
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         getAllProduct();
+        getAllCategory();
     }, []);
 
     const getAllProduct = async () => {
@@ -20,6 +23,15 @@ function Home() {
         }
     };
 
+    const getAllCategory = async () => {
+        try {
+            const res = await fetchAllChildCategory();
+            setCategories(res.data);
+        } catch (error) {}
+    };
+
+    console.log(categories);
+
     return (
         <>
             <div class="grid wide">
@@ -30,95 +42,15 @@ function Home() {
                                 <i class="category__heading-icon fa-solid fa-list"></i>Danh mục
                             </h3>
                             <ul class="category-list">
-                                <li class="category-item category-item--active">
-                                    <a href="" class="category-item-link">
-                                        Sản phẩm
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Samsung
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        LG
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Panasonic
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Sanyo
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Sony
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Vìnash
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        audi
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        toyota
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        apple
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        xiaomi
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        oppo
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Huynhdai
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Bao ngu
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        bao oc cho
-                                    </a>
-                                </li>
+                                {categories &&
+                                    categories.length > 0 &&
+                                    categories.map((c) => (
+                                        <li class="category-item category-item--active">
+                                            <a href="" class="category-item-link">
+                                                {c.name}
+                                            </a>
+                                        </li>
+                                    ))}
                             </ul>
                         </nav>
                     </div>
@@ -167,65 +99,15 @@ function Home() {
 
                         <nav class="mobile-category">
                             <ul class="mobile-category__list">
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
+                                {categories &&
+                                    categories.length > 0 &&
+                                    categories.map((c) => (
+                                        <li class="mobile-category__item">
+                                            <a href="" class="mobile-category__link">
+                                                {c.name}
+                                            </a>
+                                        </li>
+                                    ))}
                             </ul>
                         </nav>
                         {/* <!-- Home product --> */}

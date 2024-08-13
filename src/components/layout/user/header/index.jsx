@@ -76,20 +76,20 @@ function Header() {
                                             </div>
 
                                             <div className="menu-container-right">
-                                                <h2>menu-container</h2>
+                                                <h2>SẢN PHẨM MỚI NHẤT</h2>
                                                 <ul className="menu-list-1">
                                                     {products &&
                                                         products.length > 0 &&
                                                         products.map((p) => (
                                                             <li className="menu-item">
-                                                                <a href="" className="menu-text">
+                                                                <div href="" className="menu-text">
                                                                     <img
                                                                         src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/07/hinh-dep-10.jpg"
                                                                         alt=""
                                                                         className="menu-img"
                                                                     />
-                                                                    <span>{products.name}</span>
-                                                                </a>
+                                                                    <span>{p.name}</span>
+                                                                </div>
                                                                 <span className="new">Mới</span>
                                                             </li>
                                                         ))}

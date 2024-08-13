@@ -23,6 +23,8 @@ import Notification from './pages/manager/Notification';
 import UserLogin from './pages/user/Login';
 import Login from '~/pages/manager/Auth';
 import Register from './pages/user/Register';
+import Cart from './pages/user/Cart';
+import ProductDetail from './pages/user/ProductDetail';
 function App() {
     // const count = useSelector((state) => state.counter.value);
     // const dispatch = useDispatch();
@@ -33,6 +35,11 @@ function App() {
                     <Route path="" element={<DefaultLayoutUser />}>
                         <Route path="" element={<Home />} />
                         <Route path="products" element={<UserProduct />} />
+                        <Route path="cart" element={<Cart />} />
+                        <Route path="product-detail" element={<ProductDetail />} />
+                    </Route>
+                    <Route path="u">
+                        <Route path="cart" element={<Cart />} />
                     </Route>
                     <Route path="auth">
                         <Route path="login" element={<UserLogin />} />

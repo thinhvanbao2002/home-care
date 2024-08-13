@@ -15,8 +15,12 @@ const fetchAllCategory = () => {
     });
 };
 
+const fetchAllChildCategory = () => {
+    return publicInstance.get('category/child');
+};
+
 const getDetailProduct = (productId) => {
     return publicInstance.get(`a/product/${productId}`);
 };
 
-export { fetchAllCategory, getDetailProduct };
+export { fetchAllCategory, fetchAllChildCategory };

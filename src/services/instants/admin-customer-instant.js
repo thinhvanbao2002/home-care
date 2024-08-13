@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { API_BASE_URL } from './types/instant';
 
 const customer_instance = axios.create({
-    baseURL: process.env.BASE_API_URL || 'http://localhost:3009/api/v1',
+    baseURL: API_BASE_URL.URL_LOCAL,
 });
 console.log('ENV:', process.env.BASE_API_URL);
 

@@ -1,0 +1,359 @@
+.app-prod {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+}
+
+/* Header */
+.header-prod {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 20px 0;
+}
+
+/* Product Layout */
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-image-gallery {
+    flex: 1;
+    padding: 20px;
+}
+
+.product-image-gallery .main-image img {
+    border-radius: 20px;
+    width: 600px;
+    height: 600px;
+    border: 1px solid #ddd;
+    object-fit: cover;
+    object-position: center;
+}
+
+.image-thumbnails {
+    display: flex;
+    margin-top: 10px;
+}
+
+.image-thumbnails img {
+    border-radius: 5px;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    margin-right: 5px;
+    object-fit: cover;
+}
+
+.product-details {
+    flex: 1;
+    padding: 20px;
+}
+
+.product-details h1 {
+    margin-bottom: 10px;
+    font-weight: 500;
+    font-size: 24px;
+    color: #000;
+}
+
+.price {
+    font-size: 20px;
+    color: #000;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* Color Buttons */
+.colors {
+    margin: 20px 0;
+}
+
+.color-button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.color-button.black {
+    background-color: #000;
+}
+
+.color-button.yellow {
+    background-color: #ff0;
+}
+
+.color-button.selected {
+    border: 2px solid #000;
+}
+
+/* Buttons */
+.buy-button,
+.add-to-cart-button,
+.installment-button,
+.installment-card-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.buy-button:hover,
+.add-to-cart-button:hover,
+.installment-button:hover,
+.installment-card-button:hover {
+    background-color: #333;
+}
+
+/* Promotions */
+.promotions {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #edf4f4;
+}
+
+.promotions ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    font-weight: 400;
+}
+
+.additional-offers,
+.promotions-list {
+    margin-bottom: 20px;
+}
+
+.additional-offers strong, .promotions-list strong {
+    /* margin-bottom: 20px; */
+    font-weight: 500;
+}
+
+.additional-offers p,
+.promotions-list p {
+    font-size: 18px;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.additional-offers ul,
+.promotions-list ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+/* Product Info */
+.product-info {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+}
+
+.product-details-section,
+.technical-specs,
+.shop-address,
+.customer-reviews {
+    margin-bottom: 20px;
+}
+.customer-reviews h2 {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.product-details-section h2,
+.technical-specs h2,
+.shop-address h2,
+.customer-reviews h2 {
+    font-size: 20px;
+    color: #000;
+    margin-bottom: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Product Content */
+.product-content {
+    max-height: 300px;
+    overflow-y: auto;
+    transition: max-height 0.3s ease;
+    font-size: 14px;
+    line-height: 30px;
+}
+
+/* Khi mở rộng nội dung */
+.product-content.expanded {
+    max-height: 1000px;
+}
+
+/* Thanh Cuộn */
+.product-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.product-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.product-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.product-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Toggle Button */
+.toggle-content-button {
+    border-radius: 15px;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.toggle-content-button:hover {
+    background-color: #333;
+}
+
+/* Hình ảnh và Video */
+.product-image,
+.product-video {
+    width: 100%;
+    height: auto;
+    margin: 20px 0;
+}
+
+/* Technical Specs */
+.technical-specs ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.technical-specs li {
+    font-size: 16px;
+    line-height: 26px;
+}
+
+/* Reviews */
+
+.review > p {
+    margin-top: 15px;
+    margin-left: 50px;
+    font-size: 14px;
+    color: #333;
+}
+
+.review span {
+    display: flex;
+    align-items: center;
+}
+
+.review span div {
+    border-bottom: 1px solid #eee;
+}
+
+.review span div h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.review span div p {
+    font-size: 13px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: 300;
+}
+.review span img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.reviews-list .review {
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 20px;
+}
+
+.reviews-list .review:last-child {
+    border-bottom: none;
+}
+
+/* Comment Form */
+.comment-form {
+    margin-bottom: 20px;
+    margin-top: 40px;
+    text-transform: uppercase;
+}
+
+
+
+.comment-form h3 {
+    font-size: 20px;
+    color: #000;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.comment-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #000;
+}
+
+.comment-form input,
+.comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.comment-form textarea {
+    resize: vertical;
+}
+
+.submit-comment-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 15px;
+}
+
+.submit-comment-button:hover {
+    background-color: #333;
+}
