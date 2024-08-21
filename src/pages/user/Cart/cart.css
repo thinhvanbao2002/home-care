@@ -24,7 +24,7 @@ a {
 }
 
 .header {
-    height: var(--header-height);
+    height: 100px;
     background-color: var(--white-color);
 }
 
@@ -35,10 +35,12 @@ a {
 }
 
 .logo-cart img {
-    width: 200px;
+    width: 108px;
 }
 
 .logo-cart h1 {
+    font-size: 25px;
+    font-weight: 500;
     color: black;
     position: relative;
     margin-left: 30px;
@@ -71,9 +73,14 @@ a {
     margin: 20px auto;
 }
 
-.cart__header,
-.cart__items {
+.cart__header {
     background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .05);
+    padding: 10px;
+}
+
+.cart__items {
     border-radius: 3px;
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .05);
     padding: 10px;
@@ -120,6 +127,10 @@ a {
 }
 
 .cart__item {
+    height: 200px;
+    background: #fff;
+    margin-bottom: 20px;
+    border-radius: 15px;
     display: grid;
     grid-template-columns: 4fr 5fr;
     align-items: center;
@@ -134,7 +145,7 @@ a {
 }
 
 .cart__item-left {
-    padding-left: 10px;
+    padding-left: 20px;
 }
 
 .cart__item-right {
@@ -149,12 +160,14 @@ a {
 
 .item-details img {
     border-radius: 5px;
-    width: 80px;
-    height: 80px;
+    width: 150px;
+    height: 170px;
     margin-right: 10px;
+    object-fit: cover;
 }
 
 .item-details p {
+    font-size: 16px;
     margin: 0 20px 0 10px;
     color: #000;
 }
@@ -244,13 +257,18 @@ a {
 .total-price {
     color: red;
     margin-right: 40px;
+    font-size: 18px;
 }
 
 .delete-btn {
-    color: red;
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    color: #fff;
     background: none;
     border: none;
     cursor: pointer;
+    background: red;
 }
 
 
@@ -281,7 +299,7 @@ a {
 }
 
 .checkbox input {
-    margin-right: 10px;
+    margin-right: 40px;
     width: 16px;
     height: 16px;
 }
@@ -295,6 +313,8 @@ a {
 
 .buy-button,
 .voucher-button {
+    width: 200px;
+    font-size: 20px;
     border-radius: 10px;
     margin-right: 10px;
     padding: 8px 16px;
@@ -318,6 +338,7 @@ a {
 
 .total-amount,
 .savings {
+    font-size: 20px;
     margin-right: 20px;
 }
 
@@ -401,3 +422,4 @@ a {
 .voucher-button:hover {
     background-color: #333;
 }
+

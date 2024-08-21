@@ -4,54 +4,70 @@ import ModalForm from '~/components/common/components/Modal';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
-import { uploadFile, uploadFiles } from '~/services/instants/public-serbice';
+import { uploadFile } from '~/services/instants/public-serbice';
 import { fetchAllChildCategory } from '~/services/admin/admin-category-service';
-import { createProduct } from '~/services/admin/admin-product-service';
-import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
+import { deleteProductPhoto, updateProduct } from '~/services/admin/admin-product-service';
+import { openNotificationSuccess } from '~/components/common/ultils';
 
-function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getDetailProduct }) {
+function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, data, getDataProduct }) {
     const [form] = Form.useForm();
     const [editorValue, setEditorValue] = useState('');
     const [fileList, setFileList] = useState([]);
-    const [name, setName] = useState('');
     const [imageUrl, setImageUrl] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
     const [warrantyPeriod, setWarrantyPeriod] = useState(36);
     const [categoryId, setCategoryId] = useState(null);
     const [weight, setWeigh] = useState(null);
     const [future, setFuture] = useState('');
-    const [q, setQ] = useState(null);
-    const [categories, setCategories] = useState([]);
     const [productType, setProductType] = useState(null);
-    const [productPhotos, setProductPhotos] = useState([]);
-    const [image, setImage] = useState('');
+    const [productId, setProductId] = useState(null);
 
-    const handleSubmit = async () => {
-        try {
-            await form.validateFields();
-            await createProduct(
-                name,
-                categoryId,
-                price,
-                warrantyPeriod,
-                future,
-                weight,
-                productType,
-                0,
-                editorValue,
-                imageUrl,
-                productPhotos,
-            );
-            openNotificationSuccess('Thành công', 'Thêm sản phẩm thành công!');
-            // getDataProduct();
-            handleModalClose();
-            resetForm();
-            return true;
-        } catch (error) {
-            openNotificationError('Thất bại', 'Thêm sản phẩm thất bại!');
-            return false;
+    useEffect(() => {
+        if (data) {
+            setProductId(data?.id);
+            setName(data?.name);
+            setPrice(data?.price);
+            setWarrantyPeriod(data?.warranty_period);
+            setWeigh(data?.weight);
+            setFuture(data?.future);
+            setProductType(data?.product_type);
+            setImageUrl(data?.image);
+            setEditorValue(data?.description);
+            setCategoryId(data?.category_id);
+            form.setFieldsValue({
+                name: data?.name,
+                price: data?.price,
+                warranty_period: data?.warranty_period,
+                weight: data?.weight,
+                future: data?.feature,
+                category: data?.category_id,
+                product_type: data?.product_type,
+                avatar: data?.image,
+                description: data?.description,
+            });
+
+            setEditorValue(data.description || '');
+
+            setImageUrl(data.image || '');
         }
-    };
+    }, [data, form]);
+
+    useEffect(() => {
+        const transformedFileList = data?.product_photo?.map((url, index) => ({
+            uid: `${index}`, // unique identifier
+            name: `image_${index + 1}`, // name of the file
+            status: 'done', // status of the upload (done, uploading, error, etc.)
+            url: url.url, // URL of the image
+            id: url?.id, // ID của ảnh trong cơ sở dữ liệu
+        }));
+
+        console.log('transformedFileList', transformedFileList);
+
+        setFileList(transformedFileList);
+        console.log(fileList, 'file');
+    }, [data]);
 
     useEffect(() => {
         getAllCategory();
@@ -59,7 +75,7 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
 
     const getAllCategory = async () => {
         try {
-            const res = await fetchAllChildCategory(q, 1, 1000);
+            const res = await fetchAllChildCategory();
             setCategories(res.data);
         } catch (error) {}
     };
@@ -71,39 +87,21 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                 try {
                     const response = await uploadFile(file);
                     setImageUrl(response.data.absoluteUrl);
-                    setImage(response.data.relativeUrl);
+                    form.setFieldsValue({ avatar: response.data.relativeUrl });
                 } catch (error) {
                     console.error('Error uploading file:', error);
                 }
             }
         },
-        [setImageUrl],
+        [form],
     );
 
     const resetForm = useCallback(() => {
         form.resetFields();
         setFileList([]);
+        setImageUrl(null);
+        setEditorValue('');
     }, [form]);
-
-    const handleUploadImages = async (fileList) => {
-        const uploadedImageUrls = [];
-        for (const file of fileList) {
-            try {
-                const response = await uploadFile(file.originFileObj);
-                uploadedImageUrls.push(response.data.relativeUrl);
-            } catch (error) {
-                console.error('Error uploading file:', error);
-            }
-        }
-        setProductPhotos(uploadedImageUrls);
-    };
-
-    const uploadButton = (
-        <div>
-            <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Ảnh đại diện</div>
-        </div>
-    );
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -125,16 +123,50 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
         });
     };
 
+    const handleRemove = async (file) => {
+        try {
+            await deleteProductPhoto(file?.id);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
+            // await updateVoucher(data?.id, name, endTime, discountPercent);
+            // await getDataVoucher();
+            await updateProduct({
+                name,
+                categoryId,
+                price,
+                warrantyPeriod,
+                feature: future,
+                weight,
+                productType,
+                description: editorValue,
+                image: imageUrl,
+                productId,
+            });
+            openNotificationSuccess('Thành công', 'Cập nhật sản phẩm thành công!');
+            getDataProduct();
+            handleModalClose();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // Cập nhật fileList ngay lập tức
+    const handleFileChange = ({ fileList }) => {
+        setFileList(fileList);
+    };
     return (
         <ModalForm
+            onSubmit={handleSubmit}
             visible={isModalUpdateProductVisible}
             onClose={() => {
                 handleModalClose();
-                setImageUrl('');
                 resetForm();
             }}
-            onSubmit={handleSubmit}
-            onReset={resetForm}
             width={1200}
             title="Cập nhật sản phẩm"
         >
@@ -142,18 +174,18 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                 <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
+                            name="name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            name="name"
                             label="Tên sản phẩm"
                             rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
                         >
                             <Input placeholder="Nhập tên sản phẩm" />
                         </Form.Item>
                         <Form.Item
-                            name="warranty_period"
                             value={warrantyPeriod}
                             onChange={(e) => setWarrantyPeriod(e.target.value)}
+                            name="warranty_period"
                             label="Thời gian bảo hành"
                             rules={[
                                 { required: true, message: 'Vui lòng nhập thời gian bảo hành!' },
@@ -166,9 +198,9 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                             <Input placeholder="Nhập thời gian bảo hành" />
                         </Form.Item>
                         <Form.Item
-                            name="weight"
                             value={weight}
                             onChange={(e) => setWeigh(e.target.value)}
+                            name="weight"
                             label="Trọng lượng"
                             rules={[
                                 { required: true, message: 'Vui lòng nhập trọng lượng sản phẩm!' },
@@ -181,11 +213,11 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                             <Input placeholder="Nhập trọng lượng" />
                         </Form.Item>
                         <Form.Item
-                            name="future"
-                            label="Tính năng"
-                            rules={[{ required: true, message: 'Vui lòng nhập tính năng sản phẩm!' }]} // Không bắt buộc nhập
                             value={future}
                             onChange={(e) => setFuture(e.target.value)}
+                            name="future"
+                            label="Tính năng"
+                            rules={[{ required: true, message: 'Vui lòng nhập tính năng sản phẩm!' }]}
                         >
                             <Input.TextArea rows={4} placeholder="Nhập tính năng sản phẩm" />
                         </Form.Item>
@@ -219,8 +251,13 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                                 style={{ width: '100%' }}
                                 showSearch
                                 allowClear
-                                onChange={(value) => setCategoryId(value)}
-                                value={categoryId}
+                                onChange={(value) => {
+                                    form.setFieldsValue({ category: value });
+                                    console.log(value);
+
+                                    setCategoryId(value);
+                                }}
+                                value={form.getFieldValue('category')}
                                 filterOption={(input, option) => {
                                     const children = String(option.children).toLowerCase();
                                     return children.includes(input.toLowerCase());
@@ -228,7 +265,7 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                             >
                                 {categories.map((category) => (
                                     <Select.Option key={category.id} value={category.id}>
-                                        {category.name} - {category.parent.name}
+                                        {category?.name} - {category?.parent?.name}
                                     </Select.Option>
                                 ))}
                             </Select>
@@ -242,8 +279,11 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                                 placeholder="Chọn loại sản phẩm"
                                 style={{ width: '100%' }}
                                 allowClear
-                                onChange={(value) => setProductType(value)}
-                                value={productType} // Đảm bảo giá trị đã chọn được hiển thị
+                                onChange={(value) => {
+                                    form.setFieldsValue({ product_type: value });
+                                    setProductType(value);
+                                }}
+                                value={form.getFieldValue('product_type')}
                             >
                                 <Select.Option value="new_product">Hàng mới về</Select.Option>
                                 <Select.Option value="best_selling">Hàng bán chạy</Select.Option>
@@ -252,6 +292,7 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                         </Form.Item>
                         <Form.Item
                             name="avatar"
+                            value={imageUrl}
                             label="Ảnh đại diện sản phẩm"
                             rules={[{ required: true, message: 'Vui lòng tải lên ảnh đại diện sản phẩm!' }]}
                         >
@@ -260,7 +301,7 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                                 listType="picture-card"
                                 className="avatar-uploader"
                                 showUploadList={false}
-                                beforeUpload={() => true} // Ensure this returns true to allow upload
+                                beforeUpload={() => true}
                                 onChange={handleImageUpload}
                                 onPreview={handlePreview}
                             >
@@ -271,7 +312,10 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                                         style={{ width: '100%', height: '100%', borderRadius: '7px' }}
                                     />
                                 ) : (
-                                    uploadButton
+                                    <div>
+                                        <PlusOutlined />
+                                        <div style={{ marginTop: 8 }}>Ảnh đại diện</div>
+                                    </div>
                                 )}
                             </Upload>
                         </Form.Item>
@@ -283,16 +327,20 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                             name="images"
                             label="Ảnh chi tiết sản phẩm"
                             valuePropName="fileList"
-                            getValueFromEvent={(e) => e.fileList}
+                            getValueFromEvent={(e) => e && e.fileList}
                         >
+                            <p>
+                                {fileList?.map((item) => (
+                                    <h1></h1>
+                                ))}
+                            </p>
                             <Upload
+                                onRemove={handleRemove}
                                 listType="picture-card"
                                 fileList={fileList}
-                                onChange={({ fileList }) => {
-                                    setFileList(fileList);
-                                    handleUploadImages(fileList); // Upload multiple files
-                                }}
+                                onChange={handleFileChange}
                                 onPreview={handlePreview}
+                                defaultFileList={fileList}
                                 multiple
                             >
                                 <Button style={{ width: '100%', height: '100%' }} icon={<UploadOutlined />}>
@@ -304,7 +352,7 @@ function FormUpdateProduct({ isModalUpdateProductVisible, handleModalClose, getD
                 </Row>
                 <Row gutter={16}>
                     <Col span={24}>
-                        <Form.Item name="description" label="Mô tả sản phẩm" rules={[{ required: false }]}>
+                        <Form.Item name="description" label="Mô tả sản phẩm">
                             <ReactQuill
                                 value={editorValue}
                                 onChange={setEditorValue}

@@ -22,7 +22,7 @@ import logo from './logo-homecare.jpg'; // Đảm bảo bạn đã có file logo
 const { Header, Sider, Content } = Layout;
 
 function ManagerLayout() {
-    const [collapsed, setCollapsed] = useState(true);
+    const [collapsed, setCollapsed] = useState(false);
     const [title, setTitle] = useState('Tổng quan'); // Khởi tạo tiêu đề mặc định
     const location = useLocation();
     const {

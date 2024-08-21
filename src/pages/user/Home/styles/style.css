@@ -152,7 +152,7 @@ html {
 }
 
 .pagination-item--active .pagination-item__link:hover {
-    filter: brightness(120%);
+    /* filter: brightness(120%); */
 }
 
 .pagination-item__link {

@@ -29,18 +29,20 @@ const UserLogin = () => {
         <>
             <div className="login-user-container">
                 <Row className="style-row" justify="center" align="middle">
-                    <Col xs={0} sm={0} md={0} lg={6} xl={6} className="column1">
+                    <Col xs={0} sm={0} md={0} lg={6} xl={6} className="column1" style={{ height: '600px' }}>
                         <div className="logo-container">
                             <img src="/logo-homecare.jpg" alt="" />
                         </div>
-                        <div className="login-page-left-title">
+                        <div
+                            style={{ lineHeight: '32px', fontSize: '26px', textAlign: 'center', marginBottom: '40px' }}
+                        >
                             <h3>Một tài khoản cho mọi dịch vụ của HomeCare</h3>
                         </div>
                         <div className="login-page-left-desc">
                             <p>Đăng nhập tài khoản ASUS và thực hiện mọi việc bạn cần từ một cổng dịch vụ duy nhất!</p>
                         </div>
                     </Col>
-                    <Col xs={20} sm={14} md={12} lg={8} xl={8} className="column2">
+                    <Col xs={20} sm={14} md={12} lg={8} xl={8} className="column2" style={{ height: '600px' }}>
                         <Spin spinning={loading} tip="Loading...">
                             <Form
                                 className="login-form-customer"

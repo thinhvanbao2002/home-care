@@ -43,6 +43,35 @@ const createProduct = (
     });
 };
 
+const updateProduct = ({
+    name,
+    categoryId,
+    price,
+    warrantyPeriod,
+    feature,
+    weight,
+    productType,
+    quantity,
+    description,
+    image,
+    productPhoto,
+    productId,
+}) => {
+    return privateAdminAxios.put(`a/product/${productId}`, {
+        name,
+        category_id: categoryId,
+        price,
+        warranty_period: warrantyPeriod,
+        feature,
+        weight,
+        product_type: productType,
+        quantity,
+        description,
+        image,
+        product_photo: productPhoto,
+    });
+};
+
 const getDetailProduct = (productId) => {
     return privateAdminAxios.get(`a/product/${productId}`);
 };
@@ -59,4 +88,16 @@ const deleteProduct = (productId) => {
     return privateAdminAxios.delete(`a/product/${productId}`);
 };
 
-export { fetchAllProduct, createProduct, getDetailProduct, updateVoucher, deleteProduct };
+const deleteProductPhoto = (productId) => {
+    return privateAdminAxios.delete(`product-photo/${productId}`);
+};
+
+export {
+    fetchAllProduct,
+    createProduct,
+    getDetailProduct,
+    updateVoucher,
+    deleteProduct,
+    deleteProductPhoto,
+    updateProduct,
+};

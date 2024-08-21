@@ -1,17 +1,14 @@
 import publicInstance from '../instants/axios-public-instant';
 // Product
-const fetchAllProduct = () => {
+const fetchAllProduct = ({ q, categoryId, status, product_type, page, take }) => {
     return publicInstance.get('product', {
-        // params: {
-        //     // q: q,
-        //     // brand: categoryId,
-        //     // status: status,
-        //     // from_date: fromDate,
-        //     // to_date: toDate,
-        //     // product_type: productType,
-        //     // page: page,
-        //     take: take,
-        // },
+        params: {
+            q: q,
+            brand: categoryId,
+            status: status,
+            page: page,
+            take: take,
+        },
     });
 };
 

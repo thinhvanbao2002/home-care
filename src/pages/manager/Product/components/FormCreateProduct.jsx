@@ -210,7 +210,7 @@ function FormCreateProduct({ isModalCreateProductVisible, handleModalClose, getD
                             >
                                 {categories.map((category) => (
                                     <Select.Option key={category.id} value={category.id}>
-                                        {category.name} - {category.parent.name}
+                                        {category?.name} - {category?.parent?.name}
                                     </Select.Option>
                                 ))}
                             </Select>

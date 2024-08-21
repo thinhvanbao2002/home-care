@@ -222,8 +222,8 @@ function Product() {
                                 }}
                             >
                                 {categories.map((category) => (
-                                    <Select.Option key={category.id} value={category.id}>
-                                        {category.name} - {category.parent.name}
+                                    <Select.Option key={category?.id} value={category?.id}>
+                                        {category?.name} - {category?.parent?.name}
                                     </Select.Option>
                                 ))}
                             </Select>
@@ -270,13 +270,13 @@ function Product() {
                     const realIndex = (page - 1) * take + index + 1;
                     return {
                         key: realIndex,
-                        name: data.name,
-                        category: data.category.name,
-                        price: formatNumber(data.price),
-                        warranty_period: `${data.warranty_period} tháng`,
-                        weight: data.weight,
+                        name: data?.name,
+                        category: data?.category?.name,
+                        price: formatNumber(data?.price),
+                        warranty_period: `${data?.warranty_period} tháng`,
+                        weight: data?.weight,
                         product_type: (() => {
-                            switch (data.product_type) {
+                            switch (data?.product_type) {
                                 case 'new_product':
                                     return 'Sản phẩm mới';
                                 case 'best_selling':
@@ -314,7 +314,8 @@ function Product() {
             <FormUpdateProduct
                 isModalUpdateProductVisible={isModalUpdateProductVisible}
                 handleModalClose={handleModalClose}
-                getDetailProduct={productDetail}
+                data={productDetail}
+                getDataProduct={getAllProduct}
             />
             <Modal
                 title={
