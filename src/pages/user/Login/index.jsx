@@ -6,11 +6,13 @@ import { login } from '~/services/user/auth-service';
 import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { store } from '~/redux/store/store';
 import { setAuth } from '~/redux/slide/authSlide';
+import { Link, useNavigate } from 'react-router-dom';
 
 const UserLogin = () => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     // Xử lý login
     const onFinish = async (values) => {
@@ -20,8 +22,10 @@ const UserLogin = () => {
             openNotificationSuccess('Thành công', 'Đăng nhập thành công');
             store.dispatch(setAuth(res.data));
             setLoading(false);
+            navigate('/');
         } catch (error) {
-            openNotificationError('Thất bại', error.message);
+            openNotificationError('Thất bại', error.response.data.message);
+            setLoading(false);
         }
     };
 
@@ -30,7 +34,7 @@ const UserLogin = () => {
             <div className="login-user-container">
                 <Row className="style-row" justify="center" align="middle">
                     <Col xs={0} sm={0} md={0} lg={6} xl={6} className="column1" style={{ height: '600px' }}>
-                        <div className="logo-container">
+                        <div className="logo-container" onClick={() => navigate('/')}>
                             <img src="/logo-homecare.jpg" alt="" />
                         </div>
                         <div
@@ -103,7 +107,7 @@ const UserLogin = () => {
                                     <Button type="primary" htmlType="submit" className="login-form-button-customer">
                                         Đăng nhập
                                     </Button>
-                                    <a href="">Đăng kí tài khoản!</a>
+                                    <Link to="/customer/register">Đăng kí tài khoản!</Link>
                                 </Form.Item>
                             </Form>
                         </Spin>

@@ -5,6 +5,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { register } from '~/services/user/customer-service';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
 function Register() {
     const [form] = Form.useForm();
@@ -58,6 +59,7 @@ function Register() {
                 <Col xs={22} sm={20} md={18} lg={16} xl={12} className="column-register">
                     <div className="logo-container">
                         <img src="/logo-homecare.jpg" alt="" />
+                        <Link to="/"></Link>
                     </div>
                     <div className="login-page-left-title">
                         <h3>Đăng kí tài khoản cho mọi dịch vụ của HomeCare</h3>
@@ -210,7 +212,7 @@ function Register() {
                                     <p>Đăng kí</p>
                                 </Button>
                             </Spin>
-                            <a href="">Bạn đã có tài khoản, đăng nhập ngay?</a>
+                            <Link to="/auth/login">Bạn đã có tài khoản, đăng nhập ngay?</Link>
                         </Form.Item>
                     </Form>
                 </Col>

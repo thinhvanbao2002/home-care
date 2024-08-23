@@ -49,7 +49,7 @@ function Header() {
             <div className="wrapber">
                 <header className="nav">
                     <div className="nav-left">
-                        <div className="logo">
+                        <div className="logo" onClick={() => navigate('/')}>
                             <img src="/logo-homecare.jpg" alt="" className="logo-img" />
                         </div>
                         {categories &&

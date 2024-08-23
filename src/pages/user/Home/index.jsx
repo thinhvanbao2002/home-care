@@ -167,14 +167,11 @@ function Home() {
                                 {products &&
                                     products.length > 0 &&
                                     products.map((item) => (
-                                        <div
-                                            key={item.id}
-                                            className="col l-2-4 m-3 c-6"
-                                            onClick={() => handleNavigate(item.id)}
-                                        >
+                                        <div key={item.id} className="col l-2-4 m-3 c-6">
                                             <div className="home-product-item">
                                                 <div
                                                     className="home-product-item__img"
+                                                    onClick={() => handleNavigate(item.id)}
                                                     style={{ backgroundImage: `url('${item.image}')` }}
                                                 ></div>
                                                 <h4 className="home-product-item__name">{item.name}</h4>
