@@ -1,0 +1,119 @@
+.customer-change-password {
+    width: 100%;
+    padding: 20px;
+}
+
+.header-customer-change-password {
+    width: 100%;
+}
+
+.header-customer-change-password h2 {
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.header-customer-change-password p {
+    margin-top: 10px;
+    color: #4f4e4e;
+    font-size: 16px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #ccc;
+}
+
+.customer-address-operation {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 20px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+.customer-address-operation button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    background: #ff4d4d;
+    font-size: 16px;
+    color: #fff;
+}
+
+.customer-address-item {
+    padding: 20px;
+    border-bottom: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.address-item-name-phone {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.address-item-name {
+    font-size: 16px;
+}
+
+.address-item-phone {
+    font-size: 16px;
+    color: #ccc;
+}
+
+.address-item-name-phone span {
+    border: 1px solid;
+    height: 15px;
+    margin: 0 10px;
+}
+
+.address-item-address p {
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: #444;
+}
+
+.address-item-defatlt {
+    width: 90px;
+    text-align: center;
+    padding: 3px 7px;
+    border: 1px solid #ff4d4d;
+    border-radius: 7px;
+    color: #ff4d4d;
+    opacity: 0.3;
+}
+
+.address-item-defatlt-active {
+    opacity: 1 !important;
+}
+
+.customer-address-item-right {
+    display: flex;
+    flex-direction: column;
+}
+
+.customer-address-btn-update,
+.customer-address-btn-is-default {
+    padding: 3px 7px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #fff;
+}
+
+.customer-address-btn-update {
+    margin-bottom: 10px;
+    border: 1px solid #FF9933;
+    color: #FF9933;
+}
+
+.customer-address-btn-update:hover,
+.customer-address-btn-is-default:hover {
+    opacity: 0.6;
+}
+
+.customer-address-btn-is-default {
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+}

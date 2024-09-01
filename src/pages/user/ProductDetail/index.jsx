@@ -2,10 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import './productDetail.css'; // Đảm bảo rằng bạn đã tạo và liên kết tệp CSS
 import './grid.css';
 import parse from 'html-react-parser';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getDetailProduct } from '~/services/user/product-service';
-import { formatNumber, openNotificationSuccess } from '~/components/common/ultils';
+import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { addToCart } from '~/services/user/cart-service';
+import { useSelector } from 'react-redux';
 
 function ProductDetail() {
     const location = useLocation();
@@ -16,8 +17,12 @@ function ProductDetail() {
     const productContentRef = useRef(null);
     // const [productId, setProductId] = useState(location.state?.id);
     const [product, setProduct] = useState({});
-
+    const navigate = useNavigate();
     const productId = location.state?.id;
+
+    const auth = useSelector((state) => state.auth.user);
+
+    const userAuth = typeof auth === 'string' ? JSON.parse(auth) : auth;
 
     useEffect(() => {
         if (product) {
@@ -44,9 +49,30 @@ function ProductDetail() {
 
     const handleAddToCart = async () => {
         try {
-            await addToCart({ productId });
-            openNotificationSuccess('Thành công', 'Đã thêm sản phẩm vào giỏ hàng!');
+            if (Object.keys(auth).length !== 0) {
+                await addToCart({ productId });
+                openNotificationSuccess('Thành công', 'Đã thêm sản phẩm vào giỏ hàng!');
+            } else {
+                openNotificationError('Thất bại', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
+                navigate('/auth/login');
+            }
         } catch (error) {}
+    };
+
+    const handleOrder = (product, quantity = 1) => {
+        try {
+            if (Object.keys(auth).length !== 0) {
+                const totalPrice = product.price * quantity;
+                navigate('/u/order', {
+                    state: { products: [{ ...product, quantity, totalPrice, product_id: product.id }] },
+                });
+            } else {
+                openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
+                navigate('/auth/login');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
@@ -84,7 +110,11 @@ function ProductDetail() {
                                 <button className="color-button black"></button>
                                 <button className="color-button yellow selected"></button>
                             </div>
-                            <button style={{ borderRadius: '15px' }} className="buy-button">
+                            <button
+                                onClick={() => handleOrder(product)}
+                                style={{ borderRadius: '15px', width: '100%' }}
+                                className="buy-button"
+                            >
                                 MUA NGAY
                             </button>
                             <button

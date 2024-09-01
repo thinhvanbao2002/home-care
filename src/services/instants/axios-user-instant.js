@@ -10,9 +10,12 @@ console.log('ENV:', process.env.BASE_API_URL);
 user_instance.interceptors.request.use(
     function (config) {
         // Thêm token vào header nếu có
-        const token = localStorage.getItem('user-token');
+        const token = localStorage.getItem('authData');
+
+        const jsonToken = JSON.parse(token);
+
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${jsonToken.token}`;
         }
         return config;
     },

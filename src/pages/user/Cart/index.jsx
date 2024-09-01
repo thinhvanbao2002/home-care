@@ -3,19 +3,38 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './cart.css';
 import { useEffect, useState } from 'react';
 import { deleteCart, getAllCart, updateCart } from '~/services/user/cart-service';
-import { formatNumber, openNotificationSuccess } from '~/components/common/ultils';
+import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function Cart() {
     const [carts, setCarts] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const [totalPrice, setTotalPrice] = useState(0);
     const [selectedProducts, setSelectedProducts] = useState([]); // Trạng thái lưu trữ sản phẩm được chọn
+    const navigate = useNavigate();
+
+    const auth = useSelector((state) => state.auth.user);
 
     console.log(selectedProducts);
 
     useEffect(() => {
         findAllCart();
     }, []);
+
+    const handleOrder = () => {
+        try {
+            if (Object.keys(auth).length !== 0) {
+                // const totalPrice = product.price * quantity;
+                navigate('/u/order', { state: { products: selectedProducts } });
+            } else {
+                openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
+                navigate('/auth/login');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const findAllCart = async () => {
         try {
@@ -35,12 +54,15 @@ function Cart() {
         setCarts(updatedCarts);
         calculateTotalPrice(updatedCarts);
 
+        console.log(updatedCarts);
+
         if (newSelectAll) {
             // Thêm tất cả sản phẩm vào mảng selectedProducts
             const selected = updatedCarts.map((item) => ({
-                productId: item.id,
+                ...item.product,
+                product_id: item.product.id,
                 quantity: item.product_number,
-                totalPrice: item.product_number * item.product.price,
+                totalPrice: item.total_price,
             }));
             setSelectedProducts(selected);
         } else {
@@ -49,7 +71,7 @@ function Cart() {
         }
     };
 
-    const handleSelectItem = (index) => {
+    const handleSelectItem = (index, item) => {
         const updatedCarts = [...carts];
         updatedCarts[index].checked = !updatedCarts[index].checked;
         setCarts(updatedCarts);
@@ -61,7 +83,8 @@ function Cart() {
         if (updatedCarts[index].checked) {
             // Thêm sản phẩm vào mảng selectedProducts
             const selectedProduct = {
-                productId: updatedCarts[index].id,
+                ...item.product,
+                product_id: item.product.id,
                 quantity: updatedCarts[index].product_number,
                 totalPrice: updatedCarts[index].product_number * updatedCarts[index].product.price,
             };
@@ -171,7 +194,7 @@ function Cart() {
                                                     type="checkbox"
                                                     id={`item-${index}`}
                                                     checked={item.checked}
-                                                    onChange={() => handleSelectItem(index)}
+                                                    onChange={() => handleSelectItem(index, item)}
                                                     style={checkboxInputStyle}
                                                 />
                                                 <label htmlFor={`item-${index}`} style={checkboxLabelStyle}></label>
@@ -258,7 +281,9 @@ function Cart() {
                             >
                                 Nhập Voucher
                             </button>
-                            <button className="buy-button">Mua Hàng</button>
+                            <button onClick={handleOrder} className="buy-button">
+                                Mua Hàng
+                            </button>
                         </div>
                     </div>
                 </div>

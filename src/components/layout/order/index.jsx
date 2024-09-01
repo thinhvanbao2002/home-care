@@ -1,9 +1,10 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 function OrderLayout() {
     const location = useLocation();
     const [pageTitle, setPageTitle] = useState('Giỏ hàng');
+    const navigate = useNavigate();
 
     useEffect(() => {
         switch (location.pathname) {
@@ -15,9 +16,13 @@ function OrderLayout() {
                 document.title = 'Thanh toán';
                 setPageTitle('Thanh toán');
                 break;
-            case '/orders/confirmation':
-                document.title = 'Xác nhận đơn hàng';
-                setPageTitle('Xác nhận đơn hàng');
+            case '/u/order':
+                document.title = 'Đặt hàng';
+                setPageTitle('Đặt hàng');
+                break;
+            case '/u/qr-pay':
+                document.title = 'Thanh toán';
+                setPageTitle('Thanh toán');
                 break;
             default:
                 document.title = 'Giỏ hàng';
@@ -32,7 +37,7 @@ function OrderLayout() {
                 <header className="header">
                     <div className="grid wide">
                         <div className="logo-cart">
-                            <img src="/logo-homecare.jpg" alt="" />
+                            <img onClick={() => navigate('/')} src="/logo-homecare.jpg" alt="" />
                             <h1>{pageTitle}</h1>
                         </div>
                     </div>

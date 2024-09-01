@@ -5,7 +5,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { register } from '~/services/user/customer-service';
 import Swal from 'sweetalert2';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
     const [form] = Form.useForm();
@@ -17,6 +17,7 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [address, setAddress] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
+    const navigate = useNavigate();
 
     const onFinish = async (values) => {
         try {
@@ -58,7 +59,7 @@ function Register() {
             <Row className="style-row-customer" justify="center" align="middle">
                 <Col xs={22} sm={20} md={18} lg={16} xl={12} className="column-register">
                     <div className="logo-container">
-                        <img src="/logo-homecare.jpg" alt="" />
+                        <img onClick={() => navigate('/')} src="/logo-homecare.jpg" alt="" />
                         <Link to="/"></Link>
                     </div>
                     <div className="login-page-left-title">

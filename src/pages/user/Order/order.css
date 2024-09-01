@@ -1,0 +1,303 @@
+.purchase-container {
+    width: 70%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.purchase-address,
+.purchase-product,
+.purchase-voucher-section,
+.purchase-payment-methods,
+.purchase-summary {
+    margin-bottom: 20px;
+}
+
+.purchase-address h2,
+.purchase-product h3,
+.purchase-payment-methods h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    line-height: 30px;
+}
+
+.purchase-address p {
+    margin: 5px 0;
+}
+
+.purchase-address a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.purchase-product-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+}
+
+.purchase-product-details img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.purchase-product-info {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.purchase-price,
+.purchase-total {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.purchase-voucher-section {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.purchase-voucher {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.purchase-voucher a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.purchase-shipping p {
+    margin: 5px 0;
+}
+
+.purchase-payment-methods .purchase-methods {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.purchase-payment-methods button {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.purchase-payment-methods button.active {
+    border-color: #3498db;
+    background-color: #ffe0cc;
+    color: #3498db;
+}
+
+.purchase-summary-details p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.purchase-summary-total {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.purchase-order-btn {
+    width: 100%;
+    padding: 12px 0;
+    background-color: #3498db;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.purchase-order-btn:hover {
+    background-color: #3498db;
+}
+
+/* Popup style */
+/* Popup style */
+.purchase-popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+.purchase-popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    /* Sử dụng absolute để căn giữa theo chiều ngang và dọc */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Căn giữa theo chiều dọc và ngang */
+    width: 90%;
+    max-width: 600px;
+    /* Điều chỉnh kích thước tối đa */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Thêm bóng để nổi bật */
+    text-align: center;
+}
+
+
+
+.purchase-popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.purchase-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #333;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.purchase-close:hover {
+    color: #3498db;
+}
+
+/* Định dạng form trong pop-up */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    flex: 1;
+    text-align: right;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group textarea {
+    flex: 2;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+form button {
+    margin-top: 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #2980b9;
+}
+
+/* Định dạng cho textarea */
+form textarea {
+    resize: vertical;
+}
+
+/* Định dạng cho phần chọn giao hàng */
+.shipping-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.shipping-option input[type="radio"] {
+    margin-right: 10px;
+}
+
+.shipping-option label {
+    font-size: 1em;
+}
+
+/* Định dạng cho phần chọn voucher */
+.voucher-input,
+.voucher-options {
+    margin-bottom: 15px;
+}
+
+.voucher-input label {
+    font-weight: bold;
+}
+
+.voucher-input input[type="text"] {
+    width: 96%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.voucher-options p {
+    margin: 0 0 10px;
+    font-weight: bold;
+}
+
+.voucher-options select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.purchase-quantity {
+    margin-right: 100px;
+}
+
+.purchase-methods button.active {
+    background-color: #1890ff;
+    /* Màu chính */
+    color: #fff;
+    /* Màu chữ trắng */
+    border-color: #1890ff;
+    /* Đảm bảo viền cùng màu với nền */
+}
+
+.purchase-methods button.active:hover {
+    background-color: #40a9ff;
+    /* Màu xanh nhạt hơn khi hover */
+    border-color: #40a9ff;
+}

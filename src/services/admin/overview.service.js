@@ -1,19 +1,12 @@
 import privateAdminAxios from '../instants/axios-admin-instant';
-
 // Product
-const fetchAllCustomer = (q, status, fromDate, toDate, page, take) => {
-    return privateAdminAxios.get('a/customer', {
-        params: {
-            q: q,
-            status: status,
-            from_date: fromDate,
-            to_date: toDate,
-            page: page,
-            take: take,
-        },
-    });
+const getNumberCustomer = () => {
+    return privateAdminAxios.get('a/customer');
 };
 
+const getNumberProduct = () => {
+    return privateAdminAxios.get('a/product');
+};
 const getDetailCustomer = (customerId) => {
     return privateAdminAxios.get(`a/customer/${customerId}`);
 };
@@ -30,4 +23,4 @@ const deleteCustomer = (customerId) => {
     return privateAdminAxios.delete(`a/customer/${customerId}`);
 };
 
-export { fetchAllCustomer, getDetailCustomer, updateCustomer, deleteCustomer };
+export { getNumberCustomer, getNumberProduct };

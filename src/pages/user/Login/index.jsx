@@ -21,6 +21,7 @@ const UserLogin = () => {
             const res = await login(email, password);
             openNotificationSuccess('Thành công', 'Đăng nhập thành công');
             store.dispatch(setAuth(res.data));
+            localStorage.setItem('authData', JSON.stringify(res.data));
             setLoading(false);
             navigate('/');
         } catch (error) {

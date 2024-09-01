@@ -3,10 +3,11 @@ import './styles/grid.css';
 import './styles/responsive.css';
 import { useEffect, useState } from 'react';
 import { fetchAllProduct } from '~/services/user/product-service';
-import { formatNumber } from '~/components/common/ultils';
+import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { fetchAllChildCategory } from '~/services/user/category-service';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { addToCart } from '~/services/user/cart-service';
 
 function Home() {
     const navigate = useNavigate();
@@ -17,15 +18,13 @@ function Home() {
     const [take, setTake] = useState(20);
     const [categoryId, setcategoryId] = useState(null);
 
-    const auth = useSelector((state) => state.auth);
+    const auth = useSelector((state) => state?.auth?.user);
 
     const handleNavigate = (id) => {
         navigate('/product-detail', { state: { id } });
     };
 
     useEffect(() => {
-        console.log('render');
-
         getAllProduct();
         getAllCategory();
     }, [currentPage, categoryId]);
@@ -47,12 +46,75 @@ function Home() {
         } catch (error) {}
     };
 
-    const handleOrder = (productId) => {
-        alert(productId);
+    const handleOrder = (product, quantity = 1) => {
+        try {
+            if (Object.keys(auth).length !== 0) {
+                const totalPrice = product.price * quantity;
+                navigate('/u/order', {
+                    state: { products: [{ ...product, quantity, totalPrice, product_id: product.id }] },
+                });
+            } else {
+                openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
+                navigate('/auth/login');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    const handleAddCart = (productId) => {
-        alert(productId);
+    const handleOrderMultiple = (cartItems) => {
+        try {
+            if (Object.keys(auth).length !== 0) {
+                const products = cartItems.map((item) => ({
+                    ...item.product,
+                    quantity: item.quantity,
+                    totalPrice: item.product.price * item.quantity,
+                }));
+                navigate('/u/order', { state: { products } });
+            } else {
+                openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
+                navigate('/auth/login');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    //     import { useLocation } from 'react-router-dom';
+    // import { formatNumber } from '~/components/common/ultils';
+
+    // function OrderPage() {
+    //     const location = useLocation();
+    //     const products = location.state?.products || [];
+
+    //     return (
+    //         <div>
+    //             <h1>Đặt Hàng</h1>
+    //             {products.map((product, index) => (
+    //                 <div key={index}>
+    //                     <h2>{product.name}</h2>
+    //                     <img src={product.image} alt={product.name} />
+    //                     <p>Số lượng: {product.quantity}</p>
+    //                     <p>Giá mỗi sản phẩm: {formatNumber(product.price)} VND</p>
+    //                     <p>Tổng tiền: {formatNumber(product.totalPrice)} VND</p>
+    //                 </div>
+    //             ))}
+    //         </div>
+    //     );
+    // }
+
+    // export default OrderPage;
+
+    const handleAddToCart = async (productId) => {
+        try {
+            if (Object.keys(auth).length !== 0) {
+                await addToCart({ productId });
+                openNotificationSuccess('Thành công!', 'Đã thêm sản phẩm vào giỏ hàng!');
+            } else {
+                openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
+                navigate('/auth/login');
+            }
+        } catch (error) {}
     };
 
     const handlePageChange = (page) => {
@@ -193,13 +255,13 @@ function Home() {
 
                                                 <div className="home-product-item__buy">
                                                     <button
-                                                        onClick={() => handleOrder(item.id)}
+                                                        onClick={() => handleOrder(item)}
                                                         className="btn btn--size-s"
                                                     >
                                                         Mua
                                                     </button>
                                                     <button
-                                                        onClick={() => handleAddCart(item.id)}
+                                                        onClick={() => handleAddToCart(item.id)}
                                                         className="btn btn--size-s"
                                                     >
                                                         Giỏ hàng

@@ -24,14 +24,24 @@ import User from './pages/manager/User';
 import OrderLayout from './components/layout/order';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuth } from './redux/slide/authSlide';
+import Order from './pages/user/Order';
+import AdminOrder from './pages/manager/Order';
+import Profile from './pages/user/Profile';
+import SideberProfile from './components/layout/profile/sidebar';
+import HeaderProfile from './components/layout/profile/header';
+import ProfileLayout from './components/layout/profile';
+import CustomerInfo from './pages/user/CustomerInfo';
+import CustomerAddress from './pages/user/CustomerAddress';
+import PurchaseOrder from './pages/user/PurchaseOrder';
+import ChangePassword from './pages/user/ChangePassword';
+import SuccessPage from './pages/user/OrderSuccess/Success';
+import QrPaymen from './pages/user/QrPaymen';
 
 function App() {
     const location = useLocation();
     const [loading, setLoading] = useState(true);
     const auth = useSelector((state) => state.auth);
     const dispatch = useDispatch(); // Initialize useDispatch
-
-    console.log(auth);
 
     useEffect(() => {
         // Check if the route is a user route
@@ -58,42 +68,60 @@ function App() {
 
     return (
         <>
-            {loading && <LoadingSpinner />}
+            {/* {loading && <LoadingSpinner />}
             <TransitionGroup>
-                <CSSTransition key={location.key} timeout={300} classNames="fade">
-                    <div>
-                        <Routes location={location}>
-                            <Route path="/" element={<DefaultLayoutUser />}>
-                                <Route index element={<Home />} />
-                                <Route path="products" element={<UserProduct />} />
-                                <Route path="product-detail" element={<ProductDetail />} />
-                            </Route>
-                            <Route path="u" element={<OrderLayout />}>
-                                <Route path="cart" element={<Cart />} />
-                            </Route>
-                            <Route path="auth">
-                                <Route path="login" element={<UserLogin />} />
-                                <Route path="a/login" element={<Login />} />
-                            </Route>
-                            <Route path="admin" element={<ManagerLayout />}>
-                                <Route index element={<Overview />} />
-                                <Route path="staff" element={<Admin />} />
-                                <Route path="customers" element={<User />} />
-                                <Route path="product" element={<Product />} />
-                                <Route path="category" element={<Category />} />
-                                <Route path="inventory" element={<Inventory />} />
-                                <Route path="voucher" element={<Voucher />} />
-                                <Route path="gift" element={<Gift />} />
-                                <Route path="new" element={<New />} />
-                                <Route path="notification" element={<Notification />} />
-                            </Route>
-                            <Route path="customer">
-                                <Route path="register" element={<Register />} />
-                            </Route>
-                        </Routes>
-                    </div>
-                </CSSTransition>
-            </TransitionGroup>
+                <CSSTransition key={location.key} timeout={300} classNames="fade"> */}
+            <div>
+                <Routes location={location}>
+                    <Route path="/" element={<DefaultLayoutUser />}>
+                        <Route index element={<Home />} />
+                        <Route path="products" element={<UserProduct />} />
+                        <Route path="product-detail" element={<ProductDetail />} />
+                    </Route>
+                    <Route path="order-success" element={<SuccessPage />} />
+
+                    <Route path="u" element={<OrderLayout />}>
+                        <Route path="cart" element={<Cart />} />
+                        <Route path="order" element={<Order />} />
+                        <Route path="qr-pay" element={<QrPaymen />} />
+                    </Route>
+                    <Route path="auth">
+                        <Route path="login" element={<UserLogin />} />
+                        <Route path="a/login" element={<Login />} />
+                    </Route>
+                    <Route path="admin" element={<ManagerLayout />}>
+                        <Route index element={<Overview />} />
+                        <Route path="staff" element={<Admin />} />
+                        <Route path="customers" element={<User />} />
+                        <Route path="product" element={<Product />} />
+                        <Route path="category" element={<Category />} />
+                        <Route path="inventory" element={<Inventory />} />
+                        <Route path="voucher" element={<Voucher />} />
+                        <Route path="gift" element={<Gift />} />
+                        <Route path="new" element={<New />} />
+                        <Route path="notification" element={<Notification />} />
+                        <Route path="order" element={<AdminOrder />} />
+                    </Route>
+                    <Route path="customer">
+                        <Route path="register" element={<Register />} />
+                        <Route path="profile" element={<Profile />} />
+                    </Route>
+                    <Route path="profile" element={<ProfileLayout />}>
+                        <Route path="info-customer" element={<CustomerInfo />} />
+                        <Route path="address-customer" element={<CustomerAddress />} />
+                        <Route path="wallet-customer" element={<Profile />} />
+                        <Route path="order-customer" element={<PurchaseOrder />} />
+                        <Route path="change-password-customer" element={<ChangePassword />} />
+                    </Route>
+
+                    <Route path="test">
+                        <Route path="sidebar" element={<SideberProfile />} />
+                        <Route path="header" element={<HeaderProfile />} />
+                    </Route>
+                </Routes>
+            </div>
+            {/* </CSSTransition>
+            </TransitionGroup> */}
         </>
     );
 }

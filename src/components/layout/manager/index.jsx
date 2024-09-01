@@ -63,6 +63,9 @@ function ManagerLayout() {
             case '/admin/new':
                 setTitle('Quản lý tin tức');
                 break;
+            case '/admin/order':
+                setTitle('Quản lý đơn hàng');
+                break;
             default:
                 setTitle('Tổng quan');
         }
@@ -79,6 +82,12 @@ function ManagerLayout() {
         { key: '8', icon: <GiftOutlined />, label: 'Quản lý khuyến mãi', path: '/admin/gift' },
         { key: '9', icon: <NotificationFilled />, label: 'Quản lý thông báo', path: '/admin/notification' },
         { key: '10', icon: <BellFilled style={{ fontSize: '16px' }} />, label: 'Quản lý tin tức', path: '/admin/new' },
+        {
+            key: '11',
+            icon: <ProductOutlined style={{ fontSize: '16px' }} />,
+            label: 'Quản lý đơn hàng',
+            path: '/admin/order',
+        },
     ];
 
     return (
@@ -86,7 +95,7 @@ function ManagerLayout() {
             <Sider className="sider-bar-admin" trigger={null} collapsible collapsed={collapsed}>
                 <div className="logo-container">
                     <img
-                        style={{ margin: '0', marginTop: '20px', width: '80%' }}
+                        style={{ margin: '0', marginTop: '20px', width: '80%', marginBottom: '20px' }}
                         src="/logo-homecare.jpg"
                         alt="Logo"
                         className="logo"
