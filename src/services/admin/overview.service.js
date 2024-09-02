@@ -7,6 +7,10 @@ const getNumberCustomer = () => {
 const getNumberProduct = () => {
     return privateAdminAxios.get('a/product');
 };
+
+const getNumberOrder = () => {
+    return privateAdminAxios.get('a/order');
+};
 const getDetailCustomer = (customerId) => {
     return privateAdminAxios.get(`a/customer/${customerId}`);
 };
@@ -23,4 +27,4 @@ const deleteCustomer = (customerId) => {
     return privateAdminAxios.delete(`a/customer/${customerId}`);
 };
 
-export { getNumberCustomer, getNumberProduct };
+export { getNumberCustomer, getNumberProduct, getNumberOrder };

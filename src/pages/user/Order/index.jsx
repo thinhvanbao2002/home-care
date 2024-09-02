@@ -26,17 +26,19 @@ function Order() {
     const auth = useSelector((state) => state.auth.user);
     const userAuth = typeof auth === 'string' ? JSON.parse(auth) : auth;
 
-    console.log('order product', products);
+    console.log(name);
+    console.log(phone);
+    console.log(note);
 
     const handleSubmit = async () => {
         form.validateFields()
             .then(async (values) => {
                 console.log('Form Values:', values);
                 await createOrder({
-                    name: values.name,
-                    phone: values.phone,
+                    name: values.fullName,
+                    phone: values.phoneNumber,
                     address: values.address,
-                    note: values.note,
+                    note: values.addressNote,
                     customerId: userAuth.id,
                     totalPrice: totalAmount,
                     items: products,

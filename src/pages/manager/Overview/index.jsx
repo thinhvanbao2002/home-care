@@ -11,7 +11,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
-import { getNumberCustomer, getNumberProduct } from '~/services/admin/overview.service';
+import { getNumberCustomer, getNumberOrder, getNumberProduct } from '~/services/admin/overview.service';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -19,6 +19,7 @@ function Overview() {
     const [selectedYear, setSelectedYear] = useState('2024');
     const [countCustomer, setCountCustomer] = useState(0);
     const [countProduct, setCountProduct] = useState(0);
+    const [countOrder, setCountOrder] = useState(0);
 
     const dataByYear = {
         2022: [100, 130, 150, 170, 160, 200, 180, 210, 190, 220, 230, 240],
@@ -29,6 +30,7 @@ function Overview() {
     useEffect(() => {
         numberCustomer();
         getAllProducts();
+        getAllOrder();
     }, []);
 
     const numberCustomer = async () => {
@@ -42,6 +44,15 @@ function Overview() {
         try {
             const res = await getNumberProduct();
             setCountProduct(res.meta.item_count);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getAllOrder = async () => {
+        try {
+            const res = await getNumberOrder();
+            setCountOrder(res.meta.item_count);
         } catch (error) {
             console.log(error);
         }
@@ -109,9 +120,10 @@ function Overview() {
                         </h4>
                     </div>
                     <div className="overview-orders">
-                        <h3>Đơn hàng</h3>
+                        <h3>Sản phẩm đã bán</h3>
                         <h4>
-                            <span>+ </span>4532
+                            <span>+ </span>
+                            {countOrder}
                         </h4>
                     </div>
                 </div>
