@@ -11,7 +11,7 @@ function SideberProfile() {
         <>
             <div className="sidebar-profile">
                 <div className="profile-info">
-                    <img src={authJson.avatar} alt="Profile Picture" />
+                    <img src={authJson.avatar ? authJson.avatar : '/user.png'} alt="Profile Picture" />
                     <p className="username">{authJson.name}</p>
                     <Link to="/" className="edit-profile">
                         Về trang chủ

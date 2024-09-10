@@ -15,7 +15,8 @@ function Home() {
     const [categories, setCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [take, setTake] = useState(20);
+    const [take, setTake] = useState(15);
+    const [page, setPage] = useState(1);
     const [categoryId, setcategoryId] = useState(null);
 
     const auth = useSelector((state) => state?.auth?.user);
@@ -31,7 +32,7 @@ function Home() {
 
     const getAllProduct = async () => {
         try {
-            const res = await fetchAllProduct({ page: currentPage, take, categoryId });
+            const res = await fetchAllProduct({ page: page, take, categoryId });
             setProducts(res.data); // Giả sử API trả về sản phẩm trong res.data.products
             setTotalPages(res.data.totalPages); // Giả sử API trả về tổng số trang
         } catch (error) {
@@ -124,210 +125,125 @@ function Home() {
 
     return (
         <>
-            <div className="grid wide">
-                <div className="row sm-gutter app__content">
-                    {/* <div className="col l-2 m-0 c-0"> */}
-                    {/* <nav className="category">
-                            <h3 className="category__heading">
-                                <i className="category__heading-icon fa-solid fa-list"></i>Danh mục
-                            </h3>
-                            <ul className="category-list">
-                                {categories &&
-                                    categories.length > 0 &&
-                                    categories.map((c) => (
-                                        <li
-                                            key={c.id}
-                                            className="category-item category-item--active"
-                                            onClick={() => setcategoryId(c.id)}
-                                        >
-                                            <a href="#" className="category-item-link">
-                                                {c.name}
-                                            </a>
-                                        </li>
-                                    ))}
-                            </ul>
-                        </nav> */}
-                    {/* </div> */}
+            <header class="home-header">
+                <div class="home-banner">
+                    {/* <!-- Slide bên trái --> */}
+                    <div class="home-slide-left">
+                        {/* <button class="slide-btn prev-btn" onclick="changeSlide('left', -1)">
+                            ‹
+                        </button> */}
+                        <img
+                            id="slideLeft"
+                            src="https://webmedia.com.vn/images/2020/05/banner-khuyen-mai-electrolux.jpg"
+                            alt="Samsung Galaxy Z Flip6 Promotion"
+                        />
+                        {/* <button class="slide-btn next-btn" onclick="changeSlide('left', 1)">
+                            ›
+                        </button> */}
+                    </div>
 
-                    <div className="col l-12 m-12 c-12 ">
-                        <div className="home-filter hide-on-mobile-tablet">
-                            <span className="home-filter__label">Sắp xếp theo</span>
-                            <button className="home-filter-btn btn">Phổ biến</button>
-                            <button className="home-filter-btn btn btn--primary">Mới nhất</button>
-                            <button className="home-filter-btn btn">Bán chạy</button>
-
-                            <div className="select-input">
-                                <span className="select-input__label">Giá</span>
-                                <i className="select-input__icon fa-solid fa-angle-down"></i>
-                                <ul className="select-input__list">
-                                    <li className="select-input__item">
-                                        <a href="#" className="select-input__link">
-                                            Giá: Thấp đến cao
-                                        </a>
-                                    </li>
-
-                                    <li className="select-input__item">
-                                        <a href="#" className="select-input__link">
-                                            Giá: Cao đến thấp
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div className="home-filter__page">
-                                <span className="home-filter__page-num">
-                                    <span className="home-filter__page-current">{currentPage}</span>/{totalPages}
-                                </span>
-
-                                <div className="home-filter__page-control">
-                                    <a
-                                        href="#"
-                                        className={`home-filter__page-btn ${
-                                            currentPage === 1 ? 'home-filter__page-btn--disabled' : ''
-                                        }`}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            handlePageChange(currentPage - 1);
-                                        }}
-                                    >
-                                        <i className="home-filter__page-icon fa-solid fa-angle-left"></i>
-                                    </a>
-
-                                    <a
-                                        href="#"
-                                        className={`home-filter__page-btn ${
-                                            currentPage === totalPages ? 'home-filter__page-btn--disabled' : ''
-                                        }`}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            handlePageChange(currentPage + 1);
-                                        }}
-                                    >
-                                        <i className="home-filter__page-icon fa-solid fa-angle-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <nav className="mobile-category">
-                            <ul className="mobile-category__list">
-                                {categories &&
-                                    categories.length > 0 &&
-                                    categories.map((c) => (
-                                        <li key={c.id} className="mobile-category__item">
-                                            <a href="#" className="mobile-category__link">
-                                                {c.name}
-                                            </a>
-                                        </li>
-                                    ))}
-                            </ul>
-                        </nav>
-                        {/* <!-- Home product --> */}
-                        <div className="home-product">
-                            <div className="row sm-gutter">
-                                {/* <!-- product item --> */}
-                                {products &&
-                                    products.length > 0 &&
-                                    products.map((item) => (
-                                        <div key={item.id} className="col l-2-4 m-3 c-6">
-                                            <div className="home-product-item">
-                                                <div
-                                                    className="home-product-item__img"
-                                                    onClick={() => handleNavigate(item.id)}
-                                                    style={{ backgroundImage: `url('${item.image}')` }}
-                                                ></div>
-                                                <h4 className="home-product-item__name">{item.name}</h4>
-                                                <div className="home-product-item__price">
-                                                    <span className="home-product-item__price-current">
-                                                        {formatNumber(item.price)} VND
-                                                    </span>
-                                                </div>
-
-                                                <div className="home-product-item__favourite">
-                                                    <i className="fa-solid fa-check"></i>
-                                                    <span>Yêu thích</span>
-                                                </div>
-
-                                                <div className="home-product-item__sale-off">
-                                                    <span className="home-product-item__sale-off-percent">10%</span>
-                                                    <span className="home-product-item__sale-off-label">GIẢM</span>
-                                                </div>
-
-                                                <div className="home-product-item__buy">
-                                                    <button
-                                                        onClick={() => handleOrder(item)}
-                                                        className="btn btn--size-s"
-                                                    >
-                                                        Mua
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleAddToCart(item.id)}
-                                                        className="btn btn--size-s"
-                                                    >
-                                                        Giỏ hàng
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                            </div>
-                        </div>
-
-                        {/* <!-- Pagination : Phân trang --> */}
-                        <ul className="pagination home-product__pagination">
-                            <li className={`pagination-item ${currentPage === 1 ? 'pagination-item--disabled' : ''}`}>
-                                <a
-                                    href="#"
-                                    className="pagination-item__link"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        handlePageChange(currentPage - 1);
-                                    }}
-                                >
-                                    <i className="pagination-item__icon fa-solid fa-chevron-left"></i>
-                                </a>
-                            </li>
-
-                            {[...Array(totalPages).keys()].map((page) => (
-                                <li
-                                    key={page + 1}
-                                    className={`pagination-item ${
-                                        currentPage === page + 1 ? 'pagination-item--active' : ''
-                                    }`}
-                                >
-                                    <a
-                                        href="#"
-                                        className="pagination-item__link"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            handlePageChange(page + 1);
-                                        }}
-                                    >
-                                        {currentPage}
-                                    </a>
-                                </li>
-                            ))}
-
-                            <li
-                                className={`pagination-item ${
-                                    currentPage === totalPages ? 'pagination-item--disabled' : ''
-                                }`}
-                            >
-                                <a
-                                    href="#"
-                                    className="pagination-item__link"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        handlePageChange(currentPage + 1);
-                                    }}
-                                >
-                                    <i className="pagination-item__icon fa-solid fa-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
+                    <div class="home-slide-right">
+                        {/* <button class="slide-btn prev-btn" onclick="changeSlide('right', -1)">
+                            ‹
+                        </button> */}
+                        <img
+                            id="slideRight"
+                            src="https://webmedia.com.vn/images/2020/05/banner-khuyen-mai-electrolux.jpg"
+                            alt="4G Promotion"
+                        />
+                        {/* <button class="slide-btn next-btn" onclick="changeSlide('right', 1)">
+                            ›
+                        </button> */}
                     </div>
                 </div>
-            </div>
+
+                <nav class="home-nav">
+                    <button>Máy lọc S</button>
+                    <button>Máy lọc A</button>
+                    <button>Máy lọc M</button>
+                    <button>Máy lọc Z</button>
+                    <button>Máy lọc Z6 SERIES</button>
+                </nav>
+
+                <section class="home-promo">
+                    <div style={{ marginBottom: '40px' }} class="home-promo-title">
+                        <h2>🔥 SẢN PHẨM HOT 🔥</h2>
+                    </div>
+                    {/* <div class="home-promo-timer">
+                        Kết thúc sau: <span>02 : 04 : 44 : 16</span>
+                    </div> */}
+                    <div class="home-promo-products">
+                        <div class="home-promo-product">
+                            <img src="/prd.webp" alt="Sản phẩm khuyến mãi 1" />
+                            <h3>Máy lọc không khí X</h3>
+                            <p>Giá: 4,000,000 VND</p>
+                            <button class="add-to-cart-btn" onclick="addToCart('promo-product-1')">
+                                Thêm vào giỏ hàng
+                            </button>
+                        </div>
+                        <div class="home-promo-product">
+                            <img src="/prd.webp" alt="Sản phẩm khuyến mãi 2" />
+                            <h3>Máy lọc không khí Y</h3>
+                            <p>Giá: 4,500,000 VND</p>
+                            <button class="add-to-cart-btn" onclick="addToCart('promo-product-2')">
+                                Thêm vào giỏ hàng
+                            </button>
+                        </div>
+                        <div class="home-promo-product">
+                            <img src="/prd.webp" alt="Sản phẩm khuyến mãi 3" />
+                            <h3>Máy lọc không khí Z</h3>
+                            <p>Giá: 5,000,000 VND</p>
+                            <button class="add-to-cart-btn" onclick="addToCart('promo-product-3')">
+                                Thêm vào giỏ hàng
+                            </button>
+                        </div>
+                        <div class="home-promo-product">
+                            <img src="/prd.webp" alt="Sản phẩm khuyến mãi 4" />
+                            <h3>Máy lọc không khí W</h3>
+                            <p>Giá: 5,500,000 VND</p>
+                            <button class="add-to-cart-btn" onclick="addToCart('promo-product-4')">
+                                Thêm vào giỏ hàng
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </header>
+
+            <section class="home-featured-products">
+                <h2>Sản phẩm nổi bật</h2>
+                {products &&
+                    products.length > 0 &&
+                    products.map((product, innex) => (
+                        <div
+                            onClick={() => {
+                                handleNavigate(product.id);
+                            }}
+                            key={innex + 1}
+                            class="home-product"
+                        >
+                            <img src={product?.image} alt="Sản phẩm 1" />
+                            <h3
+                                style={{
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    maxWidth: '200px', // Tùy chỉnh chiều rộng để giới hạn kích thước
+                                }}
+                            >
+                                {product?.name}
+                            </h3>
+                            <p>Giá: {formatNumber(Number(product?.price))} VND</p>
+                        </div>
+                    ))}
+            </section>
+
+            <section class="home-shop-intro">
+                <h2>Giới thiệu về chúng tôi</h2>
+                <p>
+                    Chúng tôi cung cấp những sản phẩm máy lọc không khí tốt nhất để bảo vệ sức khỏe gia đình bạn. Hãy
+                    khám phá các sản phẩm của chúng tôi để tận hưởng không khí trong lành mỗi ngày.
+                </p>
+            </section>
         </>
     );
 }

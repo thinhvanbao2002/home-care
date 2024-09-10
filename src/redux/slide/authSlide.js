@@ -11,6 +11,10 @@ export const userSlice = createSlice({
         setAuth: (state, action) => {
             state.user = action.payload;
         },
+        // Thêm phần cập nhật thông tin user
+        updateAuth: (state, action) => {
+            state.user = { ...state.user, ...action.payload }; // Cập nhật chỉ các thông tin mới
+        },
     },
 });
 export const { setAuth } = userSlice.actions;

@@ -54,16 +54,18 @@
 
 .address-item-name {
     font-size: 16px;
+    width: 150px;
 }
 
 .address-item-phone {
     font-size: 16px;
     color: #ccc;
 }
-.address-item-name-phone span {
+.address-item-name-phone div {
     border: 1px solid;
-    height: 15px;
+    height: 25px;
     margin: 0 10px;
+    margin-right: 50px;
 }
 .address-item-address p{
     margin-bottom: 10px;

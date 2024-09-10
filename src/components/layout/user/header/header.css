@@ -44,7 +44,7 @@
 .nav-text {
     text-decoration: none;
     color: var(--primary-text);
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     transition: 0.2s;
 }
@@ -241,6 +241,7 @@
 }
 
 .icon-item .cart-notice {
+    color: #fff;
     position: absolute;
     top: -4px;
     left: 26px;
@@ -248,7 +249,6 @@
     font-weight: 600;
     width: 16px;
     height: 16px;
-    color: var(--while-color);
     background-color: red;
     border-radius: 100%;
     display: flex;

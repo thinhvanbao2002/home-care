@@ -45,11 +45,9 @@ const getDetailOrder = (orderId) => {
     return privateAdminAxios.get(`a/order/${orderId}`);
 };
 
-const updateVoucher = (voucherId, name, enTime, discountPercent) => {
-    return privateAdminAxios.put(`a/voucher/${voucherId}`, {
-        name,
-        end_time: enTime,
-        discount_percent: discountPercent,
+const updateOrder = ({ orderId, status }) => {
+    return privateAdminAxios.patch(`a/order/${orderId}`, {
+        order_status: status,
     });
 };
 
@@ -61,4 +59,4 @@ const deleteProductPhoto = (productId) => {
     return privateAdminAxios.delete(`product-photo/${productId}`);
 };
 
-export { fetchAllOrder, getDetailOrder };
+export { fetchAllOrder, getDetailOrder, updateOrder };

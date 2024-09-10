@@ -301,3 +301,38 @@ form textarea {
     /* Màu xanh nhạt hơn khi hover */
     border-color: #40a9ff;
 }
+
+.user-address-order {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    padding: 10px 10px;
+}
+
+.user-address-order {
+    transition: background-color 0.3s ease;
+    /* Thời gian chuyển đổi là 0.3s */
+}
+
+.user-address-order:hover {
+    background-color: #eee;
+}
+
+.user-address-order h4 {
+    width: 180px;
+}
+
+.user-address-order h5 {
+    width: 180px;
+    text-align: center;
+}
+
+.user-address-order span {
+    margin-left: 50px;
+}
+
+.user-address-order span, h4, h5 {
+    font-size: 16px;
+    font-weight: 500;
+}

@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'; // Import useNaviga
 import { formatNumber } from '~/components/common/ultils';
 import { createOrder } from '~/services/user/order-service';
 import { useSelector } from 'react-redux';
+import { fetchAllAdress } from '~/services/user/customer-info-service';
 
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
@@ -22,13 +23,10 @@ function Order() {
     const [note, setNote] = useState('');
     const products = location.state?.products || [];
     const [totalAmount, setTotalAmount] = useState(0);
+    const [customerAddresses, setCustomerAddresses] = useState([]);
 
     const auth = useSelector((state) => state.auth.user);
     const userAuth = typeof auth === 'string' ? JSON.parse(auth) : auth;
-
-    console.log(name);
-    console.log(phone);
-    console.log(note);
 
     const handleSubmit = async () => {
         form.validateFields()
@@ -58,7 +56,54 @@ function Order() {
     useEffect(() => {
         const total = products.reduce((acc, product) => acc + product.totalPrice, 0);
         setTotalAmount(total);
+        getAllAddress();
     }, [products]);
+
+    console.log(customerAddresses);
+    console.log(phone);
+    console.log(name);
+    console.log(address);
+
+    const getAllAddress = async () => {
+        try {
+            const res = await fetchAllAdress();
+            setCustomerAddresses(res?.data);
+
+            // Automatically fill in the default address (is_default = true)
+            const defaultAddress = res?.data?.find((addr) => addr.is_default);
+
+            console.log(defaultAddress);
+
+            if (defaultAddress) {
+                setName(defaultAddress.customer_name);
+                setPhone(defaultAddress.customer_phone);
+                setAddress(defaultAddress.customer_address);
+                form.setFieldsValue({
+                    fullName: defaultAddress.customer_name,
+                    phoneNumber: defaultAddress.customer_phone,
+                    address: defaultAddress.customer_address,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleChooseAddress = async (item) => {
+        try {
+            setName(item.customer_name);
+            setPhone(item?.customer_phone);
+            setAddress(item?.customer_address);
+            form.setFieldsValue({
+                fullName: item?.customer_name,
+                phoneNumber: item?.customer_phone,
+                address: item?.customer_address,
+            });
+            handleAddressModalCancel();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handlePaymentMethodChange = (method) => {
         setPaymentMethod(method);
@@ -247,12 +292,20 @@ function Order() {
             </div>
 
             <Modal
-                title="Chọn địa chỉ giao hàng"
+                title="CHỌN ĐỊA CHỈ GIAO HÀNG"
                 visible={addressModalVisible}
                 onOk={handleAddressModalOk}
                 onCancel={handleAddressModalCancel}
+                width={1000}
             >
-                <p>Nội dung của modal chọn địa chỉ</p>
+                {customerAddresses &&
+                    customerAddresses.length > 0 &&
+                    customerAddresses.map((item, index) => (
+                        <div key={index + 1} onClick={() => handleChooseAddress(item)} className="user-address-order">
+                            <h4>{item?.customer_name}</h4> | <h5>{item?.customer_phone}</h5> |{' '}
+                            <span>{item?.customer_address}</span>
+                        </div>
+                    ))}
             </Modal>
         </div>
     );

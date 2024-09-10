@@ -1,748 +1,153 @@
+import { Select, Input, Slider, Button, Pagination } from 'antd';
+import { useEffect, useState } from 'react';
 import './styles/style.css';
 import './styles/grid.css';
 import './styles/responsive.css';
+import { fetchAllProduct } from '~/services/user/product-service';
+import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
+import { fetchAllChildCategory } from '~/services/user/category-service';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { addToCart } from '~/services/user/cart-service';
+
+const { Option } = Select;
+
 function UserProduct() {
+    const navigate = useNavigate();
+    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [take, setTake] = useState(40); // Number of products per page
+    const [categoryId, setCategoryId] = useState(null);
+    const [searchName, setSearchName] = useState('');
+    const [sortOrder, setSortOrder] = useState(null);
+    const [priceRange, setPriceRange] = useState([0, 20000000]); // Default price range
+    const [statusFilter, setStatusFilter] = useState(null);
+
+    const auth = useSelector((state) => state?.auth?.user);
+
+    const handleNavigate = (id) => {
+        navigate('/product-detail', { state: { id } });
+    };
+
+    useEffect(() => {
+        getAllProduct();
+        getAllCategory();
+    }, [currentPage, categoryId, searchName, sortOrder, priceRange, statusFilter]);
+
+    const getAllProduct = async () => {
+        try {
+            const res = await fetchAllProduct({
+                page: currentPage, // Use currentPage state for pagination
+                take,
+                q: searchName,
+            });
+            console.log(res);
+
+            setProducts(res.data); // Assuming the API returns a list of items
+            setTotalPages(res.meta.page_count); // Assuming total pages are returned from the API
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getAllCategory = async () => {
+        try {
+            const res = await fetchAllChildCategory();
+            setCategories(res.data);
+        } catch (error) {}
+    };
+
+    const handleSearch = (value) => {
+        setSearchName(value);
+    };
+
+    const handleSortOrderChange = (value) => {
+        setSortOrder(value);
+    };
+
+    const handlePriceRangeChange = (value) => {
+        setPriceRange(value);
+    };
+
+    const handleStatusChange = (value) => {
+        setStatusFilter(value);
+    };
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page); // Update current page on page change
+    };
+
     return (
         <>
-            <div class="grid wide">
-                <div class="row sm-gutter app__content">
-                    <div class="col l-2 m-0 c-0">
-                        <nav class="category">
-                            <h3 class="category__heading">
-                                <i class="category__heading-icon fa-solid fa-list"></i>Danh mục
+            <header style={{ marginTop: '40px' }} className="home-header">
+                <nav className="home-nav">
+                    <Input.Search
+                        value={searchName}
+                        placeholder="Tìm theo tên sản phẩm"
+                        allowClear
+                        onChange={(e) => setSearchName(e.target.value)}
+                        style={{ width: 200, marginRight: '1rem' }}
+                    />
+                    <Select
+                        placeholder="Sắp xếp giá"
+                        onChange={handleSortOrderChange}
+                        style={{ width: 150, marginRight: '1rem' }}
+                    >
+                        <Option value="asc">Giá tăng dần</Option>
+                        <Option value="desc">Giá giảm dần</Option>
+                    </Select>
+                    <Select placeholder="Khoảng giá" onChange={handleStatusChange} style={{ width: 200 }}>
+                        <Option value="in_stock">Hàng tồn kho</Option>
+                        <Option value="new_arrival">Hàng mới về</Option>
+                        <Option value="pre_order">Đặt trước</Option>
+                    </Select>
+                    <Select placeholder="Tình trạng hàng" onChange={handleStatusChange} style={{ width: 200 }}>
+                        <Option value="in_stock">Hàng tồn kho</Option>
+                        <Option value="new_arrival">Hàng mới về</Option>
+                        <Option value="pre_order">Đặt trước</Option>
+                    </Select>
+                </nav>
+            </header>
+
+            <section style={{ background: '#fff' }} className="home-featured-products">
+                {products &&
+                    products.length > 0 &&
+                    products.map((product, index) => (
+                        <div onClick={() => handleNavigate(product.id)} key={index} className="home-product">
+                            <img src={product?.image} alt={product?.name} />
+                            <h3
+                                style={{
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    maxWidth: '200px',
+                                }}
+                            >
+                                {product?.name}
                             </h3>
-                            <ul class="category-list">
-                                <li class="category-item category-item--active">
-                                    <a href="" class="category-item-link">
-                                        Sản phẩm
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Samsung
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        LG
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Panasonic
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Sanyo
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Sony
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Vìnash
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        audi
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        toyota
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        apple
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        xiaomi
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        oppo
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Huynhdai
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        Bao ngu
-                                    </a>
-                                </li>
-
-                                <li class="category-item">
-                                    <a href="" class="category-item-link">
-                                        bao oc cho
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-
-                    <div class="col l-10 m-12 c-12 ">
-                        <div class="home-filter hide-on-mobile-tablet">
-                            <span class="home-filter__label">Săp xếp theo</span>
-                            <button class="home-filter-btn btn">Phổ biến</button>
-                            <button class="home-filter-btn btn btn--primary">Mới nhất</button>
-                            <button class="home-filter-btn btn">Bán chạy</button>
-
-                            <div class="select-input">
-                                <span class="select-input__label">Giá</span>
-                                <i class="select-input__icon fa-solid fa-angle-down"></i>
-                                <ul class="select-input__list">
-                                    <li class="select-input__item">
-                                        <a href="" class="select-input__link">
-                                            Giá: Thấp đến cao
-                                        </a>
-                                    </li>
-
-                                    <li class="select-input__item">
-                                        <a href="" class="select-input__link">
-                                            Giá: Cao đến thấp
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="home-filter__page">
-                                <span class="home-filter__page-num">
-                                    <span class="home-filter__page-current">1</span>/14
-                                </span>
-
-                                <div class="home-filter__page-control">
-                                    <a href="" class="home-filter__page-btn home-filter__page-btn--disabled">
-                                        <i class="home-filter__page-icon fa-solid fa-angle-left"></i>
-                                    </a>
-
-                                    <a href="" class="home-filter__page-btn">
-                                        <i class="home-filter__page-icon fa-solid fa-angle-right"></i>
-                                    </a>
-                                </div>
-                            </div>
+                            <p>Giá: {formatNumber(Number(product?.price))} VND</p>
                         </div>
-
-                        <nav class="mobile-category">
-                            <ul class="mobile-category__list">
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-
-                                <li class="mobile-category__item">
-                                    <a href="" class="mobile-category__link">
-                                        Dụng cụ & Thiết bị tiện ích
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                        {/* <!-- Home product --> */}
-                        <div class="home-product">
-                            <div class="row sm-gutter">
-                                {/* <!-- product item --> */}
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            style={{
-                                                backgroundImage:
-                                                    'url(https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/07/hinh-dep-10.jpg)',
-                                            }}
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col l-2-4 m-3 c-6">
-                                    <div class="home-product-item">
-                                        <div
-                                            class="home-product-item__img"
-                                            // style="background-image: url(/product-1.jpg);"
-                                        ></div>
-                                        <h4 class="home-product-item__name">
-                                            Máy lọc không khí Panasonic không khí trong lanhf
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-old">đ2.600.000</span>
-                                            <span class="home-product-item__price-current">đ2.111.000</span>
-                                        </div>
-
-                                        <div class="home-product-item__favourite">
-                                            <i class="fa-solid fa-check"></i>
-                                            <span>Yêu thích</span>
-                                        </div>
-
-                                        <div class="home-product-item__sale-off">
-                                            <span class="home-product-item__sale-off-percent">10%</span>
-                                            <span class="home-product-item__sale-off-label">GIẢM</span>
-                                        </div>
-
-                                        <div class="home-product-item__buy">
-                                            <button class="btn btn--size-s">Mua</button>
-                                            <button class="btn btn--size-s">Chi tiết</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* <!-- Pagination : Phân trang --> */}
-                        <ul class="pagination home-product__pagination">
-                            <li class="pagination-item">
-                                <a href="" class="pagination-item__link">
-                                    <i class="pagination-item__icon fa-solid fa-chevron-left"></i>
-                                </a>
-                            </li>
-
-                            <li class="pagination-item pagination-item--active">
-                                <a href="" class="pagination-item__link">
-                                    1
-                                </a>
-                            </li>
-
-                            <li class="pagination-item">
-                                <a href="" class="pagination-item__link">
-                                    2
-                                </a>
-                            </li>
-
-                            <li class="pagination-item">
-                                <a href="" class="pagination-item__link">
-                                    3
-                                </a>
-                            </li>
-
-                            <li class="pagination-item">
-                                <a href="" class="pagination-item__link">
-                                    4
-                                </a>
-                            </li>
-
-                            <li class="pagination-item">
-                                <a href="" class="pagination-item__link">
-                                    5
-                                </a>
-                            </li>
-
-                            <li class="pagination-item">
-                                <a href="" class="pagination-item__link">
-                                    ...
-                                </a>
-                            </li>
-
-                            <li class="pagination-item">
-                                <a href="" class="pagination-item__link">
-                                    14
-                                </a>
-                            </li>
-
-                            <li class="pagination-item">
-                                <a href="" class="pagination-item__link">
-                                    <i class="pagination-item__icon fa-solid fa-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                    ))}
+            </section>
+
+            {/* Pagination Component */}
+            <Pagination
+                current={currentPage}
+                pageSize={take}
+                total={totalPages * take} // Total number of products (pages * products per page)
+                onChange={handlePageChange}
+                style={{ textAlign: 'center', margin: '20px 0' }}
+            />
+
+            <section className="home-shop-intro">
+                <h2>Giới thiệu về chúng tôi</h2>
+                <p>
+                    Chúng tôi cung cấp những sản phẩm máy lọc không khí tốt nhất để bảo vệ sức khỏe gia đình bạn. Hãy
+                    khám phá các sản phẩm của chúng tôi để tận hưởng không khí trong lành mỗi ngày.
+                </p>
+            </section>
         </>
     );
 }

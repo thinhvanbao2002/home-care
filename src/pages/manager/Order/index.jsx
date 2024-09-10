@@ -208,7 +208,7 @@ function AdminOrder() {
                         key: realIndex,
                         order_id: data?.id,
                         created_at: moment(data?.created_at, 'YYYY-MM-DD').format('DD/MM/YYYY'),
-                        customer_name: data?.customer?.user?.name,
+                        customer_name: data?.name,
                         product_number: data?.order_details.length,
                         total_price: formatNumber(Number(data?.total_price)),
                         order_status: (() => {
@@ -241,7 +241,12 @@ function AdminOrder() {
                 //     pageSizeOptions: ['12', '20', '50', '100'],
                 // }}
             />
-            <FormDetailOrder isModalVisible={isModalVisible} handleModalClose={handleModalClose} data={order} />
+            <FormDetailOrder
+                isModalVisible={isModalVisible}
+                handleModalClose={handleModalClose}
+                data={order}
+                getDataOrder={getAllOrder}
+            />
         </>
     );
 }

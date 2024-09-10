@@ -36,6 +36,7 @@ import PurchaseOrder from './pages/user/PurchaseOrder';
 import ChangePassword from './pages/user/ChangePassword';
 import SuccessPage from './pages/user/OrderSuccess/Success';
 import QrPaymen from './pages/user/QrPaymen';
+import { setAuthAdmin } from './redux/slide/authAdminSlide';
 
 function App() {
     const location = useLocation();
@@ -63,6 +64,14 @@ function App() {
         const authData = localStorage.getItem('authData');
         if (authData) {
             dispatch(setAuth(authData)); // Lưu vào Redux
+        }
+    }, [dispatch]); // Chỉ chạy một lần khi component được mount
+
+    useEffect(() => {
+        // Giả sử bạn muốn lấy dữ liệu đăng nhập từ localStorage và lưu vào Redux
+        const authData = localStorage.getItem('authDataAdmin');
+        if (authData) {
+            dispatch(setAuthAdmin(authData)); // Lưu vào Redux
         }
     }, [dispatch]); // Chỉ chạy một lần khi component được mount
 

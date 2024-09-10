@@ -2,21 +2,20 @@ import { Col, Form, Input, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import ModalForm from '~/components/common/components/Modal';
 import './formDetailOrder.css';
-import { formatNumber } from '~/components/common/ultils';
+import { formatNumber, openNotificationSuccess } from '~/components/common/ultils';
+import { updateOrder } from '~/services/admin/admin-order-service';
 
-function FormDetailOrder({ isModalVisible, handleModalClose, data, getDataCustomers }) {
+function FormDetailOrder({ isModalVisible, handleModalClose, data, getDataOrder }) {
     const [form] = Form.useForm();
 
-    console.log(data);
+    const [orderId, setOrderId] = useState(null);
     const [products, setProducts] = useState([]);
-
-    console.log('products', products);
+    const [status, setStatus] = useState(null);
 
     useEffect(() => {
         if (data) {
-            // setName(data?.name);
-            // setImageUrl(data?.avatar);
-            // setStatus(data?.status);
+            setOrderId(data?.id);
+            setStatus(data?.order_status);
             setProducts(data?.order_details);
             form.setFieldsValue({
                 name: data?.name,
@@ -33,7 +32,16 @@ function FormDetailOrder({ isModalVisible, handleModalClose, data, getDataCustom
         }
     }, [data, form]);
 
-    const handleSubmit = () => {};
+    const handleSubmit = async () => {
+        try {
+            await updateOrder({ orderId, status });
+            openNotificationSuccess('Thành công', 'Cập nhật đơn hàng thành công!');
+            handleModalClose();
+            getDataOrder();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <>
@@ -94,13 +102,20 @@ function FormDetailOrder({ isModalVisible, handleModalClose, data, getDataCustom
                                     placeholder="Trạng thái"
                                     style={{ width: '100%' }}
                                     allowClear
-                                    // onChange={handleChangeSelectStatus}
-                                    // value={status}
+                                    onChange={(value) => {
+                                        setStatus(value);
+                                    }}
+                                    value={status}
                                 >
                                     <Select.Opt ion value="active">
                                         Đang hoạt động
                                     </Select.Opt>
-                                    <Select.Option value="pending">Đang chuẩn bị hàng</Select.Option>
+                                    <Select.Option value="pending">Đang chờ xử lý</Select.Option>
+                                    <Select.Option value="progress">Đang chuẩn bị hàng</Select.Option>
+                                    <Select.Option value="confirmed">Đã chuẩn bị hàng</Select.Option>
+                                    <Select.Option value="shiped">Đang giao hàng</Select.Option>
+                                    <Select.Option value="completed">Đã hoàn thành</Select.Option>
+                                    <Select.Option value="cancelled">Đã hủy</Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>

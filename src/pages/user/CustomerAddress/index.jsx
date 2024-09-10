@@ -54,7 +54,7 @@ function CustomerAddress() {
                                     <div className="customer-address-item-left">
                                         <div className="address-item-name-phone">
                                             <p className="address-item-name">{item.customer_name}</p>
-                                            <span></span>
+                                            <div></div>
                                             <p className="address-item-phone">{item.customer_phone}</p>
                                         </div>
                                         <div className="address-item-address">

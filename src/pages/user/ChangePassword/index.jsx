@@ -1,6 +1,27 @@
+import { useState } from 'react';
 import './changepass.css';
+import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
+import { changePassword } from '~/services/user/auth-service';
 
 function ChangePassword() {
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [rePassword, setRePassword] = useState('');
+
+    console.log(oldPassword);
+    console.log(newPassword);
+    console.log(rePassword);
+
+    const handleChangePassword = async () => {
+        try {
+            await changePassword({ oldPassword, newPassword, rePassword });
+            openNotificationSuccess('Thành công', 'Đổi mật khẩu thành công!');
+        } catch (error) {
+            openNotificationError('Thất bại', error.response.data.message);
+            console.log(error);
+        }
+    };
+
     return (
         <>
             <>
@@ -9,7 +30,42 @@ function ChangePassword() {
                         <h2>Đổi mật khẩu</h2>
                         <p>Quản lý thông tin đăng nhập</p>
                     </div>
-                    <div className="content-customer-change-password"></div>
+                    <div className="content-customer-change-password" style={{ width: '900px' }}>
+                        <div className="profile-form">
+                            <div className="form-group">
+                                <label htmlFor="name">Mật khẩu cũ</label>
+                                <input
+                                    value={oldPassword}
+                                    onChange={(e) => setOldPassword(e.target.value)}
+                                    type="password"
+                                    id="name"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="email">Mật khẩu mới</label>
+                                <input
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    style={{ fontSize: '16px' }}
+                                    type="password"
+                                    id="email"
+                                    // value={authJson.email}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="phone">Nhập lại</label>
+                                <input
+                                    value={rePassword}
+                                    onChange={(e) => setRePassword(e.target.value)}
+                                    type="password"
+                                    id="phone"
+                                />
+                            </div>
+                            <button onClick={handleChangePassword} className="save-btn">
+                                Lưu
+                            </button>
+                        </div>
+                    </div>
                     {/* <Modal
                     title="Thêm mới địa chỉ"
                     centered

@@ -7,6 +7,8 @@ import { getDetailProduct } from '~/services/user/product-service';
 import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { addToCart } from '~/services/user/cart-service';
 import { useSelector } from 'react-redux';
+import { fetchAllProductReview, reviewProduct } from '~/services/user/product-review.service';
+import moment from 'moment';
 
 function ProductDetail() {
     const location = useLocation();
@@ -17,6 +19,8 @@ function ProductDetail() {
     const productContentRef = useRef(null);
     // const [productId, setProductId] = useState(location.state?.id);
     const [product, setProduct] = useState({});
+    const [productReview, SetProductReview] = useState([]);
+    const [review, setReview] = useState('');
     const navigate = useNavigate();
     const productId = location.state?.id;
 
@@ -27,13 +31,24 @@ function ProductDetail() {
     useEffect(() => {
         if (product) {
             getDetail();
+            getAllReview();
         }
+        // window.scrollTo(0, 0);
     }, [productId]);
 
     const getDetail = async () => {
         try {
             const res = await getDetailProduct(productId);
             setProduct(res?.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getAllReview = async () => {
+        try {
+            const res = await fetchAllProductReview({ productId });
+            SetProductReview(res?.data);
         } catch (error) {
             console.log(error);
         }
@@ -70,6 +85,16 @@ function ProductDetail() {
                 openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
                 navigate('/auth/login');
             }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleCreateReview = async () => {
+        try {
+            await reviewProduct({ productId, review });
+            getAllReview();
+            setReview('');
         } catch (error) {
             console.log(error);
         }
@@ -124,12 +149,12 @@ function ProductDetail() {
                             >
                                 Thêm giỏ hàng
                             </button>
-                            <button style={{ borderRadius: '15px' }} className="installment-button">
+                            {/* <button style={{ borderRadius: '15px' }} className="installment-button">
                                 Mua trả góp
                             </button>
                             <button style={{ borderRadius: '15px' }} className="installment-card-button">
                                 Mua trả góp bằng thẻ
-                            </button>
+                            </button> */}
                             <div className="promotions">
                                 <div className="additional-offers">
                                     <p>
@@ -174,97 +199,59 @@ function ProductDetail() {
 
                     <div className="shop-address">
                         <h2>Địa chỉ cửa hàng</h2>
-                        <p>123 Đường XYZ, Quận ABC, Thành phố DEF, Việt Nam</p>
+                        <p>299 Trung Kính, phường Yên Hòa, quận Cầu Giấy, thành phố Hà Nội, Việt Nam</p>
                     </div>
 
                     <div className="customer-reviews">
                         <h2>Bình luận của khách hàng</h2>
                         <div className="comment-form">
-                            <h3>Gửi bình luận của bạn</h3>
-                            <form id="commentForm">
-                                <label htmlFor="name">Tên:</label>
+                            {/* <h3>Gửi bình luận của bạn</h3> */}
+                            {/* <label htmlFor="name">Tên:</label>
                                 <input type="text" id="name" name="name" required />
 
                                 <label htmlFor="phone">Số điện thoại:</label>
                                 <input type="tel" id="phone" name="phone" required />
 
                                 <label htmlFor="email">Email:</label>
-                                <input type="email" id="email" name="email" required />
+                                <input type="email" id="email" name="email" required /> */}
 
-                                <label htmlFor="comment">Nội dung bình luận:</label>
-                                <textarea id="comment" name="comment" rows="4" required></textarea>
+                            <label htmlFor="comment">Nội dung bình luận:</label>
+                            <textarea
+                                value={review}
+                                onChange={(e) => setReview(e.target.value)}
+                                id="comment"
+                                name="comment"
+                                rows="4"
+                                required
+                            ></textarea>
 
-                                <button type="submit" className="submit-comment-button">
-                                    Gửi bình luận
-                                </button>
-                            </form>
+                            <button onClick={handleCreateReview} type="submit" className="submit-comment-button">
+                                Gửi bình luận
+                            </button>
                         </div>
 
                         <div className="reviews-list">
-                            <div className="review">
-                                <span>
-                                    <img
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdQwSon87NY6OvMQ_zwqaYntbD1C-sKl7INg&s"
-                                        alt=""
-                                    />
-                                    <div>
-                                        <h4>Nguyễn Văn A</h4>
-                                        <p>08-06-2024 10:54</p>
+                            {productReview &&
+                                productReview.length > 0 &&
+                                productReview.map((item, index) => (
+                                    <div key={index + 1} className="review">
+                                        <span>
+                                            <img
+                                                src={
+                                                    item?.customer?.user?.avatar
+                                                        ? item?.customer?.user?.avatar
+                                                        : '/user.png'
+                                                }
+                                                alt=""
+                                            />
+                                            <div>
+                                                <h4>{item?.customer?.user?.name}</h4>
+                                                <p>{moment(item?.created_at).format('DD-MM-YYYY HH:mm')}</p>
+                                            </div>
+                                        </span>
+                                        <p>{item?.review}</p>
                                     </div>
-                                </span>
-                                <p>
-                                    Hàng đẹp phết nha mua được 3 cái mà giá quá đã hàng lại rất là đẹp hàng rất là OK
-                                    nha đáng mua lần này là khen thật lòng hàng rất ổn
-                                </p>
-                            </div>
-                            <div className="review">
-                                <span>
-                                    <img
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdQwSon87NY6OvMQ_zwqaYntbD1C-sKl7INg&s"
-                                        alt=""
-                                    />
-                                    <div>
-                                        <h4>Nguyễn Văn A</h4>
-                                        <p>08-06-2024 10:54</p>
-                                    </div>
-                                </span>
-                                <p>
-                                    Hàng đẹp phết nha mua được 3 cái mà giá quá đã hàng lại rất là đẹp hàng rất là OK
-                                    nha đáng mua lần này là khen thật lòng hàng rất ổn
-                                </p>
-                            </div>
-                            <div className="review">
-                                <span>
-                                    <img
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdQwSon87NY6OvMQ_zwqaYntbD1C-sKl7INg&s"
-                                        alt=""
-                                    />
-                                    <div>
-                                        <h4>Nguyễn Văn A</h4>
-                                        <p>08-06-2024 10:54</p>
-                                    </div>
-                                </span>
-                                <p>
-                                    Hàng đẹp phết nha mua được 3 cái mà giá quá đã hàng lại rất là đẹp hàng rất là OK
-                                    nha đáng mua lần này là khen thật lòng hàng rất ổn
-                                </p>
-                            </div>
-                            <div className="review">
-                                <span>
-                                    <img
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdQwSon87NY6OvMQ_zwqaYntbD1C-sKl7INg&s"
-                                        alt=""
-                                    />
-                                    <div>
-                                        <h4>Nguyễn Văn A</h4>
-                                        <p>08-06-2024 10:54</p>
-                                    </div>
-                                </span>
-                                <p>
-                                    Hàng đẹp phết nha mua được 3 cái mà giá quá đã hàng lại rất là đẹp hàng rất là OK
-                                    nha đáng mua lần này là khen thật lòng hàng rất ổn
-                                </p>
-                            </div>
+                                ))}
                         </div>
                     </div>
                 </div>

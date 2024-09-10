@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { store } from '~/redux/store/store';
 import { setAuth } from '~/redux/slide/authSlide';
 import { openNotificationSuccess } from '~/components/common/ultils';
+import { getAllCart } from '~/services/user/cart-service';
 
 function Header() {
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ function Header() {
     const [categories, setCategories] = useState([]);
     const [childCategoies, setChildCategories] = useState([]);
     const [products, setProducts] = useState([]);
+    const [countCart, setCountCart] = useState(0);
 
     const auth = useSelector((state) => state.auth.user);
 
@@ -32,6 +34,7 @@ function Header() {
     useEffect(() => {
         getAllCategory();
         getAllProduct();
+        handleCountCart();
     }, []);
 
     const getAllCategory = async () => {
@@ -47,6 +50,15 @@ function Header() {
         try {
             const res = await fetchAllProduct({ page: 1, take: 9 });
             setProducts(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleCountCart = async () => {
+        try {
+            const res = await getAllCart();
+            setCountCart(res?.data?.length);
         } catch (error) {
             console.log(error);
         }
@@ -80,6 +92,7 @@ function Header() {
                                             onMouseLeave={() => setIsHovered(false)}
                                             href=""
                                             className="nav-text"
+                                            to="/products"
                                         >
                                             {item.name}
                                         </Link>
@@ -89,7 +102,12 @@ function Header() {
                                                     {childCategoies &&
                                                         childCategoies &&
                                                         childCategoies.map((child) => (
-                                                            <li className="menu-item">
+                                                            <li
+                                                                onClick={() => {
+                                                                    navigate('/products');
+                                                                }}
+                                                                className="menu-item"
+                                                            >
                                                                 <a href="" className="menu-text">
                                                                     {child.name}
                                                                 </a>
@@ -141,13 +159,13 @@ function Header() {
                         </ul>
 
                         <ul className="icon-list">
-                            <li id="searchs" className="icon-item">
+                            {/* <li id="searchs" className="icon-item">
                                 <p href="" className="icon-link">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                                     </svg>
                                 </p>
-                            </li>
+                            </li> */}
 
                             <li className="icon-item" onClick={() => handleNavigate()}>
                                 <a href="" className="icon-link">
@@ -155,7 +173,7 @@ function Header() {
                                         <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
                                     </svg>
                                 </a>
-                                <span className="cart-notice">8</span>
+                                <span className="cart-notice">{countCart}</span>
                             </li>
 
                             <li className="icon-item header__navbar-item--noti">
