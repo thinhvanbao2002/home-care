@@ -1,0 +1,19 @@
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    /* Adjust the space between the OTP fields */
+}
+
+.otp-input {
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+}
+
+.otp-input:focus {
+    border-color: #40a9ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}

@@ -71,7 +71,9 @@ function ProductDetail() {
                 openNotificationError('Thất bại', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
                 navigate('/auth/login');
             }
-        } catch (error) {}
+        } catch (error) {
+            openNotificationError('Thất bại!', error.response.data.message);
+        }
     };
 
     const handleOrder = (product, quantity = 1) => {

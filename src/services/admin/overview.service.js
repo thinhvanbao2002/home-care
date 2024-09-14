@@ -27,4 +27,8 @@ const deleteCustomer = (customerId) => {
     return privateAdminAxios.delete(`a/customer/${customerId}`);
 };
 
-export { getNumberCustomer, getNumberProduct, getNumberOrder };
+const getDataByYear = ({ year }) => {
+    return privateAdminAxios.get(`overview/revenue/${year}`);
+};
+
+export { getNumberCustomer, getNumberProduct, getNumberOrder, getDataByYear };

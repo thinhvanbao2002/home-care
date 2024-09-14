@@ -92,6 +92,13 @@ const deleteProductPhoto = (productId) => {
     return privateAdminAxios.delete(`product-photo/${productId}`);
 };
 
+const importProduct = ({ productId, quantity, note }) => {
+    return privateAdminAxios.post(`a/product/import/${productId}`, {
+        quantity,
+        note,
+    });
+};
+
 export {
     fetchAllProduct,
     createProduct,
@@ -100,4 +107,5 @@ export {
     deleteProduct,
     deleteProductPhoto,
     updateProduct,
+    importProduct,
 };

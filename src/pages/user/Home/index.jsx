@@ -148,7 +148,7 @@ function Home() {
                         </button> */}
                         <img
                             id="slideRight"
-                            src="https://webmedia.com.vn/images/2020/05/banner-khuyen-mai-electrolux.jpg"
+                            src="https://img.pikbest.com/templates/20240729/oil-free-fryer-product-catalog-banner-decorates-a-home-appliance-shop_10687341.jpg!w700wp"
                             alt="4G Promotion"
                         />
                         {/* <button class="slide-btn next-btn" onclick="changeSlide('right', 1)">

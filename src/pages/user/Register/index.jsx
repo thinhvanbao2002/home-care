@@ -3,13 +3,16 @@ import { Form, Input, Button, Checkbox, Row, Col, Spin, DatePicker, Modal } from
 import './register.css';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
-import { register } from '~/services/user/customer-service';
+import { register } from '~/services/user/customer-service'; // Ensure verifyOtp function exists
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router-dom';
+import OtpInput from '../Otp';
+import { login } from '~/services/user/auth-service';
+import { sendOtp, verifyOtp } from '~/services/user/otp.service';
 
 function Register() {
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false); // Set loading to false initially
+    const [loading, setLoading] = useState(false);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
@@ -17,30 +20,51 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [address, setAddress] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
+    const [otpModalVisible, setOtpModalVisible] = useState(false);
+    const [otp, setOtp] = useState('');
     const navigate = useNavigate();
 
     const onFinish = async (values) => {
         try {
             setLoading(true);
-            const formattedDateOfBirth = formatDateOfBirth(dateOfBirth);
-            const res = await register(name, phone, email, password, formattedDateOfBirth, address);
-            // console.log(res);
-            openNotificationSuccess('Thành công', 'Đăng kí tài khoản thành công');
-            setLoading(false);
+            //send OTP
+            await sendOtp({ phone });
+            // Show OTP modal
+            setOtpModalVisible(true);
         } catch (error) {
             console.log(error);
             openNotificationError('Thất bại', error.response.data.message);
-            setLoading(false); // Ensure to stop loading on error as well
+            setLoading(false);
+        }
+    };
+
+    const onOtpFinish = async () => {
+        try {
+            const res = await verifyOtp({ phone, otp });
+            if (res.status && res.code === 200) {
+                const formattedDateOfBirth = formatDateOfBirth(dateOfBirth);
+                await register(name, phone, email, password, formattedDateOfBirth, address);
+                openNotificationSuccess('Thành công', 'Đăng kí tài khoản thành công');
+                navigate('/auth/login');
+                setLoading(false);
+                setOtpModalVisible(false);
+                setOtp('');
+            } else {
+                openNotificationError('Thất bại', 'Xác thực OTP không thành công');
+            }
+        } catch (error) {
+            openNotificationError('Thất bại', 'Có lỗi xảy ra trong quá trình xác thực OTP');
+        } finally {
+            setLoading(false);
         }
     };
 
     const formatDateOfBirth = (dateString) => {
-        // Assuming dateString is in DD-MM-YYYY format
         const parts = dateString.split('-');
         if (parts.length === 3) {
             return `${parts[2]}-${parts[1]}-${parts[0]}`;
         }
-        return dateString; // Return as is if format is unexpected
+        return dateString;
     };
 
     const validateConfirmPassword = (_, value) => {
@@ -171,51 +195,46 @@ function Register() {
                             labelCol={{ span: 24 }}
                             dependencies={['password']}
                             rules={[
-                                { required: true, message: 'Nhập lại mật khẩu!' },
+                                { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
                                 { validator: validateConfirmPassword },
                             ]}
                         >
                             <Input.Password
                                 value={confirmPassword}
-                                onChange={(e) => {
-                                    setConfirmPassword(e.target.value);
-                                    form.setFieldsValue({ confirmPassword: e.target.value });
-                                }}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                                 className="form-login-input-customer"
                                 prefix={<LockOutlined className="site-form-item-icon" />}
-                                placeholder="Confirm Password"
+                                placeholder="Nhập lại mật khẩu"
                             />
                         </Form.Item>
                         <Form.Item>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                }}
-                            >
-                                <Form.Item name="remember" valuePropName="checked" noStyle>
-                                    <Checkbox>Nhớ tôi</Checkbox>
-                                </Form.Item>
-                                <a className="login-form-forgot" href="">
-                                    Quên mật khẩu của bạn?
-                                </a>
-                            </div>
+                            <Form.Item name="remember" valuePropName="checked" noStyle>
+                                <Checkbox>Nhớ tôi</Checkbox>
+                            </Form.Item>
+                            <a className="login-form-forgot" href="">
+                                Quên mật khẩu
+                            </a>
                         </Form.Item>
                         <Form.Item>
-                            <Spin spinning={loading}>
-                                <Button
-                                    style={{ fontSize: '22px' }}
-                                    type="primary"
-                                    htmlType="submit"
-                                    className="login-form-button-customer"
-                                >
-                                    <p>Đăng kí</p>
-                                </Button>
-                            </Spin>
-                            <Link to="/auth/login">Bạn đã có tài khoản, đăng nhập ngay?</Link>
+                            <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>
+                                Đăng kí
+                            </Button>
                         </Form.Item>
                     </Form>
+
+                    <Modal
+                        title="Xác thực OTP"
+                        visible={otpModalVisible}
+                        onOk={onOtpFinish}
+                        onCancel={() => {
+                            setOtpModalVisible(false);
+                            setLoading(false);
+                            setOtp('');
+                        }}
+                        // confirmLoading={loading}
+                    >
+                        <OtpInput value={otp} onChange={setOtp} />
+                    </Modal>
                 </Col>
             </Row>
         </div>

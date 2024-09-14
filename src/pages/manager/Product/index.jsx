@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, DatePicker, Input, Select, Row, Col, Tag, Modal } from 'antd';
 import '../Admin/admin.css';
-import { EditOutlined, DeleteOutlined, FileExcelFilled } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, FileExcelFilled, ImportOutlined } from '@ant-design/icons';
 import { deleteCustomer, fetchAllCustomer, getDetailCustomer } from '~/services/admin/admin-customer-service';
 import moment from 'moment';
 import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { deleteVoucher, fetchAllVoucher, getDetailVoucher } from '~/services/admin/admin-voucher-service';
-import { deleteProduct, fetchAllProduct, getDetailProduct } from '~/services/admin/admin-product-service';
+import {
+    deleteProduct,
+    fetchAllProduct,
+    getDetailProduct,
+    importProduct,
+} from '~/services/admin/admin-product-service';
 import FormCreateProduct from './components/FormCreateProduct';
 import { fetchAllChildCategory } from '~/services/admin/admin-category-service';
 import FormUpdateProduct from './components/FormUpdateProduct';
@@ -32,6 +37,9 @@ function Product() {
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
     const [productDetail, setProductDetail] = useState({});
+    const [open, setOpen] = useState(false);
+    const [quantity, setQuantity] = useState(null);
+    const [note, setNote] = useState('');
 
     useEffect(() => {
         getAllProduct();
@@ -94,6 +102,23 @@ function Product() {
         setTake(pagination.pageSize);
     };
 
+    const handleImportProduct = async () => {
+        try {
+            await importProduct({ productId, quantity, note });
+            getAllProduct();
+            openNotificationSuccess('Thành công!', 'Nhập thêm sản phẩm thành công!');
+            setQuantity(null);
+            setNote('');
+            setOpen(false);
+        } catch (error) {
+            openNotificationError('Thất bại!', error.response.data.message);
+        }
+    };
+
+    const handleCancel = () => {
+        setOpen(false);
+    };
+
     const columns = [
         {
             title: 'STT',
@@ -126,7 +151,7 @@ function Product() {
             title: 'Thao tác',
             key: 'operation',
             fixed: 'right',
-            width: 150,
+            width: 200,
             render: (text, record) => (
                 <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Button
@@ -152,6 +177,21 @@ function Product() {
                         size="large"
                         onClick={() => {
                             setDeleteModalVisible(true);
+                            setProductId(record?.id);
+                        }}
+                    ></Button>
+                    <Button
+                        type="button"
+                        icon={<ImportOutlined style={{ color: '#fff' }} />}
+                        style={{
+                            padding: '8px 16px',
+                            fontSize: '16px',
+                            backgroundColor: '#3399FF',
+                            marginLeft: '20px',
+                        }}
+                        size="large"
+                        onClick={() => {
+                            setOpen(true);
                             setProductId(record?.id);
                         }}
                     ></Button>
@@ -334,6 +374,27 @@ function Product() {
                 centered // Center the modal vertically
             >
                 <p style={{ fontSize: '18px', textAlign: 'center' }}>Bạn có chắc chắn muốn xóa?</p>
+            </Modal>
+            <Modal
+                open={open}
+                title="Nhập hàng"
+                onOk={handleImportProduct}
+                onCancel={handleCancel}
+                footer={(_, { OkBtn, CancelBtn }) => (
+                    <>
+                        <Button>Custom Button</Button>
+                        <CancelBtn />
+                        <OkBtn />
+                    </>
+                )}
+            >
+                <Input
+                    placeholder="Số lượng sản phẩm cần nhập"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    style={{ marginBottom: '16px' }}
+                />
+                <Input.TextArea placeholder="Ghi chú" rows={5} value={note} onChange={(e) => setNote(e.target.value)} />
             </Modal>
         </>
     );
