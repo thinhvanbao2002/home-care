@@ -65,6 +65,7 @@ export const FormUserDetail = ({ isModalVisible, handleModalClose, data, getData
             form.resetFields();
             openNotificationSuccess('Thành công', 'Cập nhật người dùng thành công!');
             await getDataCustomers();
+            handleModalClose();
         } catch (error) {
             form.resetFields();
             openNotificationError('Thất bại', error.response.data.message);

@@ -16,12 +16,12 @@ function Footer() {
                                 </li>
                                 <li class="footer-item">
                                     <a href="" class="footer-item__link">
-                                        Shopee Blog
+                                        Homecare Blog
                                     </a>
                                 </li>
                                 <li class="footer-item">
                                     <a href="" class="footer-item__link">
-                                        Shopee Mall
+                                        Homecare Mall
                                     </a>
                                 </li>
                                 <li class="footer-item">
@@ -41,7 +41,7 @@ function Footer() {
                                 </li>
                                 <li class="footer-item">
                                     <a href="" class="footer-item__link">
-                                        Shopee Xu
+                                        Homecare Xu
                                     </a>
                                 </li>
                                 <li class="footer-item">
@@ -68,11 +68,11 @@ function Footer() {
                         </div>
 
                         <div class="col l-2-4 m-4 c-6">
-                            <h3 class="footer__heading">Về Shoppe</h3>
+                            <h3 class="footer__heading">Về Homecare</h3>
                             <ul class="footer-list">
                                 <li class="footer-item">
                                     <a href="" class="footer-item__link">
-                                        Giới Thiệu Về Shopee Việt Nam
+                                        Giới Thiệu Về Homecare Việt Nam
                                     </a>
                                 </li>
                                 <li class="footer-item">
@@ -82,7 +82,7 @@ function Footer() {
                                 </li>
                                 <li class="footer-item">
                                     <a href="" class="footer-item__link">
-                                        Điều Khoản Shopee
+                                        Điều Khoản Homecare
                                     </a>
                                 </li>
                                 <li class="footer-item">
@@ -107,7 +107,7 @@ function Footer() {
                                 </li>
                                 <li class="footer-item">
                                     <a href="" class="footer-item__link">
-                                        Chương Trình Tiếp Thị Liên Kết Shopee
+                                        Chương Trình Tiếp Thị Liên Kết Homecare
                                     </a>
                                 </li>
                                 <li class="footer-item">
@@ -260,7 +260,7 @@ function Footer() {
                         </div>
 
                         <div class="col l-2-4 m-8 c-6">
-                            <h3 class="footer__heading">Tải ứng dụng Shoppe ngay thôi</h3>
+                            <h3 class="footer__heading">Đăng kí tài khoản Homecare ngay thôi</h3>
                             <div class="footer__download">
                                 <a href="" class="footer__download-apps-link">
                                     <img src="/QR.png" alt="" class="footer__download-qr" />

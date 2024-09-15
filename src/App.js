@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import DefaultLayoutUser from './components/layout/user';
 import Home from '~/pages/user/Home';
@@ -43,21 +43,22 @@ function App() {
     const [loading, setLoading] = useState(true);
     const auth = useSelector((state) => state.auth);
     const dispatch = useDispatch(); // Initialize useDispatch
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Check if the route is a user route
-        const isUserRoute = !location.pathname.startsWith('/admin') && !location.pathname.startsWith('/auth');
+        const isAdminRoute = location.pathname.startsWith('/admin');
+        const authDataAdmin = localStorage.getItem('authDataAdmin');
 
-        if (isUserRoute) {
-            // Start loading for user routes
-            setLoading(true);
-            const timer = setTimeout(() => setLoading(false), 300); // Simulate loading time
-            return () => clearTimeout(timer);
+        if (isAdminRoute && !authDataAdmin) {
+            // Điều hướng về trang login nếu chưa có auth cho admin
+            navigate('/auth/a/login');
         } else {
-            // Immediately set loading to false for admin routes
-            setLoading(false);
+            // Lưu dữ liệu đăng nhập vào Redux
+            if (authDataAdmin) {
+                dispatch(setAuthAdmin(authDataAdmin));
+            }
         }
-    }, [location]);
+    }, [location, navigate, dispatch]);
 
     useEffect(() => {
         // Giả sử bạn muốn lấy dữ liệu đăng nhập từ localStorage và lưu vào Redux

@@ -148,27 +148,13 @@ function Admin() {
 
     const handleOk = async () => {
         try {
-            const values = form
-                .validateFields()
-                .then((values) => {
-                    console.log('Form values:', values);
-                    form.resetFields();
-                    setOpen(false);
-                })
-                .catch((info) => {
-                    console.log('Validate Failed:', info);
-                });
-            form.resetFields();
-            const amdin = await createAdmin(name, phone, email, password, imageUrl, role, null);
+            await form.validateFields();
+            await createAdmin(name, phone, email, password, imageUrl, role, null);
             await getUserAdmin();
             openNotification('Thành công', 'Thêm mới tài khoản thành công!');
-
-            setOpen(false);
+            // setOpen(false);
         } catch (error) {
-            form.resetFields();
-            setImageUrl(null);
-            setOpen(false);
-            erorNotification('Thất bại', error.response.data.message);
+            console.error('Validation Failed:', error);
         }
     };
 
@@ -403,7 +389,6 @@ function Admin() {
                         <Col span={12}>
                             <Form.Item
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}
                                 name="fullName"
                                 label="Họ và tên"
                                 rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
@@ -496,7 +481,7 @@ function Admin() {
                     </Row>
                 </Form>
             </Modal>
-
+            {/* 
             <Modal
                 title="Cập nhật tài khoản"
                 centered
@@ -597,7 +582,7 @@ function Admin() {
                             <Form.Item
                                 name="status"
                                 label="Trạng thái"
-                                rules={[{ required: true, message: 'Vui lòng chọn quyền hạn!' }]}
+                                rules={[{ required: true, message: 'Vui lòng chọn trạng thái!' }]}
                             >
                                 <Select
                                     placeholder="Trạng thái"
@@ -613,7 +598,7 @@ function Admin() {
                         </Col>
                     </Row>
                 </Form>
-            </Modal>
+            </Modal> */}
             <Modal
                 title={
                     <div style={{ display: 'flex', alignItems: 'center' }}>

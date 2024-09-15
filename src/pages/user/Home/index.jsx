@@ -2,7 +2,7 @@ import './styles/style.css';
 import './styles/grid.css';
 import './styles/responsive.css';
 import { useEffect, useState } from 'react';
-import { fetchAllProduct } from '~/services/user/product-service';
+import { fetchAllProduct, fetchBestSeller } from '~/services/user/product-service';
 import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { fetchAllChildCategory } from '~/services/user/category-service';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ function Home() {
     const [take, setTake] = useState(15);
     const [page, setPage] = useState(1);
     const [categoryId, setcategoryId] = useState(null);
+    const [bestSeller, setBestSeller] = useState([]);
 
     const auth = useSelector((state) => state?.auth?.user);
 
@@ -28,6 +29,7 @@ function Home() {
     useEffect(() => {
         getAllProduct();
         getAllCategory();
+        getAllBestSeller();
     }, [currentPage, categoryId]);
 
     const getAllProduct = async () => {
@@ -58,6 +60,15 @@ function Home() {
                 openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
                 navigate('/auth/login');
             }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getAllBestSeller = async () => {
+        try {
+            const res = await fetchBestSeller();
+            setBestSeller(res?.data);
         } catch (error) {
             console.log(error);
         }
@@ -173,38 +184,22 @@ function Home() {
                         Kết thúc sau: <span>02 : 04 : 44 : 16</span>
                     </div> */}
                     <div class="home-promo-products">
-                        <div class="home-promo-product">
-                            <img src="/prd.webp" alt="Sản phẩm khuyến mãi 1" />
-                            <h3>Máy lọc không khí X</h3>
-                            <p>Giá: 4,000,000 VND</p>
-                            <button class="add-to-cart-btn" onclick="addToCart('promo-product-1')">
-                                Thêm vào giỏ hàng
-                            </button>
-                        </div>
-                        <div class="home-promo-product">
-                            <img src="/prd.webp" alt="Sản phẩm khuyến mãi 2" />
-                            <h3>Máy lọc không khí Y</h3>
-                            <p>Giá: 4,500,000 VND</p>
-                            <button class="add-to-cart-btn" onclick="addToCart('promo-product-2')">
-                                Thêm vào giỏ hàng
-                            </button>
-                        </div>
-                        <div class="home-promo-product">
-                            <img src="/prd.webp" alt="Sản phẩm khuyến mãi 3" />
-                            <h3>Máy lọc không khí Z</h3>
-                            <p>Giá: 5,000,000 VND</p>
-                            <button class="add-to-cart-btn" onclick="addToCart('promo-product-3')">
-                                Thêm vào giỏ hàng
-                            </button>
-                        </div>
-                        <div class="home-promo-product">
-                            <img src="/prd.webp" alt="Sản phẩm khuyến mãi 4" />
-                            <h3>Máy lọc không khí W</h3>
-                            <p>Giá: 5,500,000 VND</p>
-                            <button class="add-to-cart-btn" onclick="addToCart('promo-product-4')">
-                                Thêm vào giỏ hàng
-                            </button>
-                        </div>
+                        {bestSeller &&
+                            bestSeller.length > 0 &&
+                            bestSeller.map((item) => (
+                                <div class="home-promo-product">
+                                    <img
+                                        style={{ height: '200px', objectFit: 'cover', objectPosition: 'center' }}
+                                        src={item?.image}
+                                        alt="Sản phẩm khuyến mãi 1"
+                                    />
+                                    <h3>{item?.name}</h3>
+                                    <p>Giá: {formatNumber(Number(item?.price))} VND</p>
+                                    <button class="add-to-cart-btn" onclick="addToCart('promo-product-1')">
+                                        Thêm vào giỏ hàng
+                                    </button>
+                                </div>
+                            ))}
                     </div>
                 </section>
             </header>

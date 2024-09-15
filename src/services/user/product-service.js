@@ -12,8 +12,12 @@ const fetchAllProduct = ({ q, categoryId, status, product_type, page, take }) =>
     });
 };
 
+const fetchBestSeller = () => {
+    return publicInstance.get('product/best-seller');
+};
+
 const getDetailProduct = (productId) => {
     return publicInstance.get(`a/product/${productId}`);
 };
 
-export { fetchAllProduct, getDetailProduct };
+export { fetchAllProduct, getDetailProduct, fetchBestSeller };
