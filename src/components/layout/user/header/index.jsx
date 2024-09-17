@@ -70,6 +70,7 @@ function Header() {
 
     const handleLogout = () => {
         localStorage.removeItem('authData');
+        localStorage.removeItem('user-token');
         store.dispatch(setAuth({}));
         openNotificationSuccess('Thành công', 'Đăng xuất thành công');
     };

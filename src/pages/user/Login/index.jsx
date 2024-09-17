@@ -22,6 +22,7 @@ const UserLogin = () => {
             openNotificationSuccess('Thành công', 'Đăng nhập thành công');
             store.dispatch(setAuth(res.data));
             localStorage.setItem('authData', JSON.stringify(res.data));
+            localStorage.setItem('user-token', res?.data?.token);
             setLoading(false);
             navigate('/');
         } catch (error) {

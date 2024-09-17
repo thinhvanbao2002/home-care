@@ -2,9 +2,9 @@ import axios from 'axios';
 import { API_BASE_URL } from './types/instant';
 
 const customer_instance = axios.create({
-    baseURL: API_BASE_URL.URL_LOCAL,
+    baseURL: process.env.REACT_APP_API_BASE_URL,
 });
-console.log('ENV:', process.env.BASE_API_URL);
+console.log('ENV:', process.env.REACT_APP_API_BASE_URL);
 
 // Add a request interceptor
 customer_instance.interceptors.request.use(

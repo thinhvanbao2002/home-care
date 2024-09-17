@@ -28,11 +28,16 @@ function Order() {
     const auth = useSelector((state) => state.auth.user);
     const userAuth = typeof auth === 'string' ? JSON.parse(auth) : auth;
 
+    const url = process.env.REACT_APP_API_BASE_URL;
+
+    console.log(url);
+
     const handleSubmit = async () => {
         form.validateFields()
             .then(async (values) => {
                 console.log('Form Values:', values);
-                await createOrder({
+
+                const orderData = {
                     name: values.fullName,
                     phone: values.phoneNumber,
                     address: values.address,
@@ -40,12 +45,13 @@ function Order() {
                     customerId: userAuth.id,
                     totalPrice: totalAmount,
                     items: products,
-                });
+                };
 
                 if (paymentMethod === 'cod') {
+                    await createOrder(orderData);
                     navigate('/order-success');
                 } else if (paymentMethod === 'bankTransfer') {
-                    navigate('/u/qr-pay');
+                    navigate('/u/qr-pay', { state: { orderData } });
                 }
             })
             .catch(() => {
