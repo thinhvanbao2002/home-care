@@ -140,14 +140,14 @@ function AdminOrder() {
                                 <Select.Option value="cancelled">Đã hủy</Select.Option>
                             </Select>
                         </Col>
-                        <Col>
+                        {/* <Col>
                             <RangePicker
                                 placeholder={['Từ ngày', 'Đến ngày']}
                                 // onChange={handleDateChange}
                                 // value={dateRange}
                                 format="DD-MM-YYYY"
                             />
-                        </Col>
+                        </Col> */}
                     </Row>
                     <Row gutter={16} style={{ marginTop: '20px' }}>
                         {/* <Col>

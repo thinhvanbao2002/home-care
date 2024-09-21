@@ -78,10 +78,14 @@ function ProductDetail() {
     const handleOrder = (product, quantity = 1) => {
         try {
             if (Object.keys(auth).length !== 0) {
-                const totalPrice = product.price * quantity;
-                navigate('/u/order', {
-                    state: { products: [{ ...product, quantity, totalPrice, product_id: product.id }] },
-                });
+                if (product.quantity >= quantity) {
+                    const totalPrice = product.price * quantity;
+                    navigate('/u/order', {
+                        state: { products: [{ ...product, quantity, totalPrice, product_id: product.id }] },
+                    });
+                } else {
+                    openNotificationError('Thất bại!', 'Số lượng sản phẩm hiện không đủ!');
+                }
             } else {
                 openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
                 navigate('/auth/login');

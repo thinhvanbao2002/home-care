@@ -117,8 +117,8 @@ function User() {
         },
         { title: 'Ngày đăng nhập gần nhất', dataIndex: 'last_login', key: '5', width: 200 },
         { title: 'Ngày sinh', dataIndex: 'birth_day', key: '6', width: 200 },
-        { title: 'Số dư ví', dataIndex: 'wallet', key: '7', width: 200 },
-        { title: 'Điểm tích lũy', dataIndex: 'cumulative_score', key: '8', width: 200 },
+        // { title: 'Số dư ví', dataIndex: 'wallet', key: '7', width: 200 },
+        // { title: 'Điểm tích lũy', dataIndex: 'cumulative_score', key: '8', width: 200 },
         { title: 'Ngày tạo', dataIndex: 'created_at', key: '9', width: 150 },
         { title: 'id', dataIndex: 'id', key: '10', width: 0 },
         {
@@ -221,8 +221,8 @@ function User() {
                             ? moment(data.last_login, 'YYYY-MM-DD').format('DD/MM/YYYY')
                             : 'Chưa đăng nhập',
                         birth_day: moment(data.birth_day, 'YYYY-MM-DD').format('DD/MM/YYYY'),
-                        wallet: formatNumber(data.customer.customer_wallet.balance),
-                        cumulative_score: formatNumber(data.customer.cumulative_score),
+                        // wallet: formatNumber(data.customer.customer_wallet.balance),
+                        // cumulative_score: formatNumber(data.customer.cumulative_score),
                         created_at: moment(data.created_at, 'YYYY-MM-DD').format('DD/MM/YYYY'),
                         id: data.id,
                     };
