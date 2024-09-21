@@ -256,7 +256,7 @@ const Category = () => {
         <div>
             <Row gutter={16} align="middle" justify="space-between">
                 <Col>
-                    <Row gutter={16}>
+                    {/* <Row gutter={16}>
                         <Col>
                             <Input placeholder="Nội dung tìm kiếm" style={{ width: '200px' }} allowClear />
                         </Col>
@@ -269,7 +269,7 @@ const Category = () => {
                         <Col>
                             <RangePicker placeholder={['Từ ngày', 'Đến ngày']} format="DD-MM-YYYY" />
                         </Col>
-                    </Row>
+                    </Row> */}
                 </Col>
                 <Col>
                     <Row gutter={16}>
@@ -284,7 +284,7 @@ const Category = () => {
                                 Thêm mới
                             </Button>
                         </Col>
-                        <Col>
+                        {/* <Col>
                             <Button
                                 type="button"
                                 style={{ backgroundColor: '#009900', color: '#fff' }}
@@ -292,7 +292,7 @@ const Category = () => {
                             >
                                 Xuất Excel
                             </Button>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Col>
             </Row>

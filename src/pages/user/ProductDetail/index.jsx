@@ -17,7 +17,6 @@ function ProductDetail() {
     );
     const [isExpanded, setIsExpanded] = useState(false);
     const productContentRef = useRef(null);
-    // const [productId, setProductId] = useState(location.state?.id);
     const [product, setProduct] = useState({});
     const [productReview, SetProductReview] = useState([]);
     const [review, setReview] = useState('');
@@ -25,14 +24,11 @@ function ProductDetail() {
     const productId = location.state?.id;
 
     const auth = useSelector((state) => state.auth.user);
-
     const userAuth = typeof auth === 'string' ? JSON.parse(auth) : auth;
 
     useEffect(() => {
-        if (product) {
-            getDetail();
-            getAllReview();
-        }
+        getDetail();
+        getAllReview();
         // window.scrollTo(0, 0);
     }, [productId]);
 
@@ -40,6 +36,9 @@ function ProductDetail() {
         try {
             const res = await getDetailProduct(productId);
             setProduct(res?.data);
+            if (res?.data?.product_photo?.length > 0) {
+                setMainImage(res.data.product_photo[0].url); // Thiết lập ảnh chính là ảnh đầu tiên
+            }
         } catch (error) {
             console.log(error);
         }
@@ -55,7 +54,7 @@ function ProductDetail() {
     };
 
     const changeImage = (src) => {
-        setMainImage(src);
+        setMainImage(src); // Thiết lập ảnh chính bằng ảnh phụ được chọn
     };
 
     const toggleContent = () => {
@@ -109,34 +108,25 @@ function ProductDetail() {
                     <div className="product-container">
                         <div className="product-image-gallery">
                             <div className="main-image">
-                                <img src={product?.image} alt="Product" id="main-product-image" />
+                                <img src={mainImage} alt="Product" id="main-product-image" />
                             </div>
                             <div className="image-thumbnails">
                                 {product &&
-                                    product?.product_photo &&
-                                    product?.product_photo.length > 0 &&
-                                    product?.product_photo.map((p) => (
+                                    product.product_photo &&
+                                    product.product_photo.length > 0 &&
+                                    product.product_photo.map((p) => (
                                         <img
+                                            key={p.id}
                                             src={p.url}
-                                            alt="Front View"
-                                            onClick={() =>
-                                                changeImage(
-                                                    'https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-nen-3d-thien-nhien-001.jpg',
-                                                )
-                                            }
+                                            alt="Thumbnail"
+                                            onClick={() => changeImage(p.url)} // Chọn ảnh phụ
                                         />
                                     ))}
                             </div>
                         </div>
                         <div className="product-details">
                             <h1>{product.name}</h1>
-                            <p className="price">
-                                {formatNumber(Number(product?.price))} ₫ <span className="old-price">4,790,000 ₫</span>
-                            </p>
-                            <div className="colors">
-                                <button className="color-button black"></button>
-                                <button className="color-button yellow selected"></button>
-                            </div>
+                            <p className="price">{formatNumber(Number(product?.price))} ₫</p>
                             <button
                                 onClick={() => handleOrder(product)}
                                 style={{ borderRadius: '15px', width: '100%' }}
@@ -151,12 +141,6 @@ function ProductDetail() {
                             >
                                 Thêm giỏ hàng
                             </button>
-                            {/* <button style={{ borderRadius: '15px' }} className="installment-button">
-                                Mua trả góp
-                            </button>
-                            <button style={{ borderRadius: '15px' }} className="installment-card-button">
-                                Mua trả góp bằng thẻ
-                            </button> */}
                             <div className="promotions">
                                 <div className="additional-offers">
                                     <p>
@@ -207,16 +191,6 @@ function ProductDetail() {
                     <div className="customer-reviews">
                         <h2>Bình luận của khách hàng</h2>
                         <div className="comment-form">
-                            {/* <h3>Gửi bình luận của bạn</h3> */}
-                            {/* <label htmlFor="name">Tên:</label>
-                                <input type="text" id="name" name="name" required />
-
-                                <label htmlFor="phone">Số điện thoại:</label>
-                                <input type="tel" id="phone" name="phone" required />
-
-                                <label htmlFor="email">Email:</label>
-                                <input type="email" id="email" name="email" required /> */}
-
                             <label htmlFor="comment">Nội dung bình luận:</label>
                             <textarea
                                 value={review}

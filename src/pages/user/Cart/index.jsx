@@ -26,7 +26,11 @@ function Cart() {
         try {
             if (Object.keys(auth).length !== 0) {
                 // const totalPrice = product.price * quantity;
-                navigate('/u/order', { state: { products: selectedProducts } });
+                if (selectedProducts && selectedProducts.length > 0) {
+                    navigate('/u/order', { state: { products: selectedProducts } });
+                } else {
+                    openNotificationError('Thất bại!', 'Vui lòng chọn sản phẩm để mua hàng!');
+                }
             } else {
                 openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
                 navigate('/auth/login');
@@ -98,7 +102,15 @@ function Cart() {
     };
 
     const handleQuantityChange = async (index, newQuantity, cartId) => {
-        if (newQuantity >= 0) {
+        // Kiểm tra số lượng người dùng nhập vào có vượt quá số lượng hiện có hay không
+        const availableQuantity = carts[index].product.quantity; // Số lượng sản phẩm hiện có
+
+        if (newQuantity > availableQuantity) {
+            openNotificationError('Thất bại!', 'Số lượng vượt quá số lượng sản phẩm hiện có.');
+            return;
+        }
+
+        if (newQuantity > 0) {
             const updatedCarts = [...carts];
             updatedCarts[index].product_number = newQuantity;
             setCarts(updatedCarts);
@@ -107,8 +119,10 @@ function Cart() {
                 await updateCart({ cartId, newQuantity });
                 calculateTotalPrice(updatedCarts);
             } catch (error) {
-                console.error('Error updating cart:', error);
+                openNotificationError('Thất bại!', error?.response?.data?.message);
             }
+        } else {
+            openNotificationError('Thất bại!', 'Số lượng sản phẩm phải lớn hơn 0.');
         }
     };
 
@@ -121,11 +135,22 @@ function Cart() {
     };
 
     const increaseQuantity = (index, cartId) => {
-        handleQuantityChange(index, carts[index].product_number + 1, cartId);
+        const currentQuantity = carts[index].product_number;
+        const availableStock = carts[index].product.quantity; // Giả sử 'stock' là số lượng còn lại trong kho
+
+        if (currentQuantity < availableStock) {
+            handleQuantityChange(index, currentQuantity + 1, cartId);
+        } else {
+            openNotificationError('Thất bại!', 'Số lượng sản phẩm không được vượt quá số lượng tồn kho.');
+        }
     };
 
     const decreaseQuantity = (index, cartId) => {
-        handleQuantityChange(index, carts[index].product_number > 0 ? carts[index].product_number - 1 : 0, cartId);
+        if (carts[index].product_number > 1) {
+            handleQuantityChange(index, carts[index].product_number - 1, cartId);
+        } else {
+            openNotificationError('Thất bại!', 'Số lượng sản phẩm phải lớn hơn 0.');
+        }
     };
 
     const calculateTotalPrice = (cartItems) => {
@@ -187,20 +212,20 @@ function Cart() {
                             {carts &&
                                 carts.length > 0 &&
                                 carts.map((item, index) => (
-                                    <div className="cart__item" key={item.id}>
+                                    <div className="cart__item" key={item?.id}>
                                         <div className="cart__item-left">
                                             <div style={checkboxContainerStyle}>
                                                 <input
                                                     type="checkbox"
                                                     id={`item-${index}`}
-                                                    checked={item.checked}
+                                                    checked={item?.checked}
                                                     onChange={() => handleSelectItem(index, item)}
                                                     style={checkboxInputStyle}
                                                 />
                                                 <label htmlFor={`item-${index}`} style={checkboxLabelStyle}></label>
                                             </div>
                                             <div className="item-details">
-                                                <img src={item.product.image} alt={item.product.name} />
+                                                <img src={item?.product?.image} alt={item?.product?.name} />
                                                 <p>{item?.product?.name}</p>
                                             </div>
                                         </div>
@@ -226,7 +251,7 @@ function Cart() {
                                                     type="number"
                                                     value={item?.product_number}
                                                     onChange={(e) =>
-                                                        handleQuantityChange(index, parseInt(e.target.value), item.id)
+                                                        handleQuantityChange(index, parseInt(e.target.value), item?.id)
                                                     }
                                                 />
                                                 <button
@@ -275,12 +300,7 @@ function Cart() {
                             <div className="total-amount">
                                 Tổng thanh toán: <span>{formatNumber(totalPrice)} đ</span>
                             </div>
-                            <button
-                                className="voucher-button"
-                                onClick={() => (document.getElementById('voucher-modal').style.display = 'block')}
-                            >
-                                Nhập Voucher
-                            </button>
+
                             <button onClick={handleOrder} className="buy-button">
                                 Mua Hàng
                             </button>

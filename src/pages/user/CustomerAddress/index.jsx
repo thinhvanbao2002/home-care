@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './customer-address.css';
 import { useEffect, useState } from 'react';
-import { createAddress, fetchAllAdress } from '~/services/user/customer-info-service';
+import { createAddress, deleteAddress, fetchAllAdress, updateAddress } from '~/services/user/customer-info-service';
 import { Input, Row, Col, Modal, Form } from 'antd';
-import { openNotificationSuccess } from '~/components/common/ultils';
+import { openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 function CustomerAddress() {
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
@@ -32,6 +32,26 @@ function CustomerAddress() {
             getAllCustomerAddress();
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    const handleDeleteAddress = async (addressId) => {
+        try {
+            await deleteAddress({ id: addressId });
+            openNotificationSuccess('Thành công', 'Xóa địa chỉ thành công!');
+            await getAllCustomerAddress();
+        } catch (error) {
+            openNotificationError('Thất bại', error?.response?.data?.message);
+        }
+    };
+
+    const handleSetDefaultAddress = async (addressId) => {
+        try {
+            await updateAddress({ addressId, isDefault: true });
+            openNotificationSuccess('Thành công', 'Đặt làm địa chỉ mặc định thành công!');
+            await getAllCustomerAddress();
+        } catch (error) {
+            openNotificationError('Thất bại', error?.response?.data?.message);
         }
     };
 
@@ -69,8 +89,20 @@ function CustomerAddress() {
                                         </div>
                                     </div>
                                     <div className="customer-address-item-right">
-                                        <button className="customer-address-btn-update">Cập nhật</button>
-                                        <button className="customer-address-btn-is-default">Đặt làm mặc định</button>
+                                        {/* <button className="customer-address-btn-update">Cập nhật</button> */}
+                                        <button
+                                            onClick={() => handleSetDefaultAddress(item?.id)}
+                                            className="customer-address-btn-is-default"
+                                        >
+                                            Đặt làm mặc định
+                                        </button>
+                                        <button
+                                            style={{ marginTop: '10px' }}
+                                            className="customer-address-btn-is-default"
+                                            onClick={() => handleDeleteAddress(item?.id)}
+                                        >
+                                            Xóa
+                                        </button>
                                     </div>
                                 </div>
                             ))}

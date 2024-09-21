@@ -45,6 +45,7 @@ function Order() {
                     customerId: userAuth.id,
                     totalPrice: totalAmount,
                     items: products,
+                    pay_type: 'notpay',
                 };
 
                 if (paymentMethod === 'cod') {
@@ -218,7 +219,7 @@ function Order() {
             </div>
 
             {/* Voucher Section */}
-            <div className="purchase-voucher-section">
+            {/* <div className="purchase-voucher-section">
                 <Title level={3}>Chọn Voucher</Title>
                 <Form layout="vertical">
                     <Form.Item label="Nhập mã voucher" name="voucherCode">
@@ -238,23 +239,23 @@ function Order() {
                         </Select>
                     </Form.Item>
                 </Form>
-            </div>
+            </div> */}
 
             {/* Shipping Method Section */}
-            <div className="purchase-shipping-method">
+            {/* <div className="purchase-shipping-method">
                 <Title level={3}>Chọn phương thức giao hàng</Title>
                 <Radio.Group>
                     <Radio value="standard">Giao hàng tiết kiệm - 30,000₫</Radio>
                     <Radio value="express">Giao hàng nhanh - 50,000₫</Radio>
                     <Radio value="sameDay">Giao hàng trong ngày - 100,000₫</Radio>
                 </Radio.Group>
-            </div>
+            </div> */}
 
             {/* Payment Method Section */}
             <div className="purchase-payment-methods">
                 <Title level={3}>Phương thức thanh toán</Title>
                 <div className="purchase-methods">
-                    <Button
+                    {/* <Button
                         type={paymentMethod === 'homecareBalance' ? 'primary' : 'default'}
                         onClick={() => handlePaymentMethodChange('homecareBalance')}
                         className={paymentMethod === 'homecareBalance' ? 'active' : ''}
@@ -267,7 +268,7 @@ function Order() {
                         className={paymentMethod === 'homecareWallet' ? 'active' : ''}
                     >
                         Ví HomeCare
-                    </Button>
+                    </Button> */}
                     <Button
                         type={paymentMethod === 'bankTransfer' ? 'primary' : 'default'}
                         onClick={() => handlePaymentMethodChange('bankTransfer')}

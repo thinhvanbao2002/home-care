@@ -2,7 +2,7 @@ import privateUserAxios from '../instants/axios-user-instant';
 
 // Cart
 
-const createOrder = ({ name, phone, address, note, customerId, totalPrice, items }) => {
+const createOrder = ({ name, phone, address, note, customerId, totalPrice, items, pay_type }) => {
     return privateUserAxios.post(`order`, {
         name,
         phone,
@@ -11,6 +11,7 @@ const createOrder = ({ name, phone, address, note, customerId, totalPrice, items
         customer_id: customerId,
         total_price: totalPrice,
         items,
+        pay_type: pay_type,
     });
 };
 

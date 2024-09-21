@@ -86,7 +86,7 @@ function ManagerLayout() {
         { key: '4', icon: <ProductOutlined />, label: 'Quản lý sản phẩm', path: '/admin/product' },
         { key: '5', icon: <UnorderedListOutlined />, label: 'Quản lý danh mục', path: '/admin/category' },
         // { key: '6', icon: <QrcodeOutlined />, label: 'Quản lý mã giảm giá', path: '/admin/voucher' },
-        { key: '7', icon: <ImportOutlined />, label: 'Quản lý nhập hàng', path: '/admin/inventory' },
+        // { key: '7', icon: <ImportOutlined />, label: 'Quản lý nhập hàng', path: '/admin/inventory' },
         // { key: '8', icon: <GiftOutlined />, label: 'Quản lý khuyến mãi', path: '/admin/gift' },
         // { key: '9', icon: <NotificationFilled />, label: 'Quản lý thông báo', path: '/admin/notification' },
         // { key: '10', icon: <BellFilled style={{ fontSize: '16px' }} />, label: 'Quản lý tin tức', path: '/admin/new' },

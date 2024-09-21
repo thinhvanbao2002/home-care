@@ -146,13 +146,15 @@ function Admin() {
         </div>
     );
 
+    console.log(name);
+
     const handleOk = async () => {
         try {
             await form.validateFields();
             await createAdmin(name, phone, email, password, imageUrl, role, null);
             await getUserAdmin();
             openNotification('Thành công', 'Thêm mới tài khoản thành công!');
-            // setOpen(false);
+            setOpen(false);
         } catch (error) {
             console.error('Validation Failed:', error);
         }
@@ -171,6 +173,9 @@ function Admin() {
             erorNotification('Thất bại', error.response.data.message);
         }
     };
+
+    console.log(openUpdate);
+
     const handleOpenUpdate = async (amdinId) => {
         try {
             setOpenUpdate(true);
@@ -391,6 +396,7 @@ function Admin() {
                                 value={name}
                                 name="fullName"
                                 label="Họ và tên"
+                                onChange={(e) => setName(e.target.value)}
                                 rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
                             >
                                 <Input placeholder="Nhập tên tài khoản" />
@@ -445,7 +451,7 @@ function Admin() {
                                     },
                                 ]}
                             >
-                                <Input placeholder="EnterEmail@gmail.com" />
+                                <Input placeholder="abcd@gmail.com" />
                             </Form.Item>
                             <Form.Item
                                 name="role"
@@ -481,7 +487,7 @@ function Admin() {
                     </Row>
                 </Form>
             </Modal>
-            {/* 
+
             <Modal
                 title="Cập nhật tài khoản"
                 centered
@@ -598,7 +604,7 @@ function Admin() {
                         </Col>
                     </Row>
                 </Form>
-            </Modal> */}
+            </Modal>
             <Modal
                 title={
                     <div style={{ display: 'flex', alignItems: 'center' }}>

@@ -9,8 +9,21 @@ const createAddress = ({ name, phone, address }) => {
     });
 };
 
+const updateAddress = ({ name, phone, address, isDefault, addressId }) => {
+    return privateUserAxios.put(`/customer-info/${addressId}`, {
+        name: name,
+        phone: phone,
+        address: address,
+        is_default: isDefault,
+    });
+};
+
 const fetchAllAdress = () => {
     return privateUserAxios.get('/customer-info');
 };
 
-export { createAddress, fetchAllAdress };
+const deleteAddress = ({ id }) => {
+    return privateUserAxios.delete(`/customer-info/${id}`);
+};
+
+export { createAddress, fetchAllAdress, updateAddress, deleteAddress };

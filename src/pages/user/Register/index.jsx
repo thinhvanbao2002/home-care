@@ -53,7 +53,9 @@ function Register() {
                 openNotificationError('Thất bại', 'Xác thực OTP không thành công');
             }
         } catch (error) {
-            openNotificationError('Thất bại', 'Có lỗi xảy ra trong quá trình xác thực OTP');
+            console.log(error);
+
+            openNotificationError('Thất bại', error?.response?.data?.message);
         } finally {
             setLoading(false);
         }

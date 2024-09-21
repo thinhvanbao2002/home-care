@@ -6,7 +6,7 @@ import './styles/responsive.css';
 import { fetchAllProduct } from '~/services/user/product-service';
 import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { fetchAllChildCategory } from '~/services/user/category-service';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { addToCart } from '~/services/user/cart-service';
 
@@ -26,22 +26,33 @@ function UserProduct() {
     const [statusFilter, setStatusFilter] = useState(null);
 
     const auth = useSelector((state) => state?.auth?.user);
+    const location = useLocation();
+
+    const categoryFilterId = location?.state?.categoryId;
+
+    console.log('categoryFilterId', categoryFilterId);
 
     const handleNavigate = (id) => {
         navigate('/product-detail', { state: { id } });
     };
 
     useEffect(() => {
+        setCategoryId(categoryFilterId);
+    }, [categoryFilterId]);
+
+    useEffect(() => {
         getAllProduct();
         getAllCategory();
-    }, [currentPage, categoryId, searchName, sortOrder, priceRange, statusFilter]);
+    }, [currentPage, categoryId, searchName, sortOrder, priceRange, statusFilter, categoryFilterId]);
 
     const getAllProduct = async () => {
         try {
             const res = await fetchAllProduct({
                 page: currentPage, // Use currentPage state for pagination
                 take,
+                categoryId,
                 q: searchName,
+                sortOrder,
             });
             console.log(res);
 
@@ -87,27 +98,34 @@ function UserProduct() {
                         value={searchName}
                         placeholder="Tìm theo tên sản phẩm"
                         allowClear
-                        onChange={(e) => setSearchName(e.target.value)}
-                        style={{ width: 200, marginRight: '1rem' }}
+                        onChange={(e) => {
+                            setSearchName(e.target.value);
+                            setCategoryId(null);
+                        }}
+                        style={{ width: 500, marginRight: '1rem' }}
                     />
                     <Select
+                        allowClear
                         placeholder="Sắp xếp giá"
                         onChange={handleSortOrderChange}
                         style={{ width: 150, marginRight: '1rem' }}
                     >
-                        <Option value="asc">Giá tăng dần</Option>
-                        <Option value="desc">Giá giảm dần</Option>
+                        <Option value="ASC">Giá tăng dần</Option>
+                        <Option value="DESC">Giá giảm dần</Option>
                     </Select>
-                    <Select placeholder="Khoảng giá" onChange={handleStatusChange} style={{ width: 200 }}>
-                        <Option value="in_stock">Hàng tồn kho</Option>
-                        <Option value="new_arrival">Hàng mới về</Option>
-                        <Option value="pre_order">Đặt trước</Option>
+                    {/* <Select placeholder="Khoảng giá" onChange={handleStatusChange} style={{ width: 200 }}>
+                        <Option value="in_stock"> Đến 200.000</Option>
+                        <Option value="new_arrival">Đến 500.000</Option>
+                        <Option value="pre_order">Đến 1.000.000</Option>
+                        <Option value="in_stock"> Đến 2.000.000</Option>
+                        <Option value="new_arrival">Đến 500.000</Option>
+                        <Option value="pre_order">Đến 1.000.000</Option>
                     </Select>
                     <Select placeholder="Tình trạng hàng" onChange={handleStatusChange} style={{ width: 200 }}>
                         <Option value="in_stock">Hàng tồn kho</Option>
                         <Option value="new_arrival">Hàng mới về</Option>
                         <Option value="pre_order">Đặt trước</Option>
-                    </Select>
+                    </Select> */}
                 </nav>
             </header>
 

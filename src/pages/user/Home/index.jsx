@@ -126,7 +126,9 @@ function Home() {
                 openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
                 navigate('/auth/login');
             }
-        } catch (error) {}
+        } catch (error) {
+            openNotificationError('Thất bại', 'Sản phẩm hiện không đủ hàng vui lòng chọn sản phẩm khác!');
+        }
     };
 
     const handlePageChange = (page) => {
@@ -195,7 +197,11 @@ function Home() {
                                     />
                                     <h3>{item?.name}</h3>
                                     <p>Giá: {formatNumber(Number(item?.price))} VND</p>
-                                    <button class="add-to-cart-btn" onclick="addToCart('promo-product-1')">
+                                    <button
+                                        onClick={() => handleAddToCart(item?.id)}
+                                        class="add-to-cart-btn"
+                                        onclick="addToCart('promo-product-1')"
+                                    >
                                         Thêm vào giỏ hàng
                                     </button>
                                 </div>

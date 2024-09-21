@@ -11,12 +11,14 @@ function FormDetailOrder({ isModalVisible, handleModalClose, data, getDataOrder 
     const [orderId, setOrderId] = useState(null);
     const [products, setProducts] = useState([]);
     const [status, setStatus] = useState(null);
+    const [payStatus, setPayStatus] = useState(null);
 
     useEffect(() => {
         if (data) {
             setOrderId(data?.id);
             setStatus(data?.order_status);
             setProducts(data?.order_details);
+            setPayStatus(data?.pay_type);
             form.setFieldsValue({
                 name: data?.name,
                 phone: data?.phone,
@@ -25,6 +27,7 @@ function FormDetailOrder({ isModalVisible, handleModalClose, data, getDataOrder 
                 status: data?.order_status,
                 address: data?.address,
                 note: data?.note,
+                pay_status: data?.pay_type === 'pay' ? 'Đã thanh toán' : 'Chưa thanh toán',
                 // birth_day: moment(data?.birth_day, 'YYYY-MM-DD').format('DD/MM/YYYY'),
                 // wallet: data.customer?.customer_wallet?.balance,
                 // cumulative_score: data?.customer?.cumulative_score,
@@ -72,10 +75,10 @@ function FormDetailOrder({ isModalVisible, handleModalClose, data, getDataOrder 
                                 <Input disabled />
                             </Form.Item>
                             <Form.Item
-                                // name="name"
+                                name="pay_status"
                                 // value={name}
                                 // onChange={(e) => setName(e.target.value)}
-                                label="Hình thức thanh toán"
+                                label="Trạng thái thanh toán"
                             >
                                 <Input disabled />
                             </Form.Item>

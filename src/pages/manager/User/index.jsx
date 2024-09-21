@@ -18,6 +18,7 @@ function User() {
     const [take, setTake] = useState(10);
     const [changeSelectValue, setChangeSelectValue] = useState(null);
     const [total, setTotal] = useState(0);
+    const [status, setStatus] = useState(null);
 
     const [user, setDataUser] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -25,27 +26,38 @@ function User() {
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [customerId, setCustomerId] = useState('');
     const [userDetail, setUserDetail] = useState([]);
-    // Xử lý date
+
     const handleDateChange = (dates) => {
         setDateRange(dates);
         if (dates) {
-            const formattedDates = dates.map((date) => (date ? date.format('DD-MM-YYYY') : null));
+            const formattedDates = dates.map((date) => (date ? date.format('YYYY-MM-DD') : null));
             setFromDate(formattedDates[0]);
             setToDate(formattedDates[1]);
+        } else {
+            setFromDate(null);
+            setToDate(null);
         }
     };
 
-    // Fetch All user admin
+    console.log(fromDate);
+    console.log(toDate);
+
     useEffect(() => {
         getCustomerAdmin();
-    }, []);
+    }, [searchKeyword, fromDate, toDate, status, dateRange]);
 
     // get list product
     const getCustomerAdmin = async () => {
         try {
-            let res = await fetchAllCustomer(searchKeyword, changeSelectValue, fromDate, toDate, page, take);
+            let res = await fetchAllCustomer({
+                searchKeyword,
+                status,
+                fromDate,
+                toDate,
+                page,
+                take,
+            });
             setDataUser(res.data);
-
             setTotal(res.meta.item_count);
         } catch (error) {
             console.log(error);
@@ -152,12 +164,22 @@ function User() {
                 <Col>
                     <Row gutter={16}>
                         <Col>
-                            <Input placeholder="Nội dung tìn kiếm" style={{ width: '200px' }} allowClear />
+                            <Input
+                                onChange={(e) => setSearchKeyword(e.target.value)}
+                                placeholder="Nội dung tìn kiếm"
+                                style={{ width: '200px' }}
+                                allowClear
+                            />
                         </Col>
                         <Col>
-                            <Select placeholder="Trạng thái" style={{ width: '200px' }} allowClear>
-                                <Select.Option value="Đang hạt động">Đang hạt động</Select.Option>
-                                <Select.Option value="Ngừng hoạt động">Ngừng hoạt động</Select.Option>
+                            <Select
+                                onChange={(value) => setStatus(value)}
+                                placeholder="Trạng thái"
+                                style={{ width: '200px' }}
+                                allowClear
+                            >
+                                <Select.Option value="active">Đang hạt động</Select.Option>
+                                <Select.Option value="inactive">Ngừng hoạt động</Select.Option>
                             </Select>
                         </Col>
                         <Col>
@@ -166,6 +188,7 @@ function User() {
                                 onChange={handleDateChange}
                                 value={dateRange}
                                 format="DD-MM-YYYY"
+                                allowClear
                             />
                         </Col>
                     </Row>

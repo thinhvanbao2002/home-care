@@ -57,6 +57,9 @@ const formatDate = (dateString) => {
 function PurchaseOrder() {
     const [form] = Form.useForm();
     const [orders, setOrders] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
+    const [selectedDates, setSelectedDates] = useState([null, null]);
+    const [selectedStatus, setSelectedStatus] = useState(null);
 
     useEffect(() => {
         getOrders();
@@ -65,11 +68,38 @@ function PurchaseOrder() {
     const getOrders = async () => {
         try {
             const res = await getAllOrder();
-            console.log(res);
             setOrders(res.data);
+            setFilteredOrders(res.data); // Lưu bản sao của danh sách đơn hàng ban đầu
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const handleDateChange = (dates, dateStrings) => {
+        setSelectedDates(dateStrings);
+        filterOrders(dateStrings, selectedStatus); // Gọi hàm lọc khi có sự thay đổi về ngày
+    };
+
+    const handleStatusChange = (status) => {
+        setSelectedStatus(status);
+        filterOrders(selectedDates, status); // Gọi hàm lọc khi có sự thay đổi về trạng thái
+    };
+
+    const filterOrders = (dates, status) => {
+        const [startDate, endDate] = dates;
+
+        const filtered = orders.filter((order) => {
+            const orderDate = new Date(order.created_at);
+
+            const isWithinDateRange =
+                (!startDate || new Date(startDate) <= orderDate) && (!endDate || orderDate <= new Date(endDate));
+
+            const matchesStatus = !status || order.order_status === status;
+
+            return isWithinDateRange && matchesStatus;
+        });
+
+        setFilteredOrders(filtered);
     };
 
     return (
@@ -90,8 +120,17 @@ function PurchaseOrder() {
                             marginBottom: '40px',
                         }}
                     >
-                        <RangePicker style={{ marginRight: '40px' }} />
-                        <Select placeholder="Chọn trạng thái" style={{ width: 200 }} allowClear>
+                        <RangePicker
+                            style={{ marginRight: '40px' }}
+                            placeholder={['Từ ngày', 'Đến ngày']}
+                            onChange={handleDateChange}
+                        />
+                        <Select
+                            placeholder="Chọn trạng thái"
+                            style={{ width: 200 }}
+                            allowClear
+                            onChange={handleStatusChange}
+                        >
                             <Option value={OrderType.PENDING}>Đang chuẩn bị hàng</Option>
                             <Option value={OrderType.PROCESSING}>Đang xử lý</Option>
                             <Option value={OrderType.SHIPED}>Đang giao hàng</Option>
@@ -100,9 +139,9 @@ function PurchaseOrder() {
                         </Select>
                     </div>
                     <div className="content-customer-order-list">
-                        {orders &&
-                            orders.length > 0 &&
-                            orders.map((item, index) => (
+                        {filteredOrders &&
+                            filteredOrders.length > 0 &&
+                            filteredOrders.map((item, index) => (
                                 <div key={index} className="order-list-item">
                                     <div className="order-list-item-header">
                                         <h4 className="item-order-code">
@@ -137,9 +176,25 @@ function PurchaseOrder() {
                                     </div>
                                     <div className="order-list-item-footer">
                                         <h3>Tổng thanh toán:</h3>
-                                        <p style={{ color: '#ee4d2d' }} className="order-list-item-total-price">
+                                        <p
+                                            style={{ color: '#ee4d2d', marginTop: '0px' }}
+                                            className="order-list-item-total-price"
+                                        >
                                             {formatNumber(Number(item?.total_price))} đ
                                         </p>
+
+                                        <h4
+                                            className="item-order-status"
+                                            style={{
+                                                border: 'none',
+                                                background: item.order_status === 'completed' ? '#ccc' : 'red', // Nếu đơn hàng đã hoàn thành, đổi màu nền
+                                                color: '#fff',
+                                                cursor: item.order_status === 'completed' ? 'not-allowed' : 'pointer', // Vô hiệu hóa con trỏ khi đã hoàn thành
+                                                marginLeft: '20px',
+                                            }}
+                                        >
+                                            Hủy đặt hàng
+                                        </h4>
                                     </div>
                                 </div>
                             ))}

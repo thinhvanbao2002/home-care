@@ -4,7 +4,8 @@
 
 .fade-enter-active {
     opacity: 1;
-    transition: opacity 300ms ease-in;
+    transition: opacity 0.5s ease-in-out;
+    /* Hiệu ứng mờ dần */
 }
 
 .fade-exit {
@@ -13,5 +14,39 @@
 
 .fade-exit-active {
     opacity: 0;
-    transition: opacity 300ms ease-in;
+    transition: opacity 0.5s ease-in-out;
+    /* Hiệu ứng mờ dần khi rời trang */
+}
+
+/* Hiệu ứng loading */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    /* Nền mờ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: ease-in;
+}
+
+.loading-icon {
+    font-size: 3rem;
+    color: #fff;
+    animation: spin 2s linear infinite;
+    /* Thêm hiệu ứng xoay */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

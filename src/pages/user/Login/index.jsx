@@ -45,7 +45,9 @@ const UserLogin = () => {
                             <h3>Một tài khoản cho mọi dịch vụ của HomeCare</h3>
                         </div>
                         <div className="login-page-left-desc">
-                            <p>Đăng nhập tài khoản ASUS và thực hiện mọi việc bạn cần từ một cổng dịch vụ duy nhất!</p>
+                            <p>
+                                Đăng nhập tài khoản HomeCare và thực hiện mọi việc bạn cần từ một cổng dịch vụ duy nhất!
+                            </p>
                         </div>
                     </Col>
                     <Col xs={20} sm={14} md={12} lg={8} xl={8} className="column2" style={{ height: '600px' }}>
@@ -60,7 +62,7 @@ const UserLogin = () => {
                                 </div>
                                 <h2 className="login-title-customer">Đăng nhập Tài khoản</h2>
                                 <Form.Item
-                                    label="Email"
+                                    label="Số điện thoại"
                                     name="enterEmai"
                                     labelCol={{ span: 24 }}
                                     rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
@@ -70,7 +72,7 @@ const UserLogin = () => {
                                         onChange={(e) => setEmail(e.target.value)}
                                         className="form-login-input-customer"
                                         prefix={<UserOutlined className="site-form-item-icon" />}
-                                        placeholder="Email"
+                                        placeholder="Số điện thoại"
                                     />
                                 </Form.Item>
                                 <Form.Item

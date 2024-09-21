@@ -1,10 +1,10 @@
 import privateAdminAxios from '../instants/axios-admin-instant';
 
 // Product
-const fetchAllCustomer = (q, status, fromDate, toDate, page, take) => {
+const fetchAllCustomer = ({ searchKeyword, status, fromDate, toDate, page, take }) => {
     return privateAdminAxios.get('a/customer', {
         params: {
-            q: q,
+            q: searchKeyword,
             status: status,
             from_date: fromDate,
             to_date: toDate,

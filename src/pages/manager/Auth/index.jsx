@@ -45,14 +45,14 @@ const Login = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     labelCol={{ span: 24 }}
-                    label="Email"
+                    label="Số điện thoại"
                     name="email"
-                    rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                 >
                     <Input
                         className="form-login-input-admin"
                         prefix={<UserOutlined className="site-form-item-icon" />}
-                        placeholder="Email"
+                        placeholder="Số điện thoại"
                     />
                 </Form.Item>
                 <Form.Item

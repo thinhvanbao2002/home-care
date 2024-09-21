@@ -16,6 +16,7 @@ import {
 import FormCreateProduct from './components/FormCreateProduct';
 import { fetchAllChildCategory } from '~/services/admin/admin-category-service';
 import FormUpdateProduct from './components/FormUpdateProduct';
+import { useLocation } from 'react-router-dom';
 const { RangePicker } = DatePicker;
 
 function Product() {
@@ -41,24 +42,33 @@ function Product() {
     const [quantity, setQuantity] = useState(null);
     const [note, setNote] = useState('');
 
+    console.log(dateRange);
+
     useEffect(() => {
         getAllProduct();
         getAllCategory();
-    }, [q, status, page, take, productType, categoryId, dateRange]);
+    }, [q, status, page, take, productType, categoryId, fromDate, toDate]);
 
     const getAllProduct = async () => {
         try {
             const res = await fetchAllProduct({ q, status, page, take, productType, categoryId, fromDate, toDate });
             setProducts(res.data);
             setTotal(res.meta.item_count);
-        } catch (error) {}
+        } catch (error) {
+            console.log(error);
+        }
     };
     const getAllCategory = async () => {
         try {
             const res = await fetchAllChildCategory(cateName, 1, 1000);
             setCategories(res.data);
-        } catch (error) {}
+        } catch (error) {
+            console.log(error);
+        }
     };
+
+    console.log(fromDate);
+    console.log(toDate);
 
     // Xử lý date
     const handleDateChange = (dates) => {
@@ -67,6 +77,9 @@ function Product() {
             const formattedDates = dates.map((date) => (date ? date.format('DD-MM-YYYY') : null));
             setFromDate(formattedDates[0]);
             setToDate(formattedDates[1]);
+        } else {
+            setFromDate(null);
+            setToDate(null);
         }
     };
 
@@ -82,7 +95,7 @@ function Product() {
             setDeleteModalVisible(false);
             await getAllProduct();
         } catch (error) {
-            openNotificationSuccess('Thất bại', 'Xóa sản phẩm thất bại!');
+            openNotificationError('Thất bại', 'Xóa sản phẩm thất bại!');
         }
     };
 
@@ -127,7 +140,6 @@ function Product() {
             key: '0',
             fixed: 'left',
         },
-
         { title: 'Tên sản phẩm', dataIndex: 'name', key: '1', width: 200 },
         { title: 'Danh mục sản phẩm', dataIndex: 'category', key: '2', width: 200 },
         { title: 'Giá tiền', dataIndex: 'price', key: '3', width: 200 },
@@ -231,6 +243,7 @@ function Product() {
                                 onChange={handleDateChange}
                                 value={dateRange}
                                 format="DD-MM-YYYY"
+                                allowClear
                             />
                         </Col>
                     </Row>
@@ -382,7 +395,6 @@ function Product() {
                 onCancel={handleCancel}
                 footer={(_, { OkBtn, CancelBtn }) => (
                     <>
-                        <Button>Custom Button</Button>
                         <CancelBtn />
                         <OkBtn />
                     </>
@@ -393,6 +405,7 @@ function Product() {
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                     style={{ marginBottom: '16px' }}
+                    rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
                 />
                 <Input.TextArea placeholder="Ghi chú" rows={5} value={note} onChange={(e) => setNote(e.target.value)} />
             </Modal>

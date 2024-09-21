@@ -27,6 +27,10 @@ function QrPaymen() {
         // Handle the paysuccess event
         socket.on('paysuccess', async (data) => {
             console.log('Payment success data:', data);
+            orderData.pay_type = 'pay';
+
+            console.log(orderData);
+
             await createOrder(orderData);
             navigate('/order-success');
         });

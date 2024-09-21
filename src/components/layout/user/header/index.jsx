@@ -88,30 +88,39 @@ function Header() {
                             categories.map((item) => (
                                 <ul className="nav-list">
                                     <li className="nav-item">
-                                        <Link
+                                        <li
+                                            style={{ cursor: 'pointer' }}
                                             onMouseEnter={() => handleMouseEnter(item)}
                                             onMouseLeave={() => setIsHovered(false)}
                                             href=""
                                             className="nav-text"
-                                            to="/products"
+                                            // onClick={() => {
+                                            //     navigate('/products', { state: { categoryId: item.id } });
+                                            //     console.log('click');
+                                            // }}
                                         >
-                                            {item.name}
-                                        </Link>
+                                            <a style={{ textDecoration: 'none', color: '#000' }} href="/products">
+                                                {item.name}
+                                            </a>
+                                        </li>
                                         <div className="menu-container">
                                             <div className="menu-container-left">
                                                 <ul className="menu-list">
                                                     {childCategoies &&
                                                         childCategoies &&
                                                         childCategoies.map((child) => (
-                                                            <li
-                                                                onClick={() => {
-                                                                    navigate('/products');
-                                                                }}
-                                                                className="menu-item"
-                                                            >
-                                                                <a href="" className="menu-text">
-                                                                    {child.name}
-                                                                </a>
+                                                            <li className="menu-item">
+                                                                <p
+                                                                    style={{ cursor: 'pointer' }}
+                                                                    onClick={() =>
+                                                                        navigate('/products', {
+                                                                            state: { categoryId: child.id },
+                                                                        })
+                                                                    }
+                                                                    className="menu-text"
+                                                                >
+                                                                    <a href="/products">{child.name}</a>
+                                                                </p>
                                                             </li>
                                                         ))}
                                                 </ul>

@@ -186,9 +186,9 @@ export const FormUserDetail = ({ isModalVisible, handleModalClose, data, getData
                             <Input placeholder="birth day" />
                         </Form.Item>
 
-                        <Form.Item name="cumulative_score" label="Điểm tích lũy">
+                        {/* <Form.Item name="cumulative_score" label="Điểm tích lũy">
                             <Input placeholder="" disabled />
-                        </Form.Item>
+                        </Form.Item> */}
                     </Col>
                 </Row>
             </Form>

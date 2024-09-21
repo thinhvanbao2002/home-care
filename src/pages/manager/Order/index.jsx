@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Input, Row, Select, Table } from 'antd';
+import { Button, Col, DatePicker, Input, Modal, Row, Select, Table } from 'antd';
 import {
     ExclamationCircleOutlined,
     PlusOutlined,
@@ -92,7 +92,7 @@ function AdminOrder() {
                         size="large"
                         onClick={() => handleOpenFormDetailOrder(record?.order_id)}
                     ></Button>
-                    <Button
+                    {/* <Button
                         type="button"
                         icon={<DeleteOutlined style={{ color: '#fff' }} />}
                         style={{
@@ -105,7 +105,7 @@ function AdminOrder() {
                         //     setDeleteModalVisible(true);
                         //     setProductId(record?.id);
                         // }}
-                    ></Button>
+                    ></Button> */}
                 </span>
             ),
         },
@@ -137,7 +137,7 @@ function AdminOrder() {
                                 <Select.Option value="confirmed">Đã chuẩn bị hàng</Select.Option>
                                 <Select.Option value="shiped">Đang giao hàng</Select.Option>
                                 <Select.Option value="completed">Đã hoàn thành</Select.Option>
-                                <Select.Option value="canceled">Đã hủy</Select.Option>
+                                <Select.Option value="cancelled">Đã hủy</Select.Option>
                             </Select>
                         </Col>
                         <Col>
@@ -174,7 +174,7 @@ function AdminOrder() {
                 </Col>
                 <Col>
                     <Row gutter={16}>
-                        <Col>
+                        {/* <Col>
                             <Button
                                 type="primary"
                                 style={{ marginRight: 16 }}
@@ -183,7 +183,7 @@ function AdminOrder() {
                             >
                                 Thêm mới
                             </Button>
-                        </Col>
+                        </Col> */}
                         <Col>
                             <Button
                                 type="button"
@@ -247,6 +247,24 @@ function AdminOrder() {
                 data={order}
                 getDataOrder={getAllOrder}
             />
+            {/* <Modal
+                title={
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <ExclamationCircleOutlined
+                            style={{ color: '#FF3333', fontSize: '24px', marginRight: '10px' }}
+                        />
+                        <span style={{ fontSize: '20px' }}>Xác nhận xóa</span>
+                    </div>
+                }
+                visible={deleteModalVisible}
+                onOk={handleDeleteOrder} // Define this function to handle delete action
+                onCancel={() => setDeleteModalVisible(false)}
+                okText="Xác nhận"
+                cancelText="Hủy bỏ"
+                centered // Center the modal vertically
+            >
+                <p style={{ fontSize: '18px', textAlign: 'center' }}>Bạn có chắc chắn muốn xóa?</p>
+            </Modal> */}
         </>
     );
 }
