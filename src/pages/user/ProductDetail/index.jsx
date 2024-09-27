@@ -112,7 +112,7 @@ function ProductDetail() {
                     <div className="product-container">
                         <div className="product-image-gallery">
                             <div className="main-image">
-                                <img src={mainImage} alt="Product" id="main-product-image" />
+                                <img src={product?.image} alt="Product" id="main-product-image" />
                             </div>
                             <div className="image-thumbnails">
                                 {product &&
