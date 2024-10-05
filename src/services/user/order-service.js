@@ -19,4 +19,8 @@ const getAllOrder = () => {
     return privateUserAxios.get(`order`);
 };
 
-export { createOrder, getAllOrder };
+const cancelOrder = ({ orderId }) => {
+    return privateUserAxios.patch(`order/${orderId}`);
+};
+
+export { createOrder, getAllOrder, cancelOrder };

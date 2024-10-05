@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { DatePicker, Select, Button, Form } from 'antd';
+import { DatePicker, Select, Button, Form, Modal } from 'antd';
 import './purchaseorder.css';
-import { getAllOrder } from '~/services/user/order-service';
-import { formatNumber } from '~/components/common/ultils';
+import { cancelOrder, getAllOrder } from '~/services/user/order-service';
+import { formatNumber, openNotificationError, openNotificationSuccess } from '~/components/common/ultils';
 import { OrderType } from './order-type';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -56,10 +57,12 @@ const formatDate = (dateString) => {
 
 function PurchaseOrder() {
     const [form] = Form.useForm();
+    const [orderId, setOderId] = useState(null);
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
     const [selectedDates, setSelectedDates] = useState([null, null]);
     const [selectedStatus, setSelectedStatus] = useState(null);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
     useEffect(() => {
         getOrders();
@@ -72,6 +75,17 @@ function PurchaseOrder() {
             setFilteredOrders(res.data); // Lưu bản sao của danh sách đơn hàng ban đầu
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    const handleCancelOrder = async () => {
+        try {
+            setDeleteModalVisible(false);
+            await cancelOrder({ orderId });
+            await getOrders();
+            openNotificationSuccess('Thành công!', 'Hủy đơn hàng thành công!');
+        } catch (error) {
+            openNotificationError('Thất bại!', error.response.data.message);
         }
     };
 
@@ -185,11 +199,23 @@ function PurchaseOrder() {
 
                                         <h4
                                             className="item-order-status"
+                                            onClick={() => {
+                                                setDeleteModalVisible(true);
+                                                setOderId(item?.id);
+                                            }}
                                             style={{
                                                 border: 'none',
-                                                background: item.order_status === 'completed' ? '#ccc' : 'red', // Nếu đơn hàng đã hoàn thành, đổi màu nền
+                                                background:
+                                                    item.order_status === 'completed' ||
+                                                    item.order_status === 'cancelled'
+                                                        ? '#ccc'
+                                                        : 'red', // Nếu đơn hàng đã hoàn thành, đổi màu nền
                                                 color: '#fff',
-                                                cursor: item.order_status === 'completed' ? 'not-allowed' : 'pointer', // Vô hiệu hóa con trỏ khi đã hoàn thành
+                                                cursor:
+                                                    item.order_status === 'completed' ||
+                                                    item.order_status === 'cancelled'
+                                                        ? 'not-allowed'
+                                                        : 'pointer', // Vô hiệu hóa con trỏ khi đã hoàn thành
                                                 marginLeft: '20px',
                                             }}
                                         >
@@ -201,6 +227,24 @@ function PurchaseOrder() {
                     </div>
                 </div>
             </div>
+            <Modal
+                title={
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <ExclamationCircleOutlined
+                            style={{ color: '#FF3333', fontSize: '24px', marginRight: '10px' }}
+                        />
+                        <span style={{ fontSize: '20px' }}>Xác nhận hủy</span>
+                    </div>
+                }
+                visible={deleteModalVisible}
+                onOk={handleCancelOrder} // Define this function to handle delete action
+                onCancel={() => setDeleteModalVisible(false)}
+                okText="Xác nhận"
+                cancelText="Hủy bỏ"
+                centered // Center the modal vertically
+            >
+                <p style={{ fontSize: '18px', textAlign: 'center' }}>Bạn có chắc chắn muốn hủy đơn hàng!</p>
+            </Modal>
         </>
     );
 }

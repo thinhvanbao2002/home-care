@@ -97,9 +97,14 @@ function ProductDetail() {
 
     const handleCreateReview = async () => {
         try {
-            await reviewProduct({ productId, review });
-            getAllReview();
-            setReview('');
+            if (Object.keys(auth).length !== 0) {
+                await reviewProduct({ productId, review });
+                getAllReview();
+                setReview('');
+            } else {
+                openNotificationError('Thất bại!', 'Vui lòng đăng nhập để sử dụng dịch vụ!');
+                navigate('/auth/login');
+            }
         } catch (error) {
             console.log(error);
         }
