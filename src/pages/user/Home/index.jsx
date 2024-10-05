@@ -1,5 +1,6 @@
 import './styles/style.css';
 import './styles/grid.css';
+import React from 'react';
 import './styles/responsive.css';
 import { useEffect, useState } from 'react';
 import { fetchAllProduct, fetchBestSeller } from '~/services/user/product-service';
@@ -8,6 +9,15 @@ import { fetchAllChildCategory } from '~/services/user/category-service';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { addToCart } from '~/services/user/cart-service';
+import { Carousel } from 'antd';
+
+const contentStyle = {
+    height: '160px',
+    color: '#fff',
+    lineHeight: '160px',
+    textAlign: 'center',
+    background: '#364d79',
+};
 
 function Home() {
     const navigate = useNavigate();
@@ -138,6 +148,29 @@ function Home() {
 
     return (
         <>
+            <Carousel autoplay>
+                <div>
+                    <img
+                        src="https://www.donghopho.vn/upload/img/2020/08/21/dong-ho-bentley-banner1_1597982381.jpg"
+                        alt="Image 3"
+                        style={{ width: '100%', height: '600px', objectFit: 'cover' }}
+                    />
+                </div>
+                <div>
+                    <img
+                        src="https://donghohungthinhphat.com/uploads/quangcao/b4-1-jpg-20210123134324S1WWwhPip8.jpg"
+                        alt="Image 3"
+                        style={{ width: '100%', height: '600px', objectFit: 'cover' }}
+                    />
+                </div>
+                <div>
+                    <img
+                        src="https://bossluxurywatch.vn/uploads/anh-dong-ho-dang-bao/5004/nhan-biet-dh-zenith/banner-zenith.jpg"
+                        alt="Image 3"
+                        style={{ width: '100%', height: '600px', objectFit: 'cover' }}
+                    />
+                </div>
+            </Carousel>
             <header class="home-header">
                 <div class="home-banner">
                     {/* <!-- Slide bên trái --> */}

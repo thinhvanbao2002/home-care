@@ -67,12 +67,12 @@ function AdminOrder() {
         },
 
         { title: 'Mã đơn hàng', dataIndex: 'order_id', key: '1', width: 200 },
-        { title: 'Ngày đặt', dataIndex: 'created_at', key: '2', width: 200 },
-        { title: 'Tên khách hàng', dataIndex: 'customer_name', key: '3', width: 200 },
+        { title: 'Tên khách hàng', dataIndex: 'customer_name', key: '2', width: 200 },
         { title: 'Số lượng sản phẩm', dataIndex: 'product_number', key: '4', width: 200 },
         { title: 'Tổng tiền', dataIndex: 'total_price', key: '5', width: 200 },
         { title: 'Trạng thái đơn hàng', dataIndex: 'order_status', key: '6', width: 200 },
         { title: 'ID', dataIndex: 'id', key: '13', width: 0 },
+        { title: 'Ngày đặt', dataIndex: 'created_at', key: '3', width: 200 },
         {
             title: 'Thao tác',
             key: 'operation',
@@ -206,7 +206,7 @@ function AdminOrder() {
                     const realIndex = (page - 1) * take + index + 1;
                     return {
                         key: realIndex,
-                        order_id: data?.id,
+                        order_id: `MDH${data?.id}`,
                         created_at: moment(data?.created_at, 'YYYY-MM-DD').format('DD/MM/YYYY'),
                         customer_name: data?.name,
                         product_number: data?.order_details.length,
