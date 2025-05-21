@@ -45,7 +45,7 @@ html {
 .home-slide-left img,
 .home-slide-right img {
     width: 800px;
-    height: 200px;
+    height: 300px;
     border-radius: 8px;
     transition: opacity 0.5s ease;
 }
@@ -182,7 +182,7 @@ html {
 }
 
 .home-featured-products h2 {
-    font-size: 24px;
+    font-size: 16px;
     color: #333;
     margin-bottom: 30px;
     text-transform: uppercase;
@@ -241,6 +241,7 @@ html {
     max-width: 800px;
     margin: 0 auto;
     color: #666;
+    line-height: 25px;
 }
 
 .home-footer {

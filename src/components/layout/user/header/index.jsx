@@ -12,164 +12,164 @@ import { openNotificationSuccess } from '~/components/common/ultils';
 import { getAllCart } from '~/services/user/cart-service';
 
 function Header() {
-    const navigate = useNavigate();
-    const [isHovered, setIsHovered] = useState(false);
-    const [categories, setCategories] = useState([]);
-    const [childCategoies, setChildCategories] = useState([]);
-    const [products, setProducts] = useState([]);
-    const [countCart, setCountCart] = useState(0);
+  const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [childCategoies, setChildCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [countCart, setCountCart] = useState(0);
 
-    const auth = useSelector((state) => state.auth.user);
+  const auth = useSelector((state) => state.auth.user);
 
-    const userAuth = typeof auth === 'string' ? JSON.parse(auth) : auth;
+  const userAuth = typeof auth === 'string' ? JSON.parse(auth) : auth;
 
-    const handleNavigateProductDetail = (id) => {
-        navigate('/product-detail', { state: { id } });
-    };
+  const handleNavigateProductDetail = (id) => {
+    navigate('/product-detail', { state: { id } });
+  };
 
-    const handleNavigate = () => {
-        navigate('/u/cart');
-    };
+  const handleNavigate = () => {
+    navigate('/u/cart');
+  };
 
-    useEffect(() => {
-        getAllCategory();
-        getAllProduct();
-        handleCountCart();
-    }, []);
+  useEffect(() => {
+    getAllCategory();
+    getAllProduct();
+    handleCountCart();
+  }, []);
 
-    const getAllCategory = async () => {
-        try {
-            const res = await fetchAllCategory();
-            setCategories(res.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+  const getAllCategory = async () => {
+    try {
+      const res = await fetchAllCategory();
+      setCategories(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    const getAllProduct = async () => {
-        try {
-            const res = await fetchAllProduct({ page: 1, take: 9 });
-            setProducts(res.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+  const getAllProduct = async () => {
+    try {
+      const res = await fetchAllProduct({ page: 1, take: 9 });
+      setProducts(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    const handleCountCart = async () => {
-        try {
-            const res = await getAllCart();
-            setCountCart(res?.data?.length);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+  const handleCountCart = async () => {
+    try {
+      const res = await getAllCart();
+      setCountCart(res?.data?.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    const handleMouseEnter = (item) => {
-        setChildCategories(item.children);
-    };
+  const handleMouseEnter = (item) => {
+    setChildCategories(item.children);
+  };
 
-    const handleLogout = () => {
-        localStorage.removeItem('authData');
-        localStorage.removeItem('user-token');
-        store.dispatch(setAuth({}));
-        openNotificationSuccess('Thành công', 'Đăng xuất thành công');
-    };
+  const handleLogout = () => {
+    localStorage.removeItem('authData');
+    localStorage.removeItem('user-token');
+    store.dispatch(setAuth({}));
+    openNotificationSuccess('Thành công', 'Đăng xuất thành công');
+  };
 
-    return (
-        <>
-            <div className="wrapber">
-                <header className="nav">
-                    <div className="nav-left">
-                        <div className="logo" onClick={() => navigate('/')}>
-                            <img src="/logo-homecare.jpg" alt="" className="logo-img" />
-                        </div>
-                        {categories &&
-                            categories.length > 0 &&
-                            categories.map((item) => (
-                                <ul className="nav-list">
-                                    <li className="nav-item">
-                                        <li
-                                            style={{ cursor: 'pointer' }}
-                                            onMouseEnter={() => handleMouseEnter(item)}
-                                            onMouseLeave={() => setIsHovered(false)}
-                                            href=""
-                                            className="nav-text"
-                                            // onClick={() => {
-                                            //     navigate('/products', { state: { categoryId: item.id } });
-                                            //     console.log('click');
-                                            // }}
-                                        >
-                                            <a style={{ textDecoration: 'none', color: '#000' }} href="/products">
-                                                {item.name}
-                                            </a>
-                                        </li>
-                                        <div className="menu-container">
-                                            <div className="menu-container-left">
-                                                <ul className="menu-list">
-                                                    {childCategoies &&
-                                                        childCategoies &&
-                                                        childCategoies.map((child) => (
-                                                            <li className="menu-item">
-                                                                <p
-                                                                    style={{ cursor: 'pointer' }}
-                                                                    onClick={() =>
-                                                                        navigate('/products', {
-                                                                            state: { categoryId: child.id },
-                                                                        })
-                                                                    }
-                                                                    className="menu-text"
-                                                                >
-                                                                    <a href="/products">{child.name}</a>
-                                                                </p>
-                                                            </li>
-                                                        ))}
-                                                </ul>
-                                            </div>
-
-                                            <div className="menu-container-right">
-                                                <h2>SẢN PHẨM MỚI NHẤT</h2>
-                                                <ul className="menu-list-1">
-                                                    {products &&
-                                                        products.length > 0 &&
-                                                        products.map((p) => (
-                                                            <li className="menu-item">
-                                                                <div href="" className="menu-text">
-                                                                    <img
-                                                                        onClick={() =>
-                                                                            handleNavigateProductDetail(p.id)
-                                                                        }
-                                                                        src={p?.image}
-                                                                        alt=""
-                                                                        className="menu-img"
-                                                                    />
-                                                                    <span>{p.name}</span>
-                                                                </div>
-                                                                <span className="new">Mới</span>
-                                                            </li>
-                                                        ))}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+  return (
+    <>
+      <div className="wrapber">
+        <header className="nav">
+          <div className="nav-left">
+            <div className="logo" onClick={() => navigate('/')}>
+              <img src="/logo-tl-house-v2.png" alt="" className="logo-img" />
+            </div>
+            {categories &&
+              categories.length > 0 &&
+              categories.map((item) => (
+                <ul className="nav-list">
+                  <li className="nav-item">
+                    <li
+                      style={{ cursor: 'pointer' }}
+                      onMouseEnter={() => handleMouseEnter(item)}
+                      onMouseLeave={() => setIsHovered(false)}
+                      href=""
+                      className="nav-text"
+                    // onClick={() => {
+                    //     navigate('/products', { state: { categoryId: item.id } });
+                    //     console.log('click');
+                    // }}
+                    >
+                      <a style={{ textDecoration: 'none' }} href="/products">
+                        {item.name}
+                      </a>
+                    </li>
+                    <div className="menu-container">
+                      <div className="menu-container-left">
+                        <ul className="menu-list">
+                          {childCategoies &&
+                            childCategoies &&
+                            childCategoies.map((child) => (
+                              <li className="menu-item">
+                                <p
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={() =>
+                                    navigate('/products', {
+                                      state: { categoryId: child.id },
+                                    })
+                                  }
+                                  className="menu-text"
+                                >
+                                  <a href="/products">{child.name}</a>
+                                </p>
+                              </li>
                             ))}
-                    </div>
-                    <div className="nav-right">
-                        <ul className="nav-list">
-                            <li className="nav-item">
-                                <a href="" className="nav-text">
-                                    Hỗ trợ
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a href="" className="nav-text">
-                                    Doanh nghiệp
-                                </a>
-                            </li>
                         </ul>
+                      </div>
 
-                        <ul className="icon-list">
-                            {/* <li id="searchs" className="icon-item">
+                      <div className="menu-container-right">
+                        <h2>SẢN PHẨM MỚI NHẤT</h2>
+                        <ul className="menu-list-1">
+                          {products &&
+                            products.length > 0 &&
+                            products.map((p) => (
+                              <li className="menu-item">
+                                <div href="" className="menu-text">
+                                  <img
+                                    onClick={() =>
+                                      handleNavigateProductDetail(p.id)
+                                    }
+                                    src={p?.image}
+                                    alt=""
+                                    className="menu-img"
+                                  />
+                                  <span>{p.name}</span>
+                                </div>
+                                <span className="new">Mới</span>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              ))}
+          </div>
+          <div className="nav-right">
+            <ul className="nav-list">
+              <li className="nav-item">
+                <a href="" className="nav-text">
+                  Hỗ trợ
+                </a>
+              </li>
+              <li className="nav-item">
+                <a href="" className="nav-text">
+                  Doanh nghiệp
+                </a>
+              </li>
+            </ul>
+
+            <ul className="icon-list">
+              {/* <li id="searchs" className="icon-item">
                                 <p href="" className="icon-link">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
@@ -177,37 +177,37 @@ function Header() {
                                 </p>
                             </li> */}
 
-                            <li className="icon-item" onClick={() => handleNavigate()}>
-                                <a href="" className="icon-link">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                        <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
-                                    </svg>
-                                </a>
-                                <span className="cart-notice">{countCart}</span>
-                            </li>
+              <li className="icon-item" onClick={() => handleNavigate()}>
+                <a href="" className="icon-link">
+                  <svg fill='#e36b77' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                    <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
+                  </svg>
+                </a>
+                <span className="cart-notice">{countCart}</span>
+              </li>
 
-                            <li className="icon-item header__navbar-item--noti">
-                                <Link to="/auth/login" className="icon-link">
-                                    {Object.keys(userAuth).length !== 0 ? (
-                                        <img
-                                            style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-                                            src={userAuth?.avatar ? userAuth?.avatar : '/user.png'}
-                                            alt="img"
-                                        />
-                                    ) : (
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                            <path d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
-                                        </svg>
-                                    )}
-                                </Link>
-                                <div className="header-noti">
-                                    <ul className="header-noti-list">
-                                        <li className="header-noti-item">
-                                            <Link to={'profile/info-customer'} className="header-noti-link">
-                                                Tài khoản
-                                            </Link>
-                                        </li>
-                                        {/* <li className="header-noti-item">
+              <li className="icon-item header__navbar-item--noti">
+                <Link to="/auth/login" className="icon-link">
+                  {Object.keys(userAuth).length !== 0 ? (
+                    <img
+                      style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                      src={userAuth?.avatar ? userAuth?.avatar : '/user.png'}
+                      alt="img"
+                    />
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                      <path d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
+                    </svg>
+                  )}
+                </Link>
+                <div className="header-noti">
+                  <ul className="header-noti-list">
+                    <li className="header-noti-item">
+                      <Link to={'profile/info-customer'} className="header-noti-link">
+                        Tài khoản
+                      </Link>
+                    </li>
+                    {/* <li className="header-noti-item">
                                             <Link to={'/DetailOrder'} className="header-noti-link">
                                                 Đơn mua
                                             </Link>
@@ -215,243 +215,243 @@ function Header() {
                                         <li className="header-noti-item">
                                             <span className="header-noti-link">Đổi mật khẩu</span>
                                         </li> */}
-                                        <li onClick={handleLogout} className="header-noti-item">
-                                            <span className="header-noti-link">Đăng xuất</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-
-                            <li id="bar-mobile" className="icon-item">
-                                <a href="#" className="icon-link">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                        <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
-                                    </svg>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </header>
-            </div>
-
-            <div className="nav-mobile">
-                <div className="wb-nav-mobile">
-                    <div className="container-nav-mobile">
-                        <header className="mobile-header">
-                            <div className="search-mobile">
-                                <div className="button-search-mb button-search-tabl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                                    </svg>
-                                </div>
-
-                                <div id="xmark-mobile">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                                        <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </header>
-
-                        <section className="login-mobile">
-                            <h3>Đăng nhập/Đăng ký</h3>
-                        </section>
-
-                        <section className="menu-mobile_1">
-                            <ul className="menu-mobile_list">
-                                <li>
-                                    <a href="#">
-                                        <p>Máy lọc không khí</p>
-                                        <svg
-                                            className="icon-plus active"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                        </svg>
-                                        <svg
-                                            className="icon-minus"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-                                        </svg>
-                                    </a>
-                                    <ul className="menu-mobile_list-drop_down">
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <p>Máy lọc không khí</p>
-                                        <svg
-                                            className="icon-plus active"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                        </svg>
-                                        <svg
-                                            className="icon-minus"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-                                        </svg>
-                                    </a>
-                                    <ul className="menu-mobile_list-drop_down">
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <p>Máy lọc không khí</p>
-                                        <svg
-                                            className="icon-plus active"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                        </svg>
-                                        <svg
-                                            className="icon-minus"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-                                        </svg>
-                                    </a>
-                                    <ul className="menu-mobile_list-drop_down">
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <p>Máy lọc không khí</p>
-                                        <svg
-                                            className="icon-plus active"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                        </svg>
-                                        <svg
-                                            className="icon-minus"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-                                        </svg>
-                                    </a>
-                                    <ul className="menu-mobile_list-drop_down">
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <p>Máy lọc không khí</p>
-                                        <svg
-                                            className="icon-plus active"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                        </svg>
-                                        <svg
-                                            className="icon-minus"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-                                        </svg>
-                                    </a>
-                                    <ul className="menu-mobile_list-drop_down">
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <p>Máy lọc không khí</p>
-                                        <svg
-                                            className="icon-plus active"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                        </svg>
-                                        <svg
-                                            className="icon-minus"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512"
-                                        >
-                                            <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-                                        </svg>
-                                    </a>
-                                    <ul className="menu-mobile_list-drop_down">
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                        <li>hhhhhhhhhh</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </section>
-                    </div>
+                    <li onClick={handleLogout} className="header-noti-item">
+                      <span className="header-noti-link">Đăng xuất</span>
+                    </li>
+                  </ul>
                 </div>
-            </div>
+              </li>
 
-            <section className="search">
-                <div className="wrapber-search">
-                    <div className="dimmed-search">
-                        <div id="xmark">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                                <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
-                            </svg>
-                        </div>
-                        <div className="content-search">
-                            <h2 className="text-search">Chúng tôi có thể giúp bạn tìm kiếm ?</h2>
-                            <div className="box-search">
-                                <div className="form-search">
-                                    <form action="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                                        </svg>
-                                        <input type="search" placeholder="search..." />
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              <li id="bar-mobile" className="icon-item">
+                <a href="#" className="icon-link">
+                  {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
+                  </svg> */}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </header>
+      </div>
+
+      <div className="nav-mobile">
+        <div className="wb-nav-mobile">
+          <div className="container-nav-mobile">
+            <header className="mobile-header">
+              <div className="search-mobile">
+                <div className="button-search-mb button-search-tabl">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                  </svg>
                 </div>
+
+                <div id="xmark-mobile">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
+                  </svg>
+                </div>
+              </div>
+            </header>
+
+            <section className="login-mobile">
+              <h3>Đăng nhập/Đăng ký</h3>
             </section>
-        </>
-    );
+
+            <section className="menu-mobile_1">
+              <ul className="menu-mobile_list">
+                <li>
+                  <a href="#">
+                    <p>Máy lọc không khí</p>
+                    <svg
+                      className="icon-plus active"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                    </svg>
+                    <svg
+                      className="icon-minus"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                    </svg>
+                  </a>
+                  <ul className="menu-mobile_list-drop_down">
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a href="#">
+                    <p>Máy lọc không khí</p>
+                    <svg
+                      className="icon-plus active"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                    </svg>
+                    <svg
+                      className="icon-minus"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                    </svg>
+                  </a>
+                  <ul className="menu-mobile_list-drop_down">
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a href="#">
+                    <p>Máy lọc không khí</p>
+                    <svg
+                      className="icon-plus active"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                    </svg>
+                    <svg
+                      className="icon-minus"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                    </svg>
+                  </a>
+                  <ul className="menu-mobile_list-drop_down">
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a href="#">
+                    <p>Máy lọc không khí</p>
+                    <svg
+                      className="icon-plus active"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                    </svg>
+                    <svg
+                      className="icon-minus"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                    </svg>
+                  </a>
+                  <ul className="menu-mobile_list-drop_down">
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a href="#">
+                    <p>Máy lọc không khí</p>
+                    <svg
+                      className="icon-plus active"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                    </svg>
+                    <svg
+                      className="icon-minus"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                    </svg>
+                  </a>
+                  <ul className="menu-mobile_list-drop_down">
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a href="#">
+                    <p>Máy lọc không khí</p>
+                    <svg
+                      className="icon-plus active"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                    </svg>
+                    <svg
+                      className="icon-minus"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+                    </svg>
+                  </a>
+                  <ul className="menu-mobile_list-drop_down">
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                    <li>hhhhhhhhhh</li>
+                  </ul>
+                </li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <section className="search">
+        <div className="wrapber-search">
+          <div className="dimmed-search">
+            <div id="xmark">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+              </svg>
+            </div>
+            <div className="content-search">
+              <h2 className="text-search">Chúng tôi có thể giúp bạn tìm kiếm ?</h2>
+              <div className="box-search">
+                <div className="form-search">
+                  <form action="">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                    </svg>
+                    <input type="search" placeholder="search..." />
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
 
 export default Header;

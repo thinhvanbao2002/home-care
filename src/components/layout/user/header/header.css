@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 80px;
+    height: 120px;
     margin: 0 40px;
     padding: 0 16px;
     /* border-bottom: 2px solid #000; */
@@ -20,8 +20,7 @@
 }
 
 .logo-img {
-    width: 108px;
-    height: 36px;
+    width: 100px;
     display: block;
 }
 
@@ -41,12 +40,14 @@
 }
 
 
-.nav-text {
+.nav-text,
+.nav-text a{
     text-decoration: none;
-    color: var(--primary-text);
     font-size: 16px;
     font-weight: 600;
     transition: 0.2s;
+    text-transform: uppercase;
+    color: #eb949c;
 }
 
 .nav-text:hover {
