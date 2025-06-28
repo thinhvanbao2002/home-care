@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API_BASE_URL } from './types/instant';
 
 const publicInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL,
+    baseURL: "http://localhost:3009/api/v1",
 });
 
 console.log('ENV:', process.env.BASE_API_URL);

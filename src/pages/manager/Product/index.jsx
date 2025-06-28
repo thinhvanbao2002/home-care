@@ -61,6 +61,8 @@ function Product() {
     const getAllCategory = async () => {
         try {
             const res = await fetchAllChildCategory(cateName, 1, 1000);
+            console.log('---- RES -----',res);
+            
             setCategories(res.data);
         } catch (error) {
             console.log(error);
@@ -233,7 +235,7 @@ function Product() {
                                 style={{ width: '200px' }}
                                 allowClear
                             >
-                                <Select.Option value="true">Đang hạt động</Select.Option>
+                                <Select.Option value="true">Đang hoạt động</Select.Option>
                                 <Select.Option value="false">Ngừng hoạt động</Select.Option>
                             </Select>
                         </Col>

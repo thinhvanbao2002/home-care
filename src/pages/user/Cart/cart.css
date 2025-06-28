@@ -90,8 +90,8 @@ a {
     display: grid;
     grid-template-columns: 4fr 5fr;
     align-items: center;
-    color: #888;
     font-size: 14px;
+    color: #000;
 }
 
 .cart__header-left,

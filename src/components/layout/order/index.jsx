@@ -37,7 +37,7 @@ function OrderLayout() {
                 <header className="header">
                     <div className="grid wide">
                         <div className="logo-cart">
-                            <img onClick={() => navigate('/')} src="/logo-homecare.jpg" alt="" />
+                            <img style={{width: 50}} onClick={() => navigate('/')} src="/logo-tl-house-v2.png" alt="" />
                             <h1>{pageTitle}</h1>
                         </div>
                     </div>

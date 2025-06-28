@@ -35,20 +35,18 @@ const UserLogin = () => {
         <>
             <div className="login-user-container">
                 <Row className="style-row" justify="center" align="middle">
-                    <Col xs={0} sm={0} md={0} lg={6} xl={6} className="column1" style={{ height: '600px' }}>
-                        <div className="logo-container" onClick={() => navigate('/')}>
-                            <img src="/logo-homecare.jpg" alt="" />
+                    <Col xs={0} sm={0} md={0} lg={6} xl={6} className="column1" style={{ height: '600px', display:'flex', alignItems: 'center',justifyContent: 'center' }}>
+                        <div>
+                            <div className="logo-container" onClick={() => navigate('/')}>
+                            <img src="/logo-tl-house-v2.png" alt="" />
                         </div>
                         <div
                             style={{ lineHeight: '32px', fontSize: '26px', textAlign: 'center', marginBottom: '40px' }}
                         >
-                            <h3>Một tài khoản cho mọi dịch vụ của HomeCare</h3>
+                            <h3>TL HOUSE</h3>
                         </div>
-                        <div className="login-page-left-desc">
-                            <p>
-                                Đăng nhập tài khoản HomeCare và thực hiện mọi việc bạn cần từ một cổng dịch vụ duy nhất!
-                            </p>
                         </div>
+                        
                     </Col>
                     <Col xs={20} sm={14} md={12} lg={8} xl={8} className="column2" style={{ height: '600px' }}>
                         <Spin spinning={loading} tip="Loading...">
@@ -58,7 +56,7 @@ const UserLogin = () => {
                                 onFinish={onFinish}
                             >
                                 <div className="logo-container-right">
-                                    <img src="/logo-homecare.jpg" alt="" />
+                                    <img src="/logo-tl-house-v2.png" alt="" />
                                 </div>
                                 <h2 className="login-title-customer">Đăng nhập Tài khoản</h2>
                                 <Form.Item

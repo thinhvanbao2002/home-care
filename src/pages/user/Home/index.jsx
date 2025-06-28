@@ -151,21 +151,14 @@ function Home() {
       <Carousel autoplay>
         <div>
           <img
-            src="https://nhabep24h.com/wp-content/uploads/may-lam-sua-hat-unie.jpg"
+            src="https://giadungviet888.rf.gd/wp-content/uploads/2024/03/mau-banner-quang-cao-dien-may_033707028-1400x575.jpg"
             alt="Image 3"
             style={{ width: '100%', height: '600px', objectFit: 'cover' }}
           />
         </div>
         <div>
           <img
-            src="https://lumias.vn/wp-content/uploads/2024/08/Banner-TB-Nha-Bep-4c-01.jpg"
-            alt="Image 3"
-            style={{ width: '100%', height: '600px', objectFit: 'cover' }}
-          />
-        </div>
-        <div>
-          <img
-            src="https://salt.tikicdn.com/cache/w700/ts/tmp/93/13/11/d12552e567a71b516f365578a2d70af1.jpg.webp"
+            src="https://img6.thuthuatphanmem.vn/uploads/2023/04/13/hinh-anh-bia-do-gia-dung-cuc-dep_075602442.jpg"
             alt="Image 3"
             style={{ width: '100%', height: '600px', objectFit: 'cover' }}
           />
@@ -190,14 +183,6 @@ function Home() {
             />
           </div>
         </div>
-
-        <nav class="home-nav">
-          <button>Máy lọc S</button>
-          <button>Máy lọc A</button>
-          <button>Máy lọc M</button>
-          <button>Máy lọc Z</button>
-          <button>Máy lọc Z6 SERIES</button>
-        </nav>
 
         <section class="home-promo">
           <div style={{ marginBottom: '40px' }} class="home-promo-title">

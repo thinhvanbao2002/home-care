@@ -16,12 +16,12 @@ function Footer() {
                 </li>
                 <li class="footer-item">
                   <a href="" class="footer-item__link">
-                    Homecare Blog
+                    TL House Blog
                   </a>
                 </li>
                 <li class="footer-item">
                   <a href="" class="footer-item__link">
-                    Homecare Mall
+                    TL House Mall
                   </a>
                 </li>
                 <li class="footer-item">
@@ -41,7 +41,7 @@ function Footer() {
                 </li>
                 <li class="footer-item">
                   <a href="" class="footer-item__link">
-                    Homecare Xu
+                    TL House Xu
                   </a>
                 </li>
                 <li class="footer-item">
@@ -68,11 +68,11 @@ function Footer() {
             </div>
 
             <div class="col l-2-4 m-4 c-6">
-              <h3 class="footer__heading">Về Homecare</h3>
+              <h3 class="footer__heading">Về TL House</h3>
               <ul class="footer-list">
                 <li class="footer-item">
                   <a href="" class="footer-item__link">
-                    Giới Thiệu Về Homecare Việt Nam
+                    Giới Thiệu Về TL House Việt Nam
                   </a>
                 </li>
                 <li class="footer-item">
@@ -82,7 +82,7 @@ function Footer() {
                 </li>
                 <li class="footer-item">
                   <a href="" class="footer-item__link">
-                    Điều Khoản Homecare
+                    Điều Khoản TL House
                   </a>
                 </li>
                 <li class="footer-item">
@@ -107,7 +107,7 @@ function Footer() {
                 </li>
                 <li class="footer-item">
                   <a href="" class="footer-item__link">
-                    Chương Trình Tiếp Thị Liên Kết Homecare
+                    Chương Trình Tiếp Thị Liên Kết TL House
                   </a>
                 </li>
                 <li class="footer-item">

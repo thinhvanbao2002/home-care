@@ -148,7 +148,7 @@ const Category = () => {
                     return item;
                 });
                 await createChildCategory(parentId, values.name);
-                openNotification('Thành công', 'Xóa danh mục thành công!');
+                openNotification('Thành công', 'Thêm danh mục thành công!');
                 setDataSource(newData);
             }
             setIsModalVisible(false);

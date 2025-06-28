@@ -178,7 +178,7 @@ function User() {
                                 style={{ width: '200px' }}
                                 allowClear
                             >
-                                <Select.Option value="active">Đang hạt động</Select.Option>
+                                <Select.Option value="active">Đang hoạt động</Select.Option>
                                 <Select.Option value="inactive">Ngừng hoạt động</Select.Option>
                             </Select>
                         </Col>

@@ -2,10 +2,10 @@ import axios from 'axios';
 import { API_BASE_URL } from './types/instant';
 
 const admin_instance = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL,
+    baseURL: "http://localhost:3009/api/v1",
 });
 
-console.log('ENV:', process.env.REACT_APP_API_BASE_URL);
+
 // Add a request interceptor
 admin_instance.interceptors.request.use(
     function (config) {

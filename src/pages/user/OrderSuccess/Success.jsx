@@ -8,7 +8,7 @@ const SuccessPage = () => {
         <div className="success-container">
             <FaCheckCircle className="success-icon" />
             <h2>Đặt hàng thành công!</h2>
-            <p style={{ marginTop: '10px' }}>Cảm ơn bạn đã đặt hàng tại homecare.</p>
+            <p style={{ marginTop: '10px' }}>Cảm ơn bạn đã đặt hàng tại TL House.</p>
             <Link style={{ marginTop: '10px' }} to={'/'}>
                 Tiếp tục đặt hàng
             </Link>

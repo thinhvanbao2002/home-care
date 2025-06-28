@@ -132,7 +132,7 @@ function Voucher() {
                         </Col>
                         <Col>
                             <Select placeholder="Trạng thái" style={{ width: '200px' }} allowClear>
-                                <Select.Option value="Đang hạt động">Đang hạt động</Select.Option>
+                                <Select.Option value="Đang hạt động">Đang hoạt động</Select.Option>
                                 <Select.Option value="Ngừng hoạt động">Ngừng hoạt động</Select.Option>
                             </Select>
                         </Col>

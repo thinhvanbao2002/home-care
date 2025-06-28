@@ -20,7 +20,7 @@ const Login = () => {
             const res = await loginAdmin(email, password);
             openNotificationSuccess('Thành công', 'Đăng nhập thành công');
 
-            // console.log(res.data);
+            console.log(res);
 
             if (res && res.data) {
                 console.log(res.data);
@@ -32,6 +32,8 @@ const Login = () => {
             }
             // // setLoading(false);
         } catch (error) {
+            console.log(error);
+            
             openNotificationError('Thất bại', error.response.data.message);
             // setLoading(false);
         }

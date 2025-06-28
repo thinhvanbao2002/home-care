@@ -234,6 +234,7 @@ function Overview() {
                             <option value="2022">Năm 2022</option>
                             <option value="2023">Năm 2023</option>
                             <option value="2024">Năm 2024</option>
+                            <option value="2025">Năm 2025</option>
                         </select>
                     </div>
                 </div>

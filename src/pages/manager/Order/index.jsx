@@ -206,7 +206,7 @@ function AdminOrder() {
                     const realIndex = (page - 1) * take + index + 1;
                     return {
                         key: realIndex,
-                        order_id: `MDH${data?.id}`,
+                        order_id: `${data?.id}`,
                         created_at: moment(data?.created_at, 'YYYY-MM-DD').format('DD/MM/YYYY'),
                         customer_name: data?.name,
                         product_number: data?.order_details.length,

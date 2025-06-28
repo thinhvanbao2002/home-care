@@ -28,6 +28,9 @@ function Order() {
     const auth = useSelector((state) => state.auth.user);
     const userAuth = typeof auth === 'string' ? JSON.parse(auth) : auth;
 
+    console.log('---- USER AUTH ----');
+    
+
     const url = process.env.REACT_APP_API_BASE_URL;
 
     console.log(url);
@@ -134,7 +137,6 @@ function Order() {
 
     return (
         <div className="purchase-container">
-            {/* Address Section */}
             <div className="purchase-address">
                 <Title level={2}>Địa Chỉ Nhận Hàng</Title>
                 <Form layout="vertical" className="purchase-form-address" form={form}>
@@ -189,14 +191,13 @@ function Order() {
                     </Form.Item>
                     <Form.Item>
                         <Radio.Group onChange={handleSaveAddressChange} value={saveAddress}>
-                            <Radio value={true}>Lưu địa chỉ này</Radio>
+                            {/* <Radio value={true}>Lưu địa chỉ này</Radio> */}
                             <Button onClick={handleAddressSelect}>Chọn địa chỉ có sẵn</Button>
                         </Radio.Group>
                     </Form.Item>
                 </Form>
             </div>
 
-            {/* Product Section */}
             <div className="purchase-product">
                 <Title level={3}>Sản phẩm</Title>
                 {products &&
@@ -206,93 +207,37 @@ function Order() {
                             <img src={product.image} alt="Product Image" />
                             <div className="purchase-product-info">
                                 <Paragraph>{product.name}</Paragraph>
-                                <span className="purchase-price">{formatNumber(Number(product.price))}</span>
+                                <span style={{color:  '#e36b77'}} className="purchase-price">{formatNumber(Number(product.price))}</span>
                             </div>
                             <div className="purchase-quantity">
-                                <span>{product.quantity}</span>
+                                <span  style={{color:  '#e36b77'}}>{product.quantity}</span>
                             </div>
                             <div className="purchase-total">
-                                <span>{formatNumber(Number(product.totalPrice))}</span>
+                                <span style={{color:  '#e36b77'}}>{formatNumber(Number(product.totalPrice))}</span>
                             </div>
                         </div>
                     ))}
             </div>
 
-            {/* Voucher Section */}
-            {/* <div className="purchase-voucher-section">
-                <Title level={3}>Chọn Voucher</Title>
-                <Form layout="vertical">
-                    <Form.Item label="Nhập mã voucher" name="voucherCode">
-                        <Input placeholder="Nhập mã voucher" />
-                    </Form.Item>
-                    <Form.Item label="Hoặc chọn voucher có sẵn" name="availableVouchers">
-                        <Select placeholder="Chọn voucher">
-                            <Select.Option value="voucher1">
-                                Voucher 1 - Giảm 10% cho đơn hàng trên 500,000₫
-                            </Select.Option>
-                            <Select.Option value="voucher2">
-                                Voucher 2 - Giảm 20% cho đơn hàng trên 1,000,000₫
-                            </Select.Option>
-                            <Select.Option value="voucher3">
-                                Voucher 3 - Giảm 50,000₫ cho đơn hàng từ 300,000₫
-                            </Select.Option>
-                        </Select>
-                    </Form.Item>
-                </Form>
-            </div> */}
-
-            {/* Shipping Method Section */}
-            {/* <div className="purchase-shipping-method">
-                <Title level={3}>Chọn phương thức giao hàng</Title>
-                <Radio.Group>
-                    <Radio value="standard">Giao hàng tiết kiệm - 30,000₫</Radio>
-                    <Radio value="express">Giao hàng nhanh - 50,000₫</Radio>
-                    <Radio value="sameDay">Giao hàng trong ngày - 100,000₫</Radio>
-                </Radio.Group>
-            </div> */}
-
-            {/* Payment Method Section */}
             <div className="purchase-payment-methods">
                 <Title level={3}>Phương thức thanh toán</Title>
                 <div className="purchase-methods">
-                    {/* <Button
-                        type={paymentMethod === 'homecareBalance' ? 'primary' : 'default'}
-                        onClick={() => handlePaymentMethodChange('homecareBalance')}
-                        className={paymentMethod === 'homecareBalance' ? 'active' : ''}
-                    >
-                        Số dư TK HomeCare (0)
-                    </Button>
-                    <Button
-                        type={paymentMethod === 'homecareWallet' ? 'primary' : 'default'}
-                        onClick={() => handlePaymentMethodChange('homecareWallet')}
-                        className={paymentMethod === 'homecareWallet' ? 'active' : ''}
-                    >
-                        Ví HomeCare
-                    </Button> */}
-                    <Button
-                        type={paymentMethod === 'bankTransfer' ? 'primary' : 'default'}
-                        onClick={() => handlePaymentMethodChange('bankTransfer')}
-                        className={paymentMethod === 'bankTransfer' ? 'active' : ''}
-                    >
-                        Chuyển khoản ngân hàng
-                    </Button>
-                    <Button
+                    <button
                         type={paymentMethod === 'cod' ? 'primary' : 'default'}
                         onClick={() => handlePaymentMethodChange('cod')}
                         className={paymentMethod === 'cod' ? 'active' : ''}
                     >
                         Thanh toán khi nhận hàng
-                    </Button>
+                    </button>
                 </div>
             </div>
 
-            {/* Summary Section */}
             <div className="purchase-summary">
                 <div className="purchase-summary-details">
                     <Paragraph>
                         Tổng tiền: <span className="purchase-total-amount">{formatNumber(Number(totalAmount))}</span>
                     </Paragraph>
-                    <Button type="primary" className="purchase-summary-button" onClick={handleSubmit}>
+                    <Button style={{background:'#e36b77', color: '#fff'}} className="purchase-summary-button" onClick={handleSubmit}>
                         Đặt hàng
                     </Button>
                 </div>

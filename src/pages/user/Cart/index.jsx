@@ -195,11 +195,11 @@ function Cart() {
                                         onChange={handleSelectAll}
                                         style={checkboxInputStyle}
                                     />
-                                    <label htmlFor="select-all" style={checkboxLabelStyle}>
+                                    <label htmlFor="select-all" style={{fontSize: 14}}>
                                         Chọn tất cả
                                     </label>
                                 </div>
-                                <div className="header-title">Sản Phẩm</div>
+                                <div style={{marginLeft: 110}} className="header-title">Sản Phẩm</div>
                             </div>
                             <div className="cart__header-right">
                                 <div className="header-title">Đơn Giá</div>
