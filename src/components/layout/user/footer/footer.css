@@ -1,87 +1,170 @@
 .footer {
-    border-top: 4px solid var(--primary-color);
-    padding-top: 26px;
-    background-color: var(--primary-header-footer);
+  border-top: 4px solid #e91e63;
+  padding-top: 36px;
+  background: linear-gradient(135deg, #fff0f6 0%, #f8bbd9 100%);
+  color: #e91e63;
+  font-family: inherit;
+}
+
+.footer__content {
+  padding-bottom: 24px;
 }
 
 .footer__heading {
-    font-size: 16px;
-    text-transform: uppercase;
-    color: var(--text-color);
-    line-height: 24px;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #e91e63;
+  line-height: 28px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 18px;
+  border-bottom: 2px solid #f48fb1;
+  padding-bottom: 6px;
+  background: linear-gradient(90deg, #e91e63 60%, #ffb6c1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .footer-list {
-    padding-left: 0;
-    list-style: none;
+  padding-left: 0;
+  list-style: none;
+  margin-bottom: 18px;
 }
 
 .footer-list__box {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-bottom: 18px;
 }
 
 .footer-item__link {
-    text-decoration: none;
-    color: #585858;
-    font-size: 15px;
-    padding: 6px 0;
-    display: flex;
-    align-items: center;
-}
-
-.footer-item__icon {
-    font-size: 1.6rem;
-    margin-right: 4px;
+  text-decoration: none;
+  color: #e91e63;
+  font-size: 15px;
+  padding: 7px 0 7px 0;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+  position: relative;
 }
 
 .footer-item__link:hover {
-    color: var(--primary-color);
+  color: #fff;
+  background: linear-gradient(90deg, #e91e63 60%, #ffb6c1 100%);
+  box-shadow: 0 2px 12px #f8bbd9;
+  text-decoration: none;
+}
+
+.footer-item__link::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 2px;
+  background: linear-gradient(90deg, #e91e63 60%, #ffb6c1 100%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.footer-item__link:hover::after {
+  opacity: 1;
 }
 
 .footer-item__link-img {
-    box-shadow: 0 1px 2px #ccc;
-    margin-right: 5px;
-    padding: 3px;
-    border-radius: 3px;
+  box-shadow: 0 2px 8px #f8bbd9;
+  margin-right: 8px;
+  padding: 6px;
+  border-radius: 12px;
+  background: #fff0f6;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.footer-item__link-img:hover {
+  box-shadow: 0 4px 16px #e91e63;
+  transform: scale(1.08) rotate(-3deg);
 }
 
 .footer__download {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  margin-top: 18px;
 }
 
 .footer__download-qr {
-    width: 80px;
-    box-shadow: 0 1px 2px #ccc;
-    margin-right: 10px;
+  width: 80px;
+  box-shadow: 0 2px 8px #f8bbd9;
+  margin-right: 10px;
+  border-radius: 12px;
 }
 
 .footer__download-apps {
-    width: 80px;
+  width: 80px;
 }
 
 .footer__download-apps-img {
-    width: 100%;
-    padding: 4px 6px;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px #ccc;
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #f8bbd9;
+  background: #fff0f6;
 }
 
 .footer__download-apps-link {
-    text-decoration: none;
-    color: transparent;
+  text-decoration: none;
+  color: transparent;
 }
 
 .footer__bottom {
-    background-color: #F5F5F5;
-    padding: 10px 0;
-    margin-top: 36px;
+  background: linear-gradient(90deg, #f8bbd9 0%, #fff0f6 100%);
+  padding: 14px 0 10px 0;
+  margin-top: 36px;
+  border-radius: 0 0 24px 24px;
+  box-shadow: 0 2px 8px #f8bbd9;
 }
 
 .footer__text {
-    font-size: 1.2rem;
-    text-align: center;
-    margin: 0;
-    color: var(--text-color);
+  font-size: 1.2rem;
+  text-align: center;
+  margin: 0;
+  color: #e91e63;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .footer__content {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer__content {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .footer__heading {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .footer-list__box {
+    gap: 6px 8px;
+  }
+
+  .footer-item__link-img {
+    width: 32px;
+    height: 32px;
+    padding: 3px;
+  }
 }

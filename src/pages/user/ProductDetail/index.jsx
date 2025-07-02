@@ -16,6 +16,9 @@ function ProductDetail() {
     'https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-nen-3d-thien-nhien-001.jpg',
   );
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedThumbnail, setSelectedThumbnail] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(false);
   const productContentRef = useRef(null);
   const [product, setProduct] = useState({});
   const [productReview, SetProductReview] = useState([]);
@@ -34,13 +37,16 @@ function ProductDetail() {
 
   const getDetail = async () => {
     try {
+      setIsLoading(true);
       const res = await getDetailProduct(productId);
       setProduct(res?.data);
       if (res?.data?.product_photo?.length > 0) {
-        setMainImage(res.data.product_photo[0].url); // Thiết lập ảnh chính là ảnh đầu tiên
+        setMainImage(res.data.product_photo[0].url);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,8 +59,9 @@ function ProductDetail() {
     }
   };
 
-  const changeImage = (src) => {
-    setMainImage(src); // Thiết lập ảnh chính bằng ảnh phụ được chọn
+  const changeImage = (src, index) => {
+    setMainImage(src);
+    setSelectedThumbnail(index);
   };
 
   const toggleContent = () => {
@@ -110,133 +117,245 @@ function ProductDetail() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Đang tải thông tin sản phẩm...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="app-prod">
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="image-modal" onClick={() => setShowImageModal(false)}>
+          <div className="modal-content">
+            <img src={mainImage} alt="Product" />
+            <button className="close-modal" onClick={() => setShowImageModal(false)}>×</button>
+          </div>
+        </div>
+      )}
+
       <header className="header-prod">
         <div className="grid wide">
           <div className="product-container">
             <div className="product-image-gallery">
-              <div className="main-image">
-                <img src={product?.image} alt="Product" id="main-product-image" />
+              <div className="main-image-container">
+                <div className="main-image" onClick={() => setShowImageModal(true)}>
+                  <img src={mainImage} alt="Product" id="main-product-image" />
+                  <div className="zoom-overlay">
+                    <span>🔍 Click để phóng to</span>
+                  </div>
+                </div>
+                <div className="image-badge">
+                  <span className="badge-new">Mới</span>
+                  <span className="badge-hot">Hot</span>
+                </div>
               </div>
               <div className="image-thumbnails">
                 {product &&
                   product.product_photo &&
                   product.product_photo.length > 0 &&
-                  product.product_photo.map((p) => (
-                    <img
+                  product.product_photo.map((p, index) => (
+                    <div
                       key={p.id}
-                      src={p.url}
-                      alt="Thumbnail"
-                      onClick={() => changeImage(p.url)} // Chọn ảnh phụ
-                    />
+                      className={`thumbnail-container ${selectedThumbnail === index ? 'active' : ''}`}
+                      onClick={() => changeImage(p.url, index)}
+                    >
+                      <img
+                        src={p.url}
+                        alt="Thumbnail"
+                        className="thumbnail-image"
+                      />
+                      <div className="thumbnail-overlay"></div>
+                    </div>
                   ))}
               </div>
             </div>
             <div className="product-details">
-              <h1 style={{ marginBottom: 20 }}>{product.name}</h1>
-              <p style={{ marginBottom: 20 }} className="price">{formatNumber(Number(product?.price))} ₫</p>
-              <button
-                onClick={() => handleOrder(product)}
-                style={{ borderRadius: '15px', width: '100%' }}
-                className="buy-button"
-              >
-                MUA NGAY
-              </button>
-              <button
-                onClick={handleAddToCart}
-                style={{ borderRadius: '15px', fontSize: 20 }}
-                className="add-to-cart-button"
-              >
-                THÊM VÀO GIỎ HÀNG
-              </button>
+              <div className="product-header">
+                <h1 className="product-title">{product.name}</h1>
+                <div className="product-rating">
+                  <div className="stars">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <span key={star} className="star">⭐</span>
+                    ))}
+                  </div>
+                  <span className="rating-text">(4.8/5 - {productReview.length} đánh giá)</span>
+                </div>
+              </div>
+
+              <div className="price-section">
+                <p className="current-price">{formatNumber(Number(product?.price))} ₫</p>
+                <p className="old-price">{formatNumber(Number(product?.price) * 1.2)} ₫</p>
+                <span className="discount-badge">-20%</span>
+              </div>
+
+              <div className="product-stats">
+                <div className="stat-item">
+                  <span className="stat-icon">📦</span>
+                  <span className="stat-text">Còn {product.quantity || 0} sản phẩm</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-icon">🚚</span>
+                  <span className="stat-text">Giao hàng miễn phí</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-icon">🔄</span>
+                  <span className="stat-text">Đổi trả 30 ngày</span>
+                </div>
+              </div>
+
+              <div className="action-buttons">
+                <button
+                  onClick={() => handleOrder(product)}
+                  className="buy-button pulse-animation"
+                >
+                  <span className="button-icon">🛒</span>
+                  MUA NGAY
+                </button>
+                <button
+                  onClick={handleAddToCart}
+                  className="add-to-cart-button"
+                >
+                  <span className="button-icon">➕</span>
+                  THÊM VÀO GIỎ HÀNG
+                </button>
+              </div>
+
               <div className="promotions">
+                <div className="promotion-header">
+                  <h3>🎁 Ưu đãi đặc biệt</h3>
+                </div>
                 <div className="additional-offers">
-                  <p>
-                    <strong>Ưu đãi thêm:</strong>
-                  </p>
-                  <ul>
-                    <li style={{ marginBottom: 10 }}>Miễn phí giao hàng toàn quốc</li>
-                    <li>Đổi trả trong vòng 30 ngày</li>
-                  </ul>
+                  <div className="offer-item">
+                    <span className="offer-icon">🎯</span>
+                    <span>Miễn phí giao hàng toàn quốc</span>
+                  </div>
+                  <div className="offer-item">
+                    <span className="offer-icon">🔄</span>
+                    <span>Đổi trả trong vòng 30 ngày</span>
+                  </div>
                 </div>
                 <div className="promotions-list">
-                  <p>
-                    <strong>Khuyến mãi:</strong>
-                  </p>
-                  <ul>
-                    <li style={{ marginBottom: 10 }}>Giảm 1% tối đa 100.000₫ khi thanh toán qua ZaloPay</li>
-                    <li style={{ marginBottom: 10 }}>Giảm 1% tối đa 300.000₫ khi thanh toán qua VNPay</li>
-                    <li style={{ marginBottom: 10 }}>Trả góp 0%</li>
-                  </ul>
+                  <div className="promotion-item">
+                    <span className="promotion-icon">💳</span>
+                    <span>Giảm 1% tối đa 100.000₫ khi thanh toán qua ZaloPay</span>
+                  </div>
+                  <div className="promotion-item">
+                    <span className="promotion-icon">🏦</span>
+                    <span>Giảm 1% tối đa 300.000₫ khi thanh toán qua VNPay</span>
+                  </div>
+                  <div className="promotion-item">
+                    <span className="promotion-icon">💳</span>
+                    <span>Trả góp 0% lãi suất</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </header>
+
       <section className="product-info">
         <div className="grid wide">
           <div className="product-details-section">
-            <h2>Thông tin sản phẩm</h2>
+            <h2 className="section-title">
+              <span className="title-icon">📋</span>
+              Thông tin sản phẩm
+            </h2>
             <div className={`product-content ${isExpanded ? 'expanded' : ''}`} ref={productContentRef}>
               {parse(String(product.description))}
             </div>
             <button className="toggle-content-button" onClick={toggleContent}>
+              <span className="toggle-icon">{isExpanded ? '▲' : '▼'}</span>
               {isExpanded ? 'Thu gọn' : 'Xem thêm'}
             </button>
           </div>
 
           <div className="technical-specs">
-            <h2>Thông số kỹ thuật</h2>
-            {product.feature}
+            <h2 className="section-title">
+              <span className="title-icon">⚙️</span>
+              Thông số kỹ thuật
+            </h2>
+            <div className="specs-content">
+              {product.feature}
+            </div>
           </div>
 
           <div className="shop-address">
-            <h2>Địa chỉ cửa hàng</h2>
-            <p>299 Trung Kính, phường Yên Hòa, quận Cầu Giấy, thành phố Hà Nội, Việt Nam</p>
+            <h2 className="section-title">
+              <span className="title-icon">📍</span>
+              Địa chỉ cửa hàng
+            </h2>
+            <div className="address-content">
+              <div className="address-icon">🏪</div>
+              <p>299 Trung Kính, phường Yên Hòa, quận Cầu Giấy, thành phố Hà Nội, Việt Nam</p>
+            </div>
           </div>
 
           <div className="customer-reviews">
-            <h2>Bình luận của khách hàng</h2>
+            <h2 className="section-title">
+              <span className="title-icon">💬</span>
+              Bình luận của khách hàng
+            </h2>
+
             <div className="comment-form">
-              <label htmlFor="comment">Nội dung bình luận:</label>
+              <div className="form-header">
+                <label htmlFor="comment">Viết bình luận của bạn:</label>
+              </div>
               <textarea
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
                 id="comment"
                 name="comment"
                 rows="4"
+                placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm..."
                 required
               ></textarea>
-
               <button onClick={handleCreateReview} type="submit" className="submit-comment-button">
+                <span className="button-icon">📤</span>
                 Gửi bình luận
               </button>
             </div>
 
             <div className="reviews-list">
-              {productReview &&
-                productReview.length > 0 &&
+              {productReview && productReview.length > 0 ? (
                 productReview.map((item, index) => (
                   <div key={index + 1} className="review">
-                    <span>
-                      <img
-                        src={
-                          item?.customer?.user?.avatar
-                            ? item?.customer?.user?.avatar
-                            : '/user.png'
-                        }
-                        alt=""
-                      />
-                      <div>
-                        <h4>{item?.customer?.user?.name}</h4>
-                        <p>{moment(item?.created_at).format('DD-MM-YYYY HH:mm')}</p>
+                    <div className="review-header">
+                      <div className="reviewer-info">
+                        <img
+                          src={
+                            item?.customer?.user?.avatar
+                              ? item?.customer?.user?.avatar
+                              : '/user.png'
+                          }
+                          alt=""
+                          className="reviewer-avatar"
+                        />
+                        <div className="reviewer-details">
+                          <h4 className="reviewer-name">{item?.customer?.user?.name}</h4>
+                          <p className="review-date">{moment(item?.created_at).format('DD-MM-YYYY HH:mm')}</p>
+                        </div>
                       </div>
-                    </span>
-                    <p>{item?.review}</p>
+                      <div className="review-rating">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span key={star} className="star">⭐</span>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="review-content">{item?.review}</p>
                   </div>
-                ))}
+                ))
+              ) : (
+                <div className="no-reviews">
+                  <div className="no-reviews-icon">💭</div>
+                  <p>Chưa có bình luận nào. Hãy là người đầu tiên chia sẻ trải nghiệm!</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
